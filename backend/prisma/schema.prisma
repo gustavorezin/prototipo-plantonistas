@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  userType  UserType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  hospital Hospital?
+  doctor   Doctor?
+
+  @@map("users")
+}
+
+enum UserType {
+  HOSPITAL
+  DOCTOR
+}
+
+model Hospital {
+  userId  String  @id
+  name    String
+  address String
+  phone   String
+  hiring  Boolean @default(false)
+
+  user     User      @relation(fields: [userId], references: [id])
+  doctors  Doctor[]  @relation("HospitalDoctors")
+  requests Request[]
+
+  @@map("hospitals")
+}
+
+model Doctor {
+  userId    String  @id
+  name      String
+  crm       String  @unique
+  specialty String
+  phone     String
+  available Boolean @default(true)
+
+  user      User       @relation(fields: [userId], references: [id])
+  hospitals Hospital[] @relation("HospitalDoctors")
+  requests  Request[]
+
+  @@map("doctors")
+}
+
+model Request {
+  id         String        @id @default(uuid())
+  hospitalId String
+  doctorId   String
+  status     RequestStatus @default(PENDING)
+  message    String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  hospital Hospital @relation(fields: [hospitalId], references: [userId])
+  doctor   Doctor   @relation(fields: [doctorId], references: [userId])
+
+  @@map("requests")
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  CONTRACTED
+}

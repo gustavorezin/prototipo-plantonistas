@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "module": "node16",
+    "target": "ES2023",
+    "baseUrl": "./",
+    "paths": {
+      "@modules/*": ["src/modules/*"],
+      "@commons/*": ["src/commons/*"]
+    },
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
