@@ -5,9 +5,9 @@ export interface ICreateUser {
   password: string;
   name: string;
   role: UserRole;
+  phone?: string;
   // Campos específicos de Hospital
   address?: string;
-  phone?: string;
   // Campos específicos de Médico
   crm?: string;
   specialty?: string;

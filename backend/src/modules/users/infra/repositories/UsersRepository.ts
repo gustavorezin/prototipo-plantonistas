@@ -30,6 +30,7 @@ export class UsersRepository implements IUsersRepository {
             userId: user.id,
             name: data.name,
             crm: data.crm!,
+            phone: data.phone!,
             specialty: data.specialty!,
           },
         });
