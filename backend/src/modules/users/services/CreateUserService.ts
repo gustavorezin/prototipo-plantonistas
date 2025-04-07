@@ -20,7 +20,7 @@ export class CreateUserService {
       throw new AppError("Email already in use");
     }
 
-    if (data.crm && data.role === "DOCTOR") {
+    if (data.crm && data.userType === "DOCTOR") {
       const doctorCrmExists = await this.doctorsRepository.findByCrm(data.crm);
       if (doctorCrmExists) {
         throw new AppError("CRM already in use");

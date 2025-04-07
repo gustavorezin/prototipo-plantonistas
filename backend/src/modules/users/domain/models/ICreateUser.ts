@@ -4,7 +4,7 @@ export interface ICreateUser {
   email: string;
   password: string;
   name: string;
-  role: UserRole;
+  userType: UserRole;
   phone?: string;
   // Campos específicos de Hospital
   address?: string;

@@ -11,11 +11,11 @@ export class UsersRepository implements IUsersRepository {
         data: {
           email: data.email,
           password: data.password,
-          userType: data.role as UserType,
+          userType: data.userType as UserType,
         },
       });
 
-      if (data.role === "HOSPITAL") {
+      if (data.userType === "HOSPITAL") {
         await prisma.hospital.create({
           data: {
             userId: user.id,
@@ -24,7 +24,7 @@ export class UsersRepository implements IUsersRepository {
             phone: data.phone!,
           },
         });
-      } else if (data.role === "DOCTOR") {
+      } else if (data.userType === "DOCTOR") {
         await prisma.doctor.create({
           data: {
             userId: user.id,

@@ -5,7 +5,7 @@ import { container } from "tsyringe";
 
 export class UsersController {
   async create(req: Request, res: Response) {
-    const { email, password, name, role, address, phone, crm, specialty } =
+    const { email, password, name, userType, address, phone, crm, specialty } =
       req.body;
 
     const createUser = container.resolve(CreateUserService);
@@ -13,7 +13,7 @@ export class UsersController {
       name,
       email,
       password,
-      role,
+      userType,
       address,
       phone,
       crm,
