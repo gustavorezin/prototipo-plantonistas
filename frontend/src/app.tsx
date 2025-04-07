@@ -1,5 +1,10 @@
+import { AuthProvider } from "./contexts/auth-context";
 import { Login } from "./pages/login";
 
 export const App = () => {
-  return <Login />;
+  return (
+    <AuthProvider>
+      <Login />
+    </AuthProvider>
+  );
 };
