@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Toggle } from "../ui/toggle";
+import { useAuth } from "../../hooks/use-auth";
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -28,6 +29,7 @@ interface CardLoginContentProps {
 }
 
 export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
+  const { login } = useAuth();
   const [userType, setUserType] = useState<"HOSPITAL" | "DOCTOR">("HOSPITAL");
 
   const {
@@ -39,12 +41,20 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
     defaultValues: isRegister ? { userType } : {},
   });
 
-  const onSubmit = (data: RegisterFormData | LoginFormData) => {
-    console.log("Dados enviados:", data);
+  const handleOnSubmit = async (data: RegisterFormData | LoginFormData) => {
+    if (!isRegister) {
+      try {
+        await login(data.email, data.password);
+      } catch (error) {
+        console.error("Erro ao fazer login:", error);
+      }
+    } else {
+      console.log("Dados de registro:", data);
+    }
   };
 
   return (
-    <form className="space-y-4 mt-4" onSubmit={handleSubmit(onSubmit)}>
+    <form className="space-y-4 mt-4" onSubmit={handleSubmit(handleOnSubmit)}>
       {isRegister && (
         <>
           <Toggle
