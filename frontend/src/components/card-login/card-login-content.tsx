@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Toggle } from "../ui/toggle";
 import { useAuth } from "../../hooks/use-auth";
+import { create } from "../../services/users-service";
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -42,6 +43,7 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
   });
 
   const handleOnSubmit = async (data: RegisterFormData | LoginFormData) => {
+    console.log("isRegister", isRegister);
     if (!isRegister) {
       try {
         await login(data.email, data.password);
@@ -49,7 +51,16 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
         console.error("Erro ao fazer login:", error);
       }
     } else {
-      console.log("Dados de registro:", data);
+      console.log("Dados do formulário:", data);
+      try {
+        const response = await create({
+          ...(data as RegisterFormData),
+          userType,
+        });
+        console.log("Usuário cadastrado com sucesso:", response.data);
+      } catch (error) {
+        console.error("Erro ao cadastrar usuário:", error);
+      }
     }
   };
 
@@ -65,6 +76,7 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
             selected={userType}
             onChange={(value) => setUserType(value as "HOSPITAL" | "DOCTOR")}
           />
+          <input type="hidden" value={userType} {...register("userType")} />
           <Input
             {...register("name")}
             isError={isRegister && !!(errors as FieldErrors)?.name}

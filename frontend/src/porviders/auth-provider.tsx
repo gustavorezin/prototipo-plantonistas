@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthContext, User } from "../contexts/auth-context";
+import { login as loginUser } from "../services/users-service";
 import api from "../lib/api";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -18,9 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await api.post("/users/login", { email, password });
-
-    console.log("Login response:", response.data);
+    const response = await loginUser({ email, password });
 
     const { user, token } = response.data;
 
