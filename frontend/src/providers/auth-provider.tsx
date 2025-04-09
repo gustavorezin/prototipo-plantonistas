@@ -6,6 +6,7 @@ import api from "../lib/api";
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
@@ -16,6 +17,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(JSON.parse(storedUser));
       api.defaults.headers.Authorization = `Bearer ${storedToken}`;
     }
+
+    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -41,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 }
