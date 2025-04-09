@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
@@ -7,6 +8,8 @@ import { Input } from "../ui/input";
 import { Toggle } from "../ui/toggle";
 import { useAuth } from "../../hooks/use-auth";
 import { create } from "../../services/users-service";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -31,6 +34,7 @@ interface CardLoginContentProps {
 
 export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [userType, setUserType] = useState<"HOSPITAL" | "DOCTOR">("HOSPITAL");
 
   const {
@@ -43,23 +47,23 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
   });
 
   const handleOnSubmit = async (data: RegisterFormData | LoginFormData) => {
-    console.log("isRegister", isRegister);
     if (!isRegister) {
       try {
         await login(data.email, data.password);
+        toast.success("Login realizado com sucesso!");
+        navigate("/");
       } catch (error) {
-        console.error("Erro ao fazer login:", error);
+        toast.error("Erro ao fazer login. Verifique suas credenciais.");
       }
     } else {
-      console.log("Dados do formulário:", data);
       try {
-        const response = await create({
+        await create({
           ...(data as RegisterFormData),
           userType,
         });
-        console.log("Usuário cadastrado com sucesso:", response.data);
+        toast.success("Usuário cadastrado com sucesso!");
       } catch (error) {
-        console.error("Erro ao cadastrar usuário:", error);
+        toast.error("Erro ao cadastrar usuário. Tente novamente.");
       }
     }
   };
