@@ -1,5 +1,5 @@
 import { Login } from "./pages/login";
-import { AuthProvider } from "./porviders/auth-provider";
+import { AuthProvider } from "./providers/auth-provider";
 
 export const App = () => {
   return (
