@@ -4,6 +4,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  userType: "HOSPITAL" | "DOCTOR";
 }
 
 interface AuthContextType {
