@@ -45,6 +45,10 @@ export class UsersRepository implements IUsersRepository {
       where: {
         email,
       },
+      include: {
+        doctor: true,
+        hospital: true,
+      },
     });
 
     return user;

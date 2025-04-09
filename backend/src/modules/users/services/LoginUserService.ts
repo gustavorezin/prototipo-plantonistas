@@ -34,6 +34,17 @@ export class LoginUserService {
       expiresIn: authConfig.jwt.expiresIn,
     } as SignOptions);
 
-    return { user, token };
+    const userName =
+      user.userType === "DOCTOR" ? user.doctor?.name : user.hospital?.name;
+
+    return {
+      user: {
+        id: user.id,
+        name: userName,
+        email: user.email,
+        userType: user.userType,
+      },
+      token,
+    };
   }
 }
