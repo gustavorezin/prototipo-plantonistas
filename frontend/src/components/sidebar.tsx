@@ -26,11 +26,11 @@ export const Sidebar = () => {
         collapsed ? "w-14" : "w-64"
       )}
     >
-      <div className="flex items-center justify-between p-4 border-b border-slate-700 h-16">
+      <div className="flex items-center justify-between p-4 border-b border-gray-800 h-16">
         {!collapsed && <h1 className="text-xl font-bold">Plantonistas</h1>}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="text-slate-400"
+          className="text-secondary"
         >
           {collapsed ? <ArrowRightIcon /> : <ArrowLeftIcon />}
         </button>
@@ -42,8 +42,8 @@ export const Sidebar = () => {
             key={item.name}
             to={item.path}
             className={clsx(
-              "flex items-center gap-4 h-12 px-2 rounded hover:bg-slate-700 transition-colors",
-              location.pathname === item.path && "bg-slate-700"
+              "flex items-center gap-4 h-12 px-2 rounded hover:bg-gray-800 transition-colors",
+              location.pathname === item.path && "bg-gray-800"
             )}
           >
             <div className="min-w-[20px]">{item.icon}</div>
@@ -59,14 +59,14 @@ export const Sidebar = () => {
         ))}
       </nav>
 
-      <div className="p-2 border-t border-slate-700 flex items-center gap-2 h-16">
-        <div className="w-10 h-10 rounded-full bg-slate-500 flex items-center justify-center text-sm font-bold uppercase shrink-0">
+      <div className="p-2 border-t border-gray-800 flex items-center gap-2 h-16">
+        <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-sm font-bold uppercase shrink-0">
           {user?.name?.[0] || "U"}
         </div>
         {!collapsed && (
           <div className="transition-all duration-300 overflow-hidden">
             <p className="text-sm font-semibold">{user?.name || "Usuário"}</p>
-            <p className="text-xs text-slate-400 capitalize">
+            <p className="text-xs text-secondary capitalize">
               {user?.userType?.toLowerCase()}
             </p>
           </div>
