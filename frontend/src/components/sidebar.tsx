@@ -1,12 +1,19 @@
 import clsx from "clsx";
-import { Home, Mail, User, ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import {
+  Home,
+  Mail,
+  User,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  LogOut,
+} from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import { useAuth } from "../hooks/use-auth";
 
 export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
 
   const menuItems = [
@@ -30,33 +37,49 @@ export const Sidebar = () => {
         {!collapsed && <h1 className="text-xl font-bold">Plantonistas</h1>}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="text-secondary"
+          className="text-secondary cursor-pointer"
         >
           {collapsed ? <ArrowRightIcon /> : <ArrowLeftIcon />}
         </button>
       </div>
 
-      <nav className="flex-1 p-2 space-y-1">
-        {menuItems.map((item) => (
-          <Link
-            key={item.name}
-            to={item.path}
-            className={clsx(
-              "flex items-center gap-4 h-12 px-2 rounded hover:bg-gray-800 transition-colors",
-              location.pathname === item.path && "bg-gray-800"
-            )}
-          >
-            <div className="min-w-[20px]">{item.icon}</div>
-            <span
+      <nav className="flex flex-col flex-1 p-2 space-y-1">
+        <div className="flex-1 space-y-1">
+          {menuItems.map((item) => (
+            <Link
+              key={item.name}
+              to={item.path}
               className={clsx(
-                "whitespace-nowrap overflow-hidden transition-all duration-300",
-                collapsed ? "w-0 opacity-0" : "w-full opacity-100"
+                "flex items-center gap-4 h-12 px-2 rounded hover:bg-gray-800 transition-colors",
+                location.pathname === item.path && "bg-gray-800"
               )}
             >
-              {item.name}
-            </span>
-          </Link>
-        ))}
+              <div className="min-w-5">{item.icon}</div>
+              <span
+                className={clsx(
+                  "whitespace-nowrap overflow-hidden transition-all duration-300",
+                  collapsed ? "w-0 opacity-0" : "w-full opacity-100"
+                )}
+              >
+                {item.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+        <div
+          className="flex items-center gap-4 h-12 px-2 rounded hover:bg-gray-800 hover:text-red-600 transition-colors cursor-pointer"
+          onClick={logout}
+        >
+          <LogOut size={20} className="min-w-5" />
+          <span
+            className={clsx(
+              "whitespace-nowrap overflow-hidden transition-all duration-300",
+              collapsed ? "w-0 opacity-0" : "w-full opacity-100"
+            )}
+          >
+            Sair
+          </span>
+        </div>
       </nav>
 
       <div className="p-2 border-t border-gray-800 flex items-center gap-2 h-16">
