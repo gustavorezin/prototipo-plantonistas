@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
@@ -48,23 +47,15 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
 
   const handleOnSubmit = async (data: RegisterFormData | LoginFormData) => {
     if (!isRegister) {
-      try {
-        await login(data.email, data.password);
-        toast.success("Login realizado com sucesso!");
-        navigate("/");
-      } catch (error) {
-        toast.error("Erro ao fazer login. Verifique suas credenciais.");
-      }
+      await login(data.email, data.password);
+      toast.success("Login realizado com sucesso!");
+      navigate("/");
     } else {
-      try {
-        await create({
-          ...(data as RegisterFormData),
-          userType,
-        });
-        toast.success("Usuário cadastrado com sucesso!");
-      } catch (error) {
-        toast.error("Erro ao cadastrar usuário. Tente novamente.");
-      }
+      await create({
+        ...(data as RegisterFormData),
+        userType,
+      });
+      toast.success("Usuário cadastrado com sucesso!");
     }
   };
 
