@@ -5,6 +5,7 @@ interface CardUserProps {
   available: boolean;
   crm?: string;
   specialty?: string;
+  onClick?: () => void;
 }
 
 export const CardUser = ({
@@ -14,10 +15,13 @@ export const CardUser = ({
   available,
   crm = "",
   specialty = "",
+  onClick,
 }: CardUserProps) => {
-  console.log("CardUser", { name, address, phone, available, crm, specialty });
   return (
-    <div className="flex flex-col justify-between bg-white rounded-2xl p-4 shadow-md border border-gray-200 hover:shadow-lg transition cursor-pointer">
+    <div
+      onClick={onClick}
+      className="flex flex-col justify-between bg-white rounded-2xl p-4 shadow-md border border-gray-200 hover:shadow-lg transition cursor-pointer"
+    >
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-start">
           <div>

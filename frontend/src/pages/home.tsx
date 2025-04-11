@@ -3,15 +3,24 @@ import { IHospital, hospitalsService } from "../services/hospitals-service";
 import { CardUser } from "../components/card-user";
 import { useAuth } from "../hooks/use-auth";
 import { doctorsService, IDoctor } from "../services/doctors-service";
+import { RequestModal } from "../components/request-modal";
 
 export const Home = () => {
+  const { user } = useAuth();
+  const userType = user?.userType;
   const [hospitals, setHospitals] = useState<IHospital[]>([]);
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedReceiver, setSelectedReceiver] = useState<
+    IHospital | IDoctor | null
+  >(null);
 
-  const { user } = useAuth();
-  const userType = user?.userType;
+  const handleCardClick = (receiver: IHospital | IDoctor) => {
+    setSelectedReceiver(receiver);
+    setIsModalOpen(true);
+  };
 
   const filteredDoctors = doctors.filter((doctor) => {
     const matchesName = doctor.name
@@ -77,30 +86,39 @@ export const Home = () => {
         <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-2">
           <div className="grid grid-cols-2 gap-4">
             {userType == "DOCTOR"
-              ? filteredHospitals.map(
-                  ({ name, phone, address, hiring, userId }) => (
-                    <CardUser
-                      key={userId}
-                      name={name}
-                      phone={phone}
-                      address={address}
-                      available={hiring}
-                    />
-                  )
-                )
-              : filteredDoctors.map(
-                  ({ userId, available, crm, name, phone, specialty }) => (
-                    <CardUser
-                      key={userId}
-                      name={name}
-                      phone={phone}
-                      crm={crm}
-                      specialty={specialty}
-                      available={available}
-                    />
-                  )
-                )}
+              ? filteredHospitals.map((hospital) => (
+                  <CardUser
+                    key={hospital.userId}
+                    name={hospital.name}
+                    phone={hospital.phone}
+                    address={hospital.address}
+                    available={hospital.hiring}
+                    onClick={() => handleCardClick(hospital)}
+                  />
+                ))
+              : filteredDoctors.map((doctor) => (
+                  <CardUser
+                    key={doctor.userId}
+                    name={doctor.name}
+                    phone={doctor.phone}
+                    crm={doctor.crm}
+                    specialty={doctor.specialty}
+                    available={doctor.available}
+                    onClick={() => handleCardClick(doctor)}
+                  />
+                ))}
           </div>
+          {selectedReceiver && userType && (
+            <RequestModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              userType={userType}
+              receiver={selectedReceiver}
+              onSend={(message) => {
+                console.log("Mensagem enviada:", message);
+              }}
+            />
+          )}
         </div>
       </div>
 
