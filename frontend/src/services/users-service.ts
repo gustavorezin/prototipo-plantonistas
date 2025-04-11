@@ -1,12 +1,28 @@
-import { AxiosResponse } from "axios";
 import api from "../lib/api";
 
-interface LoginRequest {
+export interface IUserAuthProvider {
+  id: string;
+  name: string;
+  email: string;
+  userType: "HOSPITAL" | "DOCTOR";
+}
+
+export interface ILoginRequest {
   email: string;
   password: string;
 }
 
-interface CreateRequest {
+interface ILoginResponse {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    userType: "HOSPITAL" | "DOCTOR";
+  };
+  token: string;
+}
+
+interface ICreateRequest {
   userType: "HOSPITAL" | "DOCTOR";
   name: string;
   email: string;
@@ -17,10 +33,15 @@ interface CreateRequest {
   specialty?: string;
 }
 
-export const login = (data: LoginRequest): Promise<AxiosResponse> => {
-  return api.post("/users/login", data);
+const login = (data: ILoginRequest) => {
+  return api.post<ILoginResponse>("/users/login", data);
 };
 
-export const create = (data: CreateRequest) => {
+const create = (data: ICreateRequest) => {
   return api.post("/users", data);
+};
+
+export const usersService = {
+  login,
+  create,
 };

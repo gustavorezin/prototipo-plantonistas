@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Toggle } from "../ui/toggle";
 import { useAuth } from "../../hooks/use-auth";
-import { create } from "../../services/users-service";
+import { usersService } from "../../services/users-service";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 
@@ -47,11 +47,11 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
 
   const handleOnSubmit = async (data: RegisterFormData | LoginFormData) => {
     if (!isRegister) {
-      await login(data.email, data.password);
+      await login({ email: data.email, password: data.password });
       toast.success("Login realizado com sucesso!");
       navigate("/");
     } else {
-      await create({
+      await usersService.create({
         ...(data as RegisterFormData),
         userType,
       });

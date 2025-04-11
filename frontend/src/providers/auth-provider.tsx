@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
-import { AuthContext, User } from "../contexts/auth-context";
-import { login as loginUser } from "../services/users-service";
+import { AuthContext } from "../contexts/auth-context";
+import {
+  ILoginRequest,
+  IUserAuthProvider,
+  usersService,
+} from "../services/users-service";
 import api from "../lib/api";
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<IUserAuthProvider | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,8 +29,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
-    const response = await loginUser({ email, password });
+  const login = async (loginPayload: ILoginRequest) => {
+    const response = await usersService.login(loginPayload);
 
     const { user, token } = response.data;
 
