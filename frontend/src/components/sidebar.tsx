@@ -3,8 +3,8 @@ import {
   Home,
   Mail,
   User,
-  ArrowLeftIcon,
-  ArrowRightIcon,
+  PanelLeftClose,
+  PanelLeftOpen,
   LogOut,
 } from "lucide-react";
 import { useState } from "react";
@@ -39,7 +39,7 @@ export const Sidebar = () => {
           onClick={() => setCollapsed(!collapsed)}
           className="text-secondary cursor-pointer"
         >
-          {collapsed ? <ArrowRightIcon /> : <ArrowLeftIcon />}
+          {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
         </button>
       </div>
 
