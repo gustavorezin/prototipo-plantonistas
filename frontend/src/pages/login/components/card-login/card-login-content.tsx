@@ -2,11 +2,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Toggle } from "../ui/toggle";
-import { useAuth } from "../../hooks/use-auth";
-import { usersService } from "../../services/users-service";
+import { Button } from "@commons/components/ui/button";
+import { Input } from "@commons/components/ui/input";
+import { Toggle } from "@commons/components/ui/toggle";
+import { useAuth } from "@commons/hooks/use-auth";
+import { usersService } from "@services/users-service";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 

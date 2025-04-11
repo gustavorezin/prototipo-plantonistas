@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { IUserAuthProvider, ILoginRequest } from "../services/users-service";
+import { IUserAuthProvider, ILoginRequest } from "@services/users-service";
 
 interface AuthContextType {
   user: IUserAuthProvider | null;

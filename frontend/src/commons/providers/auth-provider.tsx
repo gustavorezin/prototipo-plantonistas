@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { AuthContext } from "../contexts/auth-context";
+import { AuthContext } from "@commons/contexts/auth-context";
 import {
   ILoginRequest,
   IUserAuthProvider,
   usersService,
-} from "../services/users-service";
-import api from "../lib/api";
+} from "@services/users-service";
+import api from "@commons/lib/api";
 
 interface AuthProviderProps {
   children: React.ReactNode;

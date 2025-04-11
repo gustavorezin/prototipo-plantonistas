@@ -1,9 +1,9 @@
+import { useAuth } from "@commons/hooks/use-auth";
+import { doctorsService, IDoctor } from "@services/doctors-service";
+import { hospitalsService, IHospital } from "@services/hospitals-service";
 import { useEffect, useState } from "react";
-import { IHospital, hospitalsService } from "../services/hospitals-service";
-import { CardUser } from "../components/card-user";
-import { useAuth } from "../hooks/use-auth";
-import { doctorsService, IDoctor } from "../services/doctors-service";
-import { RequestModal } from "../components/request-modal";
+import { CardUser } from "./components/card-user";
+import { RequestModal } from "./components/request-modal";
 
 export const Home = () => {
   const { user } = useAuth();

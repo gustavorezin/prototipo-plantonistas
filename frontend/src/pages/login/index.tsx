@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CardLogin } from "../components/card-login";
+import { CardLogin } from "./components/card-login";
 
 export const Login = () => {
   const [isRegister, setIsRegister] = useState(false);

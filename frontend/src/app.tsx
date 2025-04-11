@@ -1,5 +1,5 @@
 import { RouterProvider } from "react-router";
-import { AuthProvider } from "./providers/auth-provider";
+import { AuthProvider } from "@commons/providers/auth-provider";
 import { router } from "./routes";
 import { Toaster } from "sonner";
 

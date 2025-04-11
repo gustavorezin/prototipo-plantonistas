@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { IHospital } from "../services/hospitals-service";
-import { IDoctor } from "../services/doctors-service";
+import { IHospital } from "@services/hospitals-service";
+import { IDoctor } from "@services/doctors-service";
 
 type RequestModalProps = {
   isOpen: boolean;

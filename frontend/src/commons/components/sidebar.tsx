@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "@commons/hooks/use-auth";
 
 export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
