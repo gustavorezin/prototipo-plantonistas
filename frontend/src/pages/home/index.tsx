@@ -1,13 +1,15 @@
+import { SectionCard } from "@commons/components/section-card";
 import { useAuth } from "@commons/hooks/use-auth";
 import { doctorsService, IDoctor } from "@services/doctors-service";
 import { hospitalsService, IHospital } from "@services/hospitals-service";
 import { useEffect, useState } from "react";
-import { CardUser } from "./components/card-user";
+import { HospitalOrDoctorList } from "./components/hospital-or-doctor-list";
 import { RequestModal } from "./components/request-modal";
 
 export const Home = () => {
   const { user } = useAuth();
   const userType = user?.userType;
+  const isUserDoctor = userType === "DOCTOR";
   const [hospitals, setHospitals] = useState<IHospital[]>([]);
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
   const [search, setSearch] = useState("");
@@ -44,22 +46,26 @@ export const Home = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if (userType == "DOCTOR") {
-        const response = await hospitalsService.list();
-        setHospitals(response.data);
+      const response = isUserDoctor
+        ? await hospitalsService.list()
+        : await doctorsService.list();
+      if (isUserDoctor) {
+        setHospitals(response.data as IHospital[]);
       } else {
-        const response = await doctorsService.list();
-        setDoctors(response.data);
+        setDoctors(response.data as IDoctor[]);
       }
     };
 
     fetchUsers();
-  }, [userType]);
+  }, [isUserDoctor]);
 
   return (
     <div className="flex flex-row h-screen bg-white p-4 gap-4">
-      <div className="basis-2/3 flex flex-col bg-white shadow-2xl/30 shadow-primary rounded-2xl p-4">
-        <div className="flex flex-row gap-4 mb-4">
+      <SectionCard.Root className="basis-2/3">
+        <SectionCard.Header>
+          Solicitar {isUserDoctor ? "hospital" : "médico"}
+        </SectionCard.Header>
+        <div className="flex flex-row gap-4 my-4">
           <input
             type="text"
             placeholder="Buscar por nome..."
@@ -72,42 +78,21 @@ export const Home = () => {
             onChange={(e) => setFilter(e.target.value)}
             className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           >
-            <>
-              <option value="">Todos</option>
-              <option value="true">
-                {userType === "DOCTOR" ? "Contratando" : "Disponível"}
-              </option>
-              <option value="false">
-                {userType === "DOCTOR" ? "Não contratando" : "Indisponível"}
-              </option>
-            </>
+            <option value="">Todos</option>
+            <option value="true">
+              {isUserDoctor ? "Contratando" : "Disponível"}
+            </option>
+            <option value="false">
+              {isUserDoctor ? "Não contratando" : "Indisponível"}
+            </option>
           </select>
         </div>
-        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-2">
-          <div className="grid grid-cols-2 gap-4">
-            {userType == "DOCTOR"
-              ? filteredHospitals.map((hospital) => (
-                  <CardUser
-                    key={hospital.userId}
-                    name={hospital.name}
-                    phone={hospital.phone}
-                    address={hospital.address}
-                    available={hospital.hiring}
-                    onClick={() => handleCardClick(hospital)}
-                  />
-                ))
-              : filteredDoctors.map((doctor) => (
-                  <CardUser
-                    key={doctor.userId}
-                    name={doctor.name}
-                    phone={doctor.phone}
-                    crm={doctor.crm}
-                    specialty={doctor.specialty}
-                    available={doctor.available}
-                    onClick={() => handleCardClick(doctor)}
-                  />
-                ))}
-          </div>
+        <SectionCard.Content>
+          <HospitalOrDoctorList
+            userType={userType}
+            items={isUserDoctor ? filteredHospitals : filteredDoctors}
+            onCardClick={handleCardClick}
+          />
           {selectedReceiver && userType && (
             <RequestModal
               isOpen={isModalOpen}
@@ -119,10 +104,12 @@ export const Home = () => {
               }}
             />
           )}
-        </div>
-      </div>
+        </SectionCard.Content>
+      </SectionCard.Root>
 
-      <div className="basis-1/3 bg-white shadow-2xl/30 shadow-primary rounded-2xl"></div>
+      <SectionCard.Root className="basis-1/3">
+        <SectionCard.Header>Solicitações realizadas</SectionCard.Header>
+      </SectionCard.Root>
     </div>
   );
 };
