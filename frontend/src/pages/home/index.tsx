@@ -5,6 +5,7 @@ import { hospitalsService, IHospital } from "@services/hospitals-service";
 import { useEffect, useState } from "react";
 import { HospitalOrDoctorList } from "./components/hospital-or-doctor-list";
 import { RequestModal } from "./components/request-modal";
+import { IRequest, requestsService } from "@services/requests-service";
 
 export const Home = () => {
   const { user } = useAuth();
@@ -12,6 +13,7 @@ export const Home = () => {
   const isUserDoctor = userType === "DOCTOR";
   const [hospitals, setHospitals] = useState<IHospital[]>([]);
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
+  const [requests, setRequests] = useState<IRequest[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,8 +58,14 @@ export const Home = () => {
       }
     };
 
+    const fetchRequests = async () => {
+      const response = await requestsService.listByDoctor(user?.id || "");
+      setRequests(response.data);
+    };
+
     fetchUsers();
-  }, [isUserDoctor]);
+    fetchRequests();
+  }, [isUserDoctor, user?.id]);
 
   return (
     <div className="flex flex-row h-screen bg-white p-4 gap-4">
@@ -109,6 +117,15 @@ export const Home = () => {
 
       <SectionCard.Root className="basis-1/3">
         <SectionCard.Header>Solicitações realizadas</SectionCard.Header>
+        <SectionCard.Content>
+          {requests.map((request) => (
+            <div key={request.id} className="border p-4 rounded-md">
+              <h3 className="text-lg font-semibold">{request.hospitalId}</h3>
+              <p>{request.message}</p>
+              <p>Status: {request.status}</p>
+            </div>
+          ))}
+        </SectionCard.Content>
       </SectionCard.Root>
     </div>
   );
