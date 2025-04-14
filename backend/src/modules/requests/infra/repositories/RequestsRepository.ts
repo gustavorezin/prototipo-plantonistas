@@ -11,4 +11,13 @@ export class RequestsRepository implements IRequestsRepository {
     });
     return requests;
   }
+
+  async findByHospitalId(hospitalId: string): Promise<IRequest[]> {
+    const requests = await prisma.request.findMany({
+      where: {
+        hospitalId,
+      },
+    });
+    return requests;
+  }
 }

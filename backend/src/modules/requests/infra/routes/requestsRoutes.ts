@@ -8,3 +8,4 @@ const requestsController = new RequestsController();
 requestsRouter.use(isAuthenticated);
 
 requestsRouter.get("/doctor/:doctorId", requestsController.listByDoctor);
+requestsRouter.get("/hospital/:hospitalId", requestsController.listByHospital);

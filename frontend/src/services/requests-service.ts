@@ -21,6 +21,11 @@ const listByDoctor = (doctorId: string) => {
   return api.get<IRequest[]>(`/requests/doctor/${doctorId}`);
 };
 
+const listByHospital = (hospitalId: string) => {
+  return api.get<IRequest[]>(`/requests/hospital/${hospitalId}`);
+};
+
 export const requestsService = {
   listByDoctor,
+  listByHospital,
 };

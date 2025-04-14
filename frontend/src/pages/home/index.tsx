@@ -71,7 +71,9 @@ export const Home = () => {
     };
 
     const fetchRequests = async () => {
-      const response = await requestsService.listByDoctor(user?.id || "");
+      const response = isUserDoctor
+        ? await requestsService.listByDoctor(user?.id || "")
+        : await requestsService.listByHospital(user?.id || "");
       setRequests(response.data);
     };
 
