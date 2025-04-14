@@ -1,10 +1,17 @@
 import api from "@commons/lib/api";
 
+export type IRequestStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "REJECTED"
+  | "CANCELLED"
+  | "CONTRACTED";
+
 export interface IRequest {
   id: string;
   hospitalId: string;
   doctorId: string;
-  status: "PENDING" | "ACCEPTED" | "REJECTED" | "CANCELLED" | "CONTRACTED";
+  status: IRequestStatus;
   message?: string;
   createdAt: Date;
   updatedAt: Date;
