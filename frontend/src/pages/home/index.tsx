@@ -139,7 +139,7 @@ export const Home = () => {
           >
             <option value="">Todos</option>
             <option value="PENDING">Pendentes</option>
-            <option value="ACCEPTED">Aceitados</option>
+            <option value="ACCEPTED">Aceitos</option>
             <option value="REJECTED">Rejeitados</option>
             <option value="CANCELLED">Cancelados</option>
             <option value="CONTRACTED">Contratados</option>

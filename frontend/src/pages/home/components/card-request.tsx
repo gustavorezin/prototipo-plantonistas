@@ -34,7 +34,7 @@ export const CardRequest = ({
   return (
     <div
       onClick={onClick}
-      className="flex flex-col justify-between bg-white rounded-2xl p-4 shadow-md border border-gray-200 hover:shadow-lg transition cursor-pointer"
+      className="flex flex-col mb-4 justify-between bg-white rounded-2xl p-4 shadow-md border border-gray-200 hover:shadow-lg transition cursor-pointer"
     >
       <div className="flex justify-between items-start">
         <h1 className="text-lg font-semibold text-gray-800">{name}</h1>
