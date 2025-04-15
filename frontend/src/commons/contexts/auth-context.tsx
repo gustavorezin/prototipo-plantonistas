@@ -6,6 +6,7 @@ interface AuthContextType {
   token: string | null;
   login: (loginPayload: ILoginRequest) => Promise<void>;
   logout: () => void;
+  updateStatus: (status: boolean) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(

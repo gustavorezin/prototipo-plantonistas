@@ -1,9 +1,18 @@
 import { ListHospitalsService } from "@modules/hospitals/services/ListHospitalsService";
 import { ShowHospitalService } from "@modules/hospitals/services/ShowHospitalService";
+import { UpdateHiringHospitalService } from "@modules/hospitals/services/UpdateHiringHospitalService";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
 export class HospitalsController {
+  async updateHiring(req: Request, res: Response) {
+    const { id } = req.params;
+    const { hiring } = req.body;
+    const updateHiringHospital = container.resolve(UpdateHiringHospitalService);
+    await updateHiringHospital.execute(id, hiring);
+    res.status(204).send();
+  }
+
   async show(req: Request, res: Response) {
     const { id } = req.params;
     const showHospital = container.resolve(ShowHospitalService);

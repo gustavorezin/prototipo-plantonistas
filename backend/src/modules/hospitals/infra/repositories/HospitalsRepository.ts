@@ -3,6 +3,17 @@ import { IHospital } from "@modules/hospitals/domain/models/IHospital";
 import { IHospitalsRepository } from "@modules/hospitals/domain/repositories/IHospitalsRepository";
 
 export class HospitalsRepository implements IHospitalsRepository {
+  async updateHiringStatus(id: string, hiring: boolean): Promise<void> {
+    await prisma.hospital.update({
+      where: {
+        userId: id,
+      },
+      data: {
+        hiring,
+      },
+    });
+  }
+
   async findAll(): Promise<IHospital[]> {
     const hospitals = await prisma.hospital.findMany();
     return hospitals;

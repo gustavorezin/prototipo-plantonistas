@@ -6,6 +6,8 @@ import {
   usersService,
 } from "@services/users-service";
 import api from "@commons/lib/api";
+import { hospitalsService } from "@services/hospitals-service";
+import { doctorsService } from "@services/doctors-service";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -50,8 +52,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     delete api.defaults.headers.Authorization;
   };
 
+  const updateStatus = async (status: boolean) => {
+    if (user) {
+      const updatedUser = { ...user, status };
+      setUser(updatedUser);
+      localStorage.setItem("authUser", JSON.stringify(updatedUser));
+      if (user.userType === "DOCTOR") {
+        doctorsService.updateAvailable(user.id, status);
+      } else {
+        hospitalsService.updateHiring(user.id, status);
+      }
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateStatus }}>
       {!loading && children}
     </AuthContext.Provider>
   );

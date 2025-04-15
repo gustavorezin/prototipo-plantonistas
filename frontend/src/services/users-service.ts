@@ -3,6 +3,7 @@ import api from "@commons/lib/api";
 export interface IUserAuthProvider {
   id: string;
   name: string;
+  status: boolean;
   email: string;
   userType: "HOSPITAL" | "DOCTOR";
 }
@@ -16,6 +17,7 @@ interface ILoginResponse {
   user: {
     id: string;
     name: string;
+    status: boolean;
     email: string;
     userType: "HOSPITAL" | "DOCTOR";
   };

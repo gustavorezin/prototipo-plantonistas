@@ -3,6 +3,17 @@ import { IDoctor } from "@modules/doctors/domain/models/IDoctor";
 import { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
 
 export class DoctorsRepository implements IDoctorsRepository {
+  async updateAvailableStatus(id: string, available: boolean): Promise<void> {
+    await prisma.doctor.update({
+      where: {
+        userId: id,
+      },
+      data: {
+        available,
+      },
+    });
+  }
+
   async findByCrm(crm: string): Promise<IDoctor | null> {
     const doctor = await prisma.doctor.findUnique({
       where: {
