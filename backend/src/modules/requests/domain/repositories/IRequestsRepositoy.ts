@@ -1,6 +1,7 @@
-import { IRequest } from "../models/IRequest";
+import { IRequestWithDoctor } from "../models/IRequestWithDoctor";
+import { IRequestWithHospital } from "../models/IRequestWithHospital";
 
 export interface IRequestsRepository {
-  findByDoctorId(doctorId: string): Promise<IRequest[]>;
-  findByHospitalId(hospitalId: string): Promise<IRequest[]>;
+  findByDoctorId(doctorId: string): Promise<IRequestWithHospital[]>;
+  findByHospitalId(hospitalId: string): Promise<IRequestWithDoctor[]>;
 }

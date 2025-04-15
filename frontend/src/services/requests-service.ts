@@ -1,4 +1,6 @@
 import api from "@commons/lib/api";
+import { IDoctor } from "./doctors-service";
+import { IHospital } from "./hospitals-service";
 
 export type IRequestStatus =
   | "PENDING"
@@ -15,6 +17,8 @@ export interface IRequest {
   message?: string;
   createdAt: Date;
   updatedAt: Date;
+  doctor?: IDoctor;
+  hospital?: IHospital;
 }
 
 const listByDoctor = (doctorId: string) => {

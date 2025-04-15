@@ -149,7 +149,9 @@ export const Home = () => {
           {filteredRequests.map((request) => (
             <CardRequest
               key={request.id}
-              name="Nome do médico ou hospital"
+              name={
+                isUserDoctor ? request.hospital!.name : request.doctor!.name
+              }
               message={request.message}
               status={request.status}
               onClick={() => console.log("clicou")}
