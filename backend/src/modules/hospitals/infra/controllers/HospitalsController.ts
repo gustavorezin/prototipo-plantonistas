@@ -1,5 +1,5 @@
-import { ListHospitalsService } from "@modules/hospitals/serices/ListHospitalsService";
-import { ShowHospitalService } from "@modules/hospitals/serices/ShowHospitalService";
+import { ListHospitalsService } from "@modules/hospitals/services/ListHospitalsService";
+import { ShowHospitalService } from "@modules/hospitals/services/ShowHospitalService";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 

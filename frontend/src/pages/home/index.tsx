@@ -2,7 +2,7 @@ import { SectionCard } from "@commons/components/section-card";
 import { useAuth } from "@commons/hooks/use-auth";
 import { doctorsService, IDoctor } from "@services/doctors-service";
 import { hospitalsService, IHospital } from "@services/hospitals-service";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HospitalOrDoctorList } from "./components/hospital-or-doctor-list";
 import { RequestModal } from "./components/request-modal";
 import {
@@ -58,28 +58,40 @@ export const Home = () => {
     return matchesStatus;
   });
 
+  const handleOnSendRequest = async (message: string) => {
+    if (!selectedReceiver || !user) return;
+
+    await requestsService.create({
+      message,
+      doctorId: isUserDoctor ? user.id : selectedReceiver.userId,
+      hospitalId: isUserDoctor ? selectedReceiver.userId : user.id,
+    });
+
+    fetchRequests();
+  };
+
+  const fetchUsers = useCallback(async () => {
+    const response = isUserDoctor
+      ? await hospitalsService.list()
+      : await doctorsService.list();
+    if (isUserDoctor) {
+      setHospitals(response.data as IHospital[]);
+    } else {
+      setDoctors(response.data as IDoctor[]);
+    }
+  }, [isUserDoctor]);
+
+  const fetchRequests = useCallback(async () => {
+    const response = isUserDoctor
+      ? await requestsService.listByDoctor(user?.id || "")
+      : await requestsService.listByHospital(user?.id || "");
+    setRequests(response.data);
+  }, [isUserDoctor, user?.id]);
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      const response = isUserDoctor
-        ? await hospitalsService.list()
-        : await doctorsService.list();
-      if (isUserDoctor) {
-        setHospitals(response.data as IHospital[]);
-      } else {
-        setDoctors(response.data as IDoctor[]);
-      }
-    };
-
-    const fetchRequests = async () => {
-      const response = isUserDoctor
-        ? await requestsService.listByDoctor(user?.id || "")
-        : await requestsService.listByHospital(user?.id || "");
-      setRequests(response.data);
-    };
-
     fetchUsers();
     fetchRequests();
-  }, [isUserDoctor, user?.id]);
+  }, [fetchUsers, fetchRequests]);
 
   return (
     <div className="flex flex-row h-screen bg-white p-4 gap-4">
@@ -121,9 +133,7 @@ export const Home = () => {
               onClose={() => setIsModalOpen(false)}
               userType={userType}
               receiver={selectedReceiver}
-              onSend={(message) => {
-                console.log("Mensagem enviada:", message);
-              }}
+              onSend={(message) => handleOnSendRequest(message)}
             />
           )}
         </SectionCard.Content>

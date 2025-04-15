@@ -1,9 +1,22 @@
+import { CreateRequestService } from "@modules/requests/services/CreateRequestService";
 import { ListRequestsByDoctorService } from "@modules/requests/services/ListRequestsByDoctorService";
 import { ListRequestsByHospitalService } from "@modules/requests/services/ListRequestsByHospitalService";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
 export class RequestsController {
+  async create(req: Request, res: Response) {
+    const { hospitalId, doctorId, message } = req.body;
+
+    const createRequest = container.resolve(CreateRequestService);
+    const request = await createRequest.execute({
+      hospitalId,
+      doctorId,
+      message,
+    });
+    res.status(201).json(request);
+  }
+
   async listByDoctor(req: Request, res: Response) {
     const { doctorId } = req.params;
     const listByDoctor = container.resolve(ListRequestsByDoctorService);

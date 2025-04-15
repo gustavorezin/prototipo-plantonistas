@@ -21,6 +21,20 @@ export interface IRequest {
   hospital?: IHospital;
 }
 
+interface ICreateRequest {
+  doctorId: string;
+  hospitalId: string;
+  message?: string;
+}
+
+const create = ({ doctorId, hospitalId, message = "" }: ICreateRequest) => {
+  return api.post("/requests", {
+    doctorId,
+    hospitalId,
+    message,
+  });
+};
+
 const listByDoctor = (doctorId: string) => {
   return api.get<IRequest[]>(`/requests/doctor/${doctorId}`);
 };
@@ -30,6 +44,7 @@ const listByHospital = (hospitalId: string) => {
 };
 
 export const requestsService = {
+  create,
   listByDoctor,
   listByHospital,
 };
