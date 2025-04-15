@@ -3,6 +3,7 @@ import { ICreateRequest } from "@modules/requests/domain/models/ICreateRequest";
 import { IRequest } from "@modules/requests/domain/models/IRequest";
 import { IRequestWithDoctor } from "@modules/requests/domain/models/IRequestWithDoctor";
 import { IRequestWithHospital } from "@modules/requests/domain/models/IRequestWithHospital";
+import { IUpdateStatusRequest } from "@modules/requests/domain/models/IUpdateStatusRequest";
 import { IRequestsRepository } from "@modules/requests/domain/repositories/IRequestsRepositoy";
 import { RequestStatus } from "@prisma/client";
 
@@ -18,6 +19,18 @@ export class RequestsRepository implements IRequestsRepository {
         doctorId,
         message,
         status: RequestStatus.PENDING,
+      },
+    });
+    return request;
+  }
+
+  async updateStatus({ id, status }: IUpdateStatusRequest): Promise<IRequest> {
+    const request = await prisma.request.update({
+      where: {
+        id,
+      },
+      data: {
+        status,
       },
     });
     return request;

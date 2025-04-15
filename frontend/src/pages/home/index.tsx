@@ -70,6 +70,17 @@ export const Home = () => {
     fetchRequests();
   };
 
+  const handleOnStatusRequestChange = async (
+    id: string,
+    status: IRequestStatus
+  ) => {
+    await requestsService.updateStatus({
+      id,
+      status,
+    });
+    fetchRequests();
+  };
+
   const fetchUsers = useCallback(async () => {
     const response = isUserDoctor
       ? await hospitalsService.list()
@@ -164,7 +175,9 @@ export const Home = () => {
               }
               message={request.message}
               status={request.status}
-              onClick={() => console.log("clicou")}
+              onStatusChange={async (newStatus) =>
+                handleOnStatusRequestChange(request.id, newStatus)
+              }
             />
           ))}
         </SectionCard.Content>

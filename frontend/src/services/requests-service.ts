@@ -27,11 +27,22 @@ interface ICreateRequest {
   message?: string;
 }
 
+interface IUpdateStatusRequest {
+  id: string;
+  status: IRequestStatus;
+}
+
 const create = ({ doctorId, hospitalId, message = "" }: ICreateRequest) => {
   return api.post("/requests", {
     doctorId,
     hospitalId,
     message,
+  });
+};
+
+const updateStatus = ({ id, status }: IUpdateStatusRequest) => {
+  return api.put(`/requests/${id}`, {
+    status,
   });
 };
 
@@ -45,6 +56,7 @@ const listByHospital = (hospitalId: string) => {
 
 export const requestsService = {
   create,
+  updateStatus,
   listByDoctor,
   listByHospital,
 };
