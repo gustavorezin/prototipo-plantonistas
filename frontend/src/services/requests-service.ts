@@ -24,6 +24,7 @@ export interface IRequest {
 interface ICreateRequest {
   doctorId: string;
   hospitalId: string;
+  sender: 'DOCTOR' | 'HOSPITAL';
   message?: string;
 }
 
@@ -32,10 +33,11 @@ interface IUpdateStatusRequest {
   status: IRequestStatus;
 }
 
-const create = ({ doctorId, hospitalId, message = "" }: ICreateRequest) => {
+const create = ({ doctorId, hospitalId, sender, message = "" }: ICreateRequest) => {
   return api.post("/requests", {
     doctorId,
     hospitalId,
+    sender,
     message,
   });
 };

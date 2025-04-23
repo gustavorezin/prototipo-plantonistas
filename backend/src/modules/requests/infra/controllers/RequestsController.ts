@@ -7,12 +7,13 @@ import { container } from "tsyringe";
 
 export class RequestsController {
   async create(req: Request, res: Response) {
-    const { hospitalId, doctorId, message } = req.body;
+    const { hospitalId, doctorId, message, sender } = req.body;
 
     const createRequest = container.resolve(CreateRequestService);
     const request = await createRequest.execute({
       hospitalId,
       doctorId,
+      sender,
       message,
     });
     res.status(201).json(request);

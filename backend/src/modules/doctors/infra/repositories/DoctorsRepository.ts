@@ -1,5 +1,6 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
 import { IDoctor } from "@modules/doctors/domain/models/IDoctor";
+import { IDoctorMail } from "@modules/doctors/domain/models/IDoctorMail";
 import { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
 
 export class DoctorsRepository implements IDoctorsRepository {
@@ -38,5 +39,26 @@ export class DoctorsRepository implements IDoctorsRepository {
     });
 
     return doctor;
+  }
+
+  async findNameAndEmailById(id: string): Promise<IDoctorMail | null> {
+    const doctor = await prisma.doctor.findUnique({
+      where: {
+        userId: id,
+      },
+      select: {
+        name: true,
+        user: {
+          select: {
+            email: true,
+          },
+        },
+      },
+    });
+
+    return {
+      name: doctor?.name,
+      email: doctor?.user?.email,
+    } as IDoctorMail;
   }
 }

@@ -63,6 +63,7 @@ export const Home = () => {
 
     await requestsService.create({
       message,
+      sender: isUserDoctor ? "DOCTOR" : "HOSPITAL",
       doctorId: isUserDoctor ? user.id : selectedReceiver.userId,
       hospitalId: isUserDoctor ? selectedReceiver.userId : user.id,
     });

@@ -29,7 +29,9 @@ export class CreateRequestService {
 
     const request = await this.requestsRepository.create(data);
 
-    const doctor = await this.doctorsRepository.findById(data.doctorId);
+    const doctor = await this.doctorsRepository.findNameAndEmailById(
+      data.doctorId
+    );
     if (!doctor) {
       throw new AppError("Doctor not found");
     }
@@ -41,17 +43,29 @@ export class CreateRequestService {
       throw new AppError("Hospital not found");
     }
 
+    const isDoctorSender = data.sender === "DOCTOR";
+
+    const sender = {
+      name: isDoctorSender ? doctor.name : hospital.name,
+      email: isDoctorSender ? doctor.email : hospital.email,
+    };
+
+    const receiver = {
+      name: isDoctorSender ? hospital.name : doctor.name,
+      email: isDoctorSender ? hospital.email : doctor.email,
+    };
+
     await EtherealMailProvider.sendMail({
       to: {
-        name: doctor.name,
-        email: "medico@email.com" /* doctor.email */,
+        name: receiver.name,
+        email: receiver.email,
       },
       from: {
-        name: hospital.name,
-        email: hospital.email /* hospital.email */,
+        name: sender.name,
+        email: sender.email,
       },
       subject: "Solicitação de consulta",
-      content: `Olá ${doctor.name}, você recebeu uma solicitação de ${hospital.name}.\n\n${data.message}`,
+      content: `Olá ${receiver.name}, você recebeu uma solicitação de ${sender.name}.\n\n${data.message}`,
     });
     return request;
   }
