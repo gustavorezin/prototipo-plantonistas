@@ -8,13 +8,11 @@ export function isAuthenticated(
   _response: Response,
   next: NextFunction
 ) {
-  const authHeader = request.headers.authorization;
+  const token = request.cookies?.token;
 
-  if (!authHeader) {
-    throw new AppError("JWT Token is missing.");
+  if (!token) {
+    throw new AppError("JWT Token is missing.", 401);
   }
-
-  const token = authHeader.split(" ")[1];
 
   try {
     const decodedToken = verify(token, authConfig.jwt.secret);

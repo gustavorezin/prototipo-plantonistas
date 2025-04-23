@@ -6,3 +6,4 @@ const usersController = new UsersController();
 
 usersRouter.post("/", usersController.create);
 usersRouter.post("/login", usersController.login);
+usersRouter.post("/logout", usersController.logout);

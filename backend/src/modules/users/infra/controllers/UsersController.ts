@@ -19,6 +19,7 @@ export class UsersController {
       crm,
       specialty,
     });
+
     res.status(201).json(user);
   }
 
@@ -27,6 +28,22 @@ export class UsersController {
 
     const loginUser = container.resolve(LoginUserService);
     const { user, token } = await loginUser.execute({ email, password });
-    res.status(200).json({ user, token });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24, // 1 dia
+    });
+
+    res.status(200).json({ user });
+  }
+
+  async logout(_req: Request, res: Response) {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "strict",
+    });
+
+    res.sendStatus(204);
   }
 }

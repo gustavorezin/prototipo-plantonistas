@@ -3,7 +3,6 @@ import { IUserAuthProvider, ILoginRequest } from "@services/users-service";
 
 interface AuthContextType {
   user: IUserAuthProvider | null;
-  token: string | null;
   login: (loginPayload: ILoginRequest) => Promise<void>;
   logout: () => void;
   updateStatus: (status: boolean) => Promise<void>;

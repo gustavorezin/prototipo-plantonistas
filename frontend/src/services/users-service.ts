@@ -21,7 +21,6 @@ interface ILoginResponse {
     email: string;
     userType: "HOSPITAL" | "DOCTOR";
   };
-  token: string;
 }
 
 interface ICreateRequest {
@@ -39,11 +38,16 @@ const login = (data: ILoginRequest) => {
   return api.post<ILoginResponse>("/users/login", data);
 };
 
+const logout = () => {
+  return api.post("/users/logout");
+};
+
 const create = (data: ICreateRequest) => {
   return api.post("/users", data);
 };
 
 export const usersService = {
   login,
+  logout,
   create,
 };

@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
 import { AuthContext } from "@commons/contexts/auth-context";
+import { doctorsService } from "@services/doctors-service";
+import { hospitalsService } from "@services/hospitals-service";
 import {
   ILoginRequest,
   IUserAuthProvider,
   usersService,
 } from "@services/users-service";
-import api from "@commons/lib/api";
-import { hospitalsService } from "@services/hospitals-service";
-import { doctorsService } from "@services/doctors-service";
+import { useEffect, useState } from "react";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -15,17 +14,13 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<IUserAuthProvider | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("authToken");
     const storedUser = localStorage.getItem("authUser");
 
-    if (storedToken && storedUser) {
-      setToken(storedToken);
+    if (storedUser) {
       setUser(JSON.parse(storedUser));
-      api.defaults.headers.Authorization = `Bearer ${storedToken}`;
     }
 
     setLoading(false);
@@ -34,22 +29,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = async (loginPayload: ILoginRequest) => {
     const response = await usersService.login(loginPayload);
 
-    const { user, token } = response.data;
+    const { user } = response.data;
 
     setUser(user);
-    setToken(token);
 
-    localStorage.setItem("authToken", token);
     localStorage.setItem("authUser", JSON.stringify(user));
-    api.defaults.headers.Authorization = `Bearer ${token}`;
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("authToken");
+  const logout = async () => {
+    await usersService.logout();
     localStorage.removeItem("authUser");
-    delete api.defaults.headers.Authorization;
+    setUser(null);
   };
 
   const updateStatus = async (status: boolean) => {
@@ -66,7 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, updateStatus }}>
+    <AuthContext.Provider value={{ user, login, logout, updateStatus }}>
       {!loading && children}
     </AuthContext.Provider>
   );
