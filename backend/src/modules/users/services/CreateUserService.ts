@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { ICreateUser } from "../domain/models/ICreateUser";
-import { IUsersRepository } from "../domain/repositories/IUsersRepository";
+import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
 import { HashProvider } from "@commons/providers/HashProvider";
 import { AppError } from "@commons/error/AppError";
-import { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
+import type { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
 
 @injectable()
 export class CreateUserService {

@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { IUpdateStatusRequest } from "../domain/models/IUpdateStatusRequest";
-import { IRequestsRepository } from "../domain/repositories/IRequestsRepositoy";
+import type { IRequestsRepository } from "../domain/repositories/IRequestsRepositoy";
 
 @injectable()
 export class UpdateStatusRequestService {

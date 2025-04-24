@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IRequestsRepository } from "../domain/repositories/IRequestsRepositoy";
+import type { IRequestsRepository } from "../domain/repositories/IRequestsRepositoy";
 import { ICreateRequest } from "../domain/models/ICreateRequest";
 import { AppError } from "@commons/error/AppError";
 import { EtherealMailProvider } from "@commons/providers/EtherealMailProvider";
-import { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
-import { IHospitalsRepository } from "@modules/hospitals/domain/repositories/IHospitalsRepository";
+import type { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
+import type { IHospitalsRepository } from "@modules/hospitals/domain/repositories/IHospitalsRepository";
 
 @injectable()
 export class CreateRequestService {

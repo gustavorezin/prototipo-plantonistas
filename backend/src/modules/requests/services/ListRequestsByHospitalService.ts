@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { IRequestsRepository } from "../domain/repositories/IRequestsRepositoy";
+import type { IRequestsRepository } from "../domain/repositories/IRequestsRepositoy";
 
 @injectable()
 export class ListRequestsByHospitalService {
