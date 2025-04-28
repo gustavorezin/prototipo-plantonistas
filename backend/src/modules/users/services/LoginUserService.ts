@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { IUsersRepository } from "../domain/repositories/IUsersRepository";
+import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
 import { ILoginUser } from "../domain/models/ILoginUser";
 import { AppError } from "@commons/error/AppError";
 import { HashProvider } from "@commons/providers/HashProvider";

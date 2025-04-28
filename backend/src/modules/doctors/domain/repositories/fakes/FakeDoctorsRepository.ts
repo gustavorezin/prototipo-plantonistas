@@ -31,7 +31,7 @@ export class FakeDoctorsRepository implements IDoctorsRepository {
     };
   }
 
-  public addDoctor(doctor: IDoctor): void {
+  addDoctor(doctor: IDoctor): void {
     this.doctors.push(doctor);
   }
 }
