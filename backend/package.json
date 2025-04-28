@@ -6,7 +6,8 @@
     "dev": "tsx watch src/commons/infra/http/server.ts",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

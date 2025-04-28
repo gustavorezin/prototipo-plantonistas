@@ -9,12 +9,19 @@ const config: Config = {
 
   clearMocks: true,
 
-  collectCoverage: true,
-  collectCoverageFrom: ["<rootDir>/src/modules/**/services/*.ts"],
-  coverageDirectory: "coverage",
+  //collectCoverage: true,
+  //collectCoverageFrom: ["<rootDir>/src/modules/**/services/*.ts"],
+  //coverageDirectory: "coverage",
+
+  setupFiles: ["reflect-metadata"],
 
   transform: {
-    "^.+.tsx?$": ["ts-jest", {}],
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.json",
+      },
+    ],
   },
 
   moduleFileExtensions: ["ts", "js", "json"],
