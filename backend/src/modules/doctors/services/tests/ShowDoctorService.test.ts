@@ -6,10 +6,13 @@ let repository: FakeDoctorsRepository;
 let service: ShowDoctorService;
 
 describe("ShowDoctor", () => {
-  beforeAll(() => {
+  beforeEach(() => {
     repository = new FakeDoctorsRepository();
     service = new ShowDoctorService(repository);
+  });
 
+  it("should be able to show a doctor", async () => {
+    // arrange
     repository.addDoctor({
       userId: "1",
       name: "Doctor 1",
@@ -18,9 +21,6 @@ describe("ShowDoctor", () => {
       available: true,
       phone: "phone",
     });
-  });
-
-  it("should be able to show a doctor", async () => {
     // act
     const doctor = await service.execute("1");
     // assert
@@ -32,5 +32,9 @@ describe("ShowDoctor", () => {
     const doctorPromise = service.execute("non-existing-id");
     // assert
     await expect(doctorPromise).rejects.toBeInstanceOf(AppError);
+    await expect(doctorPromise).rejects.toHaveProperty(
+      "message",
+      "Doctor not found"
+    );
   });
 });

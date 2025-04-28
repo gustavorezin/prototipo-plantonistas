@@ -10,10 +10,10 @@ export class ShowDoctorService {
   ) {}
 
   async execute(id: string) {
-    const customer = await this.doctorsRepository.findById(id);
-    if (!customer) {
+    const doctor = await this.doctorsRepository.findById(id);
+    if (!doctor) {
       throw new AppError("Doctor not found");
     }
-    return customer;
+    return doctor;
   }
 }
