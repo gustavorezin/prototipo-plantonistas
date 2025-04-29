@@ -3,6 +3,7 @@ import { CreateUserService } from "../CreateUserService";
 import { FakeUsersRepository } from "@modules/users/domain/repositories/fakes/FakeUsersRepository";
 import { ICreateUser } from "@modules/users/domain/models/ICreateUser";
 import { AppError } from "@commons/error/AppError";
+import { HashProvider } from "@commons/providers/HashProvider";
 
 let usersRepository: FakeUsersRepository;
 let doctorsRepository: FakeDoctorsRepository;
@@ -31,7 +32,7 @@ describe("CreateUser", () => {
 
   it("should not be able to create new user with same email", async () => {
     // arrange
-    usersRepository.create({
+    await usersRepository.create({
       email: "email@email.com",
       name: "name",
       password: "1234",
@@ -75,5 +76,21 @@ describe("CreateUser", () => {
     // assert
     await expect(user).rejects.toBeInstanceOf(AppError);
     await expect(user).rejects.toHaveProperty("message", "CRM already in use");
+  });
+
+  it("should hash the password before saving", async () => {
+    // arrange
+    const newUser: ICreateUser = {
+      email: "email@email.com",
+      name: "name",
+      password: "1234",
+      userType: "DOCTOR",
+      crm: "123456",
+    };
+    // act
+    const user = await service.execute(newUser);
+    // assert
+    const hashProvider = new HashProvider(); // Considerar fazer um fake depois
+    expect(await hashProvider.compareHash("1234", user.password)).toBeTruthy();
   });
 });
