@@ -38,59 +38,6 @@ async function main() {
     },
   });
 
-  await prisma.request.create({
-    data: {
-      hospitalId: hospitalUser.id,
-      doctorId: doctorUser.id,
-      status: RequestStatus.PENDING,
-      message: "Plantão no sábado das 08h às 20h.",
-    },
-  });
-
-  // Outros so pra ter mais dados
-  await prisma.user.create({
-    data: {
-      email: "hospital2@email.com",
-      password: hashedPassword,
-      userType: UserType.HOSPITAL,
-      hospital: {
-        create: {
-          name: "Hospital Santa Otilia",
-          address: "Orleans",
-          phone: "(11) 99999-9999",
-        },
-      },
-    },
-  });
-  await prisma.user.create({
-    data: {
-      email: "hospital3@email.com",
-      password: hashedPassword,
-      userType: UserType.HOSPITAL,
-      hospital: {
-        create: {
-          name: "Hospital São Jorge",
-          address: "Cricíuma",
-          phone: "(11) 99999-9999",
-        },
-      },
-    },
-  });
-  await prisma.user.create({
-    data: {
-      email: "hospital4@email.com",
-      password: hashedPassword,
-      userType: UserType.HOSPITAL,
-      hospital: {
-        create: {
-          name: "Hospital São José",
-          address: "Cricíuma",
-          phone: "(11) 99999-9999",
-        },
-      },
-    },
-  });
-
   await prisma.user.create({
     data: {
       email: "arrasca@email.com",
@@ -151,6 +98,43 @@ async function main() {
       },
     },
   });
+
+  const specialties = [
+    "Alergologia",
+    "Anestesiologia",
+    "Angiologia",
+    "Cancerologia (Oncologia)",
+    "Cardiologia",
+    "Cirurgia Geral",
+    "Cirurgia Plástica",
+    "Clínica Médica",
+    "Dermatologia",
+    "Endocrinologia",
+    "Gastroenterologia",
+    "Geriatria",
+    "Ginecologia e Obstetrícia",
+    "Hematologia",
+    "Infectologia",
+    "Mastologia",
+    "Nefrologia",
+    "Neurocirurgia",
+    "Neurologia",
+    "Oftalmologia",
+    "Ortopedia e Traumatologia",
+    "Otorrinolaringologia",
+    "Pediatria",
+    "Psiquiatria",
+    "Reumatologia",
+    "Urologia",
+  ];
+
+  for (const name of specialties) {
+    await prisma.specialty.upsert({
+      where: { name },
+      update: {},
+      create: { name },
+    });
+  }
 
   console.log("🌱 Seed executado com sucesso!");
 }

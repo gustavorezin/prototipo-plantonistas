@@ -54,9 +54,10 @@ model Doctor {
   phone     String
   available Boolean @default(true)
 
-  user      User       @relation(fields: [userId], references: [id])
-  hospitals Hospital[] @relation("HospitalDoctors")
-  requests  Request[]
+  user        User              @relation(fields: [userId], references: [id])
+  hospitals   Hospital[]        @relation("HospitalDoctors")
+  specialties DoctorSpecialty[]
+  requests    Request[]
 
   @@map("doctors")
 }
@@ -70,8 +71,9 @@ model Request {
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 
-  hospital Hospital @relation(fields: [hospitalId], references: [userId])
-  doctor   Doctor   @relation(fields: [doctorId], references: [userId])
+  hospital    Hospital           @relation(fields: [hospitalId], references: [userId])
+  doctor      Doctor             @relation(fields: [doctorId], references: [userId])
+  specialties RequestSpecialty[]
 
   @@map("requests")
 }
@@ -82,4 +84,35 @@ enum RequestStatus {
   REJECTED
   CANCELLED
   CONTRACTED
+}
+
+model Specialty {
+  id       String             @id @default(uuid())
+  name     String             @unique
+  doctors  DoctorSpecialty[]
+  requests RequestSpecialty[]
+
+  @@map("specialties")
+}
+
+model DoctorSpecialty {
+  doctorId    String
+  specialtyId String
+
+  doctor    Doctor    @relation(fields: [doctorId], references: [userId])
+  specialty Specialty @relation(fields: [specialtyId], references: [id])
+
+  @@id([doctorId, specialtyId])
+  @@map("doctor_specialties")
+}
+
+model RequestSpecialty {
+  requestId   String
+  specialtyId String
+
+  request   Request   @relation(fields: [requestId], references: [id])
+  specialty Specialty @relation(fields: [specialtyId], references: [id])
+
+  @@id([requestId, specialtyId])
+  @@map("request_specialties")
 }
