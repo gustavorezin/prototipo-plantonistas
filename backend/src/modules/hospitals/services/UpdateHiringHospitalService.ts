@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { IHospitalsRepository } from "../domain/repositories/IHospitalsRepository";
+import type { IHospitalsRepository } from "../domain/repositories/IHospitalsRepository";
 
 @injectable()
 export class UpdateHiringHospitalService {

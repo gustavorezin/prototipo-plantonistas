@@ -62,7 +62,6 @@ describe("CreateUser", () => {
       userId: "1",
       available: true,
       phone: "phone",
-      specialty: "specialty",
     });
     const newUser: ICreateUser = {
       email: "email@email.com",

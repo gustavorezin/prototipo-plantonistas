@@ -10,5 +10,5 @@ export interface ICreateUser {
   address?: string;
   // Campos específicos de Médico
   crm?: string;
-  specialty?: string;
+  specialties?: string[];
 }

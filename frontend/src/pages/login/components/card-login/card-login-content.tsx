@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { FieldErrors, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Controller, FieldErrors, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@commons/components/ui/button";
 import { Input } from "@commons/components/ui/input";
@@ -9,6 +9,8 @@ import { useAuth } from "@commons/hooks/use-auth";
 import { usersService } from "@services/users-service";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { ISpecialty, specialtiesService } from "@services/specialties-service";
+import { MultiSelect } from "@commons/components/ui/multi-select";
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -21,7 +23,7 @@ const registerSchema = loginSchema.extend({
   address: z.string().optional(),
   phone: z.string().optional(),
   crm: z.string().optional(),
-  specialty: z.string().optional(),
+  specialties: z.array(z.string()).optional(),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -35,11 +37,13 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [userType, setUserType] = useState<"HOSPITAL" | "DOCTOR">("HOSPITAL");
+  const [specialties, setSpecialties] = useState<ISpecialty[]>([]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<RegisterFormData | LoginFormData>({
     resolver: zodResolver(isRegister ? registerSchema : loginSchema),
     defaultValues: isRegister ? { userType } : {},
@@ -58,6 +62,15 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
       toast.success("Usuário cadastrado com sucesso!");
     }
   };
+
+  useEffect(() => {
+    const fetchSpecialties = async () => {
+      const response = await specialtiesService.list();
+      setSpecialties(response.data);
+    };
+
+    fetchSpecialties();
+  }, []);
 
   return (
     <form className="space-y-4 mt-4" onSubmit={handleSubmit(handleOnSubmit)}>
@@ -92,7 +105,30 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
                 isError={isRegister && !!(errors as FieldErrors)?.crm}
                 placeholder="CRM"
               />
-              <Input {...register("specialty")} placeholder="Especialidade" />
+              <Controller
+                name="specialties"
+                control={control}
+                render={({ field }) => (
+                  <MultiSelect
+                    {...register("specialties")}
+                    isMulti
+                    options={specialties.map((spec) => ({
+                      value: spec.id,
+                      label: spec.name,
+                    }))}
+                    placeholder="Selecione uma ou mais especialidades"
+                    onChange={(selectedOptions) =>
+                      field.onChange(selectedOptions.map((opt) => opt.value))
+                    }
+                    value={specialties
+                      .filter((spec) => field.value?.includes(spec.id))
+                      .map((spec) => ({
+                        value: spec.id,
+                        label: spec.name,
+                      }))}
+                  />
+                )}
+              />
             </>
           )}
           <Input {...register("phone")} type="tel" placeholder="Telefone" />

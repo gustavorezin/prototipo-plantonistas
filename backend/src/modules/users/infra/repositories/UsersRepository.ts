@@ -31,9 +31,18 @@ export class UsersRepository implements IUsersRepository {
             name: data.name,
             crm: data.crm!,
             phone: data.phone!,
-            specialty: data.specialty!,
           },
         });
+
+        if (data.specialties?.length) {
+          await prisma.doctorSpecialty.createMany({
+            data: data.specialties.map((specialtyId) => ({
+              doctorId: user.id,
+              specialtyId,
+            })),
+            skipDuplicates: true,
+          });
+        }
       }
 
       return user;

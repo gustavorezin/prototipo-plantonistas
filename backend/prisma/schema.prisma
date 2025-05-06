@@ -50,7 +50,6 @@ model Doctor {
   userId    String  @id
   name      String
   crm       String  @unique
-  specialty String
   phone     String
   available Boolean @default(true)
 

@@ -7,7 +7,7 @@ const hashProvider = new HashProvider();
 async function main() {
   const hashedPassword = await hashProvider.generateHash("123456");
 
-  const hospitalUser = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email: "hospital@email.com",
       password: hashedPassword,
@@ -31,7 +31,6 @@ async function main() {
         create: {
           name: "João da Silva",
           crm: "123456-SP",
-          specialty: "Cardiologia",
           phone: "(11) 98888-8888",
         },
       },
@@ -47,7 +46,6 @@ async function main() {
         create: {
           name: "Arrasca",
           crm: "101010-RJ",
-          specialty: "Meio campo",
           phone: "(11) 98888-8888",
         },
       },
@@ -62,7 +60,6 @@ async function main() {
         create: {
           name: "Pedro",
           crm: "999999-RJ",
-          specialty: "Atacante",
           phone: "(11) 98888-8888",
         },
       },
@@ -77,7 +74,6 @@ async function main() {
         create: {
           name: "Bruno Henrique",
           crm: "272727-RJ",
-          specialty: "Ponta",
           phone: "(11) 98888-8888",
         },
       },
@@ -92,7 +88,6 @@ async function main() {
         create: {
           name: "Rossi",
           crm: "111111-RJ",
-          specialty: "Goleiro",
           phone: "(11) 98888-8888",
         },
       },

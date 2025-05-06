@@ -15,6 +15,7 @@ export class CreateUserService {
   ) {}
 
   async execute(data: ICreateUser) {
+    console.log("CreateUserService", data);
     const userEmailExists = await this.usersRepository.findByEmail(data.email);
     if (userEmailExists) {
       throw new AppError("Email already in use");
