@@ -60,6 +60,7 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
         userType,
       });
       toast.success("Usuário cadastrado com sucesso!");
+      navigate("/");
     }
   };
 

@@ -13,16 +13,6 @@ export interface ILoginRequest {
   password: string;
 }
 
-interface ILoginResponse {
-  user: {
-    id: string;
-    name: string;
-    status: boolean;
-    email: string;
-    userType: "HOSPITAL" | "DOCTOR";
-  };
-}
-
 interface ICreateRequest {
   userType: "HOSPITAL" | "DOCTOR";
   name: string;
@@ -35,7 +25,7 @@ interface ICreateRequest {
 }
 
 const login = (data: ILoginRequest) => {
-  return api.post<ILoginResponse>("/users/login", data);
+  return api.post<IUserAuthProvider>("/users/login", data);
 };
 
 const logout = () => {
@@ -46,8 +36,13 @@ const create = (data: ICreateRequest) => {
   return api.post("/users", data);
 };
 
+const session = () => {
+  return api.get<IUserAuthProvider>("/users/session");
+};
+
 export const usersService = {
   login,
   logout,
   create,
+  session,
 };
