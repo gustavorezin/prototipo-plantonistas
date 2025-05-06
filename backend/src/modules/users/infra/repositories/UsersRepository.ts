@@ -40,7 +40,6 @@ export class UsersRepository implements IUsersRepository {
               doctorId: user.id,
               specialtyId,
             })),
-            skipDuplicates: true,
           });
         }
       }
@@ -53,6 +52,20 @@ export class UsersRepository implements IUsersRepository {
     const user = await prisma.user.findUnique({
       where: {
         email,
+      },
+      include: {
+        doctor: true,
+        hospital: true,
+      },
+    });
+
+    return user;
+  }
+
+  async findById(id: string): Promise<IUser | null> {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
       },
       include: {
         doctor: true,

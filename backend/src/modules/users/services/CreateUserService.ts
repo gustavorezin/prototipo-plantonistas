@@ -4,6 +4,8 @@ import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
 import { HashProvider } from "@commons/providers/HashProvider";
 import { AppError } from "@commons/error/AppError";
 import type { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
+import { sign, SignOptions } from "jsonwebtoken";
+import { authConfig } from "@commons/config/authConfig";
 
 @injectable()
 export class CreateUserService {
@@ -15,7 +17,6 @@ export class CreateUserService {
   ) {}
 
   async execute(data: ICreateUser) {
-    console.log("CreateUserService", data);
     const userEmailExists = await this.usersRepository.findByEmail(data.email);
     if (userEmailExists) {
       throw new AppError("Email already in use");
@@ -30,6 +31,20 @@ export class CreateUserService {
 
     const hashProvider = new HashProvider();
     const hashedPassword = await hashProvider.generateHash(data.password);
-    return this.usersRepository.create({ ...data, password: hashedPassword });
+
+    const user = await this.usersRepository.create({
+      ...data,
+      password: hashedPassword,
+    });
+
+    const token = sign({}, authConfig.jwt.secret, {
+      subject: user.id,
+      expiresIn: authConfig.jwt.expiresIn,
+    } as SignOptions);
+
+    return {
+      user,
+      token,
+    };
   }
 }
