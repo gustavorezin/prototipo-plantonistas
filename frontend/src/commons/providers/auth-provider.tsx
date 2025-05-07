@@ -17,28 +17,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("authUser");
+    const fetchSessionUser = async () => {
+      const response = await usersService.session();
+      const sessionUser = response.data;
+      setUser(sessionUser);
+      setLoading(false);
+    };
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-
-    setLoading(false);
+    fetchSessionUser();
   }, []);
 
   const login = async (loginPayload: ILoginRequest) => {
     const response = await usersService.login(loginPayload);
-
-    const { user } = response.data;
-
+    const user = response.data;
     setUser(user);
-
-    localStorage.setItem("authUser", JSON.stringify(user));
   };
 
   const logout = async () => {
     await usersService.logout();
-    localStorage.removeItem("authUser");
     setUser(null);
   };
 
@@ -46,7 +42,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (user) {
       const updatedUser = { ...user, status };
       setUser(updatedUser);
-      localStorage.setItem("authUser", JSON.stringify(updatedUser));
       if (user.userType === "DOCTOR") {
         doctorsService.updateAvailable(user.id, status);
       } else {
