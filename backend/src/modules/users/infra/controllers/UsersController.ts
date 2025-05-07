@@ -50,7 +50,7 @@ export class UsersController {
       maxAge: 1000 * 60 * 60 * 24, // 1 dia
     });
 
-    res.status(200).json({ user });
+    res.status(200).json(user);
   }
 
   async logout(_req: Request, res: Response) {
@@ -66,6 +66,6 @@ export class UsersController {
     const userId = req.user.id;
     const sessionUser = container.resolve(SessionUserService);
     const user = await sessionUser.execute(userId);
-    res.status(200).json({ user });
+    res.status(200).json(user);
   }
 }

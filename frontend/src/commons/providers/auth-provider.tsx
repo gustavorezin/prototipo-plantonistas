@@ -17,14 +17,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchSessionUser = async () => {
-      const response = await usersService.session();
-      const sessionUser = response.data;
-      setUser(sessionUser);
+    const isLoginPage = window.location.pathname === "/auth";
+    if (!isLoginPage) {
+      const fetchSessionUser = async () => {
+        const response = await usersService.session();
+        const sessionUser = response.data;
+        setUser(sessionUser);
+        setLoading(false);
+      };
+      fetchSessionUser();
+    } else {
       setLoading(false);
-    };
-
-    fetchSessionUser();
+    }
   }, []);
 
   const login = async (loginPayload: ILoginRequest) => {
