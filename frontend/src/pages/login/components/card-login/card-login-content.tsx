@@ -59,6 +59,9 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
         ...(data as RegisterFormData),
         userType,
       });
+
+      await login({ email: data.email, password: data.password });
+
       toast.success("Usuário cadastrado com sucesso!");
       navigate("/");
     }
