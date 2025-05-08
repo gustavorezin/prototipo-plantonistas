@@ -1,6 +1,7 @@
 import { CreateUserService } from "@modules/users/services/CreateUserService";
 import { LoginUserService } from "@modules/users/services/LoginUserService";
 import { SessionUserService } from "@modules/users/services/SessionUserService";
+import { ShowUserService } from "@modules/users/services/ShowUserService";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
@@ -66,6 +67,13 @@ export class UsersController {
     const userId = req.user.id;
     const sessionUser = container.resolve(SessionUserService);
     const user = await sessionUser.execute(userId);
+    res.status(200).json(user);
+  }
+
+  async show(req: Request, res: Response) {
+    const userId = req.user.id;
+    const showUser = container.resolve(ShowUserService);
+    const user = await showUser.execute(userId);
     res.status(200).json(user);
   }
 }

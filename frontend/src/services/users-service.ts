@@ -1,4 +1,14 @@
 import api from "@commons/lib/api";
+import { IDoctor } from "./doctors-service";
+import { IHospital } from "./hospitals-service";
+
+export interface IUser {
+  id: string;
+  email: string;
+  doctor?: IDoctor | null;
+  hospital?: IHospital | null;
+  userType: "HOSPITAL" | "DOCTOR";
+}
 
 export interface IUserAuthProvider {
   id: string;
@@ -40,9 +50,14 @@ const session = () => {
   return api.get<IUserAuthProvider>("/users/session");
 };
 
+const show = () => {
+  return api.get<IUser>("/users/profile");
+};
+
 export const usersService = {
   login,
   logout,
   create,
   session,
+  show,
 };

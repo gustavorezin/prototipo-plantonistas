@@ -1,6 +1,12 @@
 import { useAuth } from "@commons/hooks/use-auth";
 import clsx from "clsx";
-import { Home, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import {
+  Home,
+  LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+  User,
+} from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
 
@@ -9,7 +15,10 @@ export const Sidebar = () => {
   const { user, logout, updateStatus } = useAuth();
   const location = useLocation();
 
-  const menuItems = [{ name: "Home", icon: <Home size={20} />, path: "/" }];
+  const menuItems = [
+    { name: "Home", icon: <Home size={20} />, path: "/" },
+    { name: "Perfil", icon: <User size={20} />, path: "/profile" },
+  ];
 
   const toggleStatus = async () => {
     try {
