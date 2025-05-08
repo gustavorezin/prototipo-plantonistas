@@ -32,7 +32,7 @@ export const RequestModal = ({
         className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-bold mb-4">
+        <h2 className="text-lg font-bold mb-4 text-primary">
           {isDoctorRequesting
             ? "Solicitar vínculo com hospital"
             : "Convidar médico para o hospital"}
@@ -42,19 +42,27 @@ export const RequestModal = ({
           <p>
             <strong>Nome:</strong> {receiver.name}
           </p>
+          {"specialties" in receiver && (
+            <p>
+              <strong>Especialidade:</strong>{" "}
+              {receiver.specialties.length > 0
+                ? receiver.specialties.join(", ")
+                : "Sem especialidade"}
+            </p>
+          )}
           {"crm" in receiver && (
             <p>
               <strong>CRM:</strong> {receiver.crm}
             </p>
           )}
-          {"specialty" in receiver && (
-            <p>
-              <strong>Especialidade:</strong> {receiver.specialty}
-            </p>
-          )}
           <p>
             <strong>Telefone:</strong> {receiver.phone}
           </p>
+          {"address" in receiver && (
+            <p>
+              <strong>Endereço:</strong> {receiver.address}
+            </p>
+          )}
         </div>
 
         <textarea
