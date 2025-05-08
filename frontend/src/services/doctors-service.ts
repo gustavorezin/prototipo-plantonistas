@@ -5,7 +5,7 @@ export interface IDoctor {
   name: string;
   crm: string;
   phone: string;
-  specialty: string;
+  specialties: string[];
   available: boolean;
 }
 

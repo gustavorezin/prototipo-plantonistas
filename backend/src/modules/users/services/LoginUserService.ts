@@ -16,7 +16,7 @@ export class LoginUserService {
   async execute({ email, password }: ILoginUser) {
     const user = await this.usersRepository.findByEmail(email);
     if (!user) {
-      throw new AppError("User not found");
+      throw new AppError("Usuário não encontrado", 401);
     }
 
     const hashProvider = new HashProvider();
@@ -26,7 +26,7 @@ export class LoginUserService {
     );
 
     if (!passwordMatched) {
-      throw new AppError("Incorrect password", 401);
+      throw new AppError("Senha incorreta", 401);
     }
 
     const token = sign({}, authConfig.jwt.secret, {

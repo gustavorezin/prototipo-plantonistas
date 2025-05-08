@@ -4,7 +4,7 @@ interface CardUserProps {
   phone: string;
   available: boolean;
   crm?: string;
-  specialty?: string;
+  specialties?: string[];
   onClick?: () => void;
 }
 
@@ -14,7 +14,7 @@ export const CardUser = ({
   phone,
   available,
   crm = "",
-  specialty = "",
+  specialties = [],
   onClick,
 }: CardUserProps) => {
   return (
@@ -26,7 +26,16 @@ export const CardUser = ({
         <div className="flex justify-between items-start">
           <div>
             <h1 className="text-lg font-semibold text-gray-800">{name}</h1>
-            {specialty && <p className="text-sm text-primary">{specialty}</p>}
+            <div className="line-clamp-1 -mx-2">
+              {specialties.map((spec, i) => (
+                <span
+                  key={i}
+                  className="text-xs text-sky-900 bg-sky-100 px-2 rounded-full mr-1"
+                >
+                  {spec}
+                </span>
+              ))}
+            </div>
           </div>
           {available && (
             <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">
@@ -49,10 +58,6 @@ export const CardUser = ({
           </p>
         )}
       </div>
-
-      {/* <button className="mt-4 bg-primary text-white px-4 py-2 rounded-xl hover:bg-primary/90 transition text-sm cursor-pointer">
-        Solicitar
-      </button> */}
     </div>
   );
 };

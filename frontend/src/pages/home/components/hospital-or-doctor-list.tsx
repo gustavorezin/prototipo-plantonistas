@@ -32,7 +32,11 @@ export const HospitalOrDoctorList = ({
               name={doctor.name}
               phone={doctor.phone}
               crm={doctor.crm}
-              specialty={doctor.specialty}
+              specialties={
+                doctor.specialties.length > 0
+                  ? doctor.specialties
+                  : ["Sem especialidade"]
+              }
               available={doctor.available}
               onClick={() => onCardClick(doctor)}
             />

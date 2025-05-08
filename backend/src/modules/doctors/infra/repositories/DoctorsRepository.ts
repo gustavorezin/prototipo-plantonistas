@@ -26,9 +26,31 @@ export class DoctorsRepository implements IDoctorsRepository {
   }
 
   async findAll(): Promise<IDoctor[]> {
-    const doctors = await prisma.doctor.findMany();
+    const doctors = await prisma.doctor.findMany({
+      select: {
+        userId: true,
+        name: true,
+        crm: true,
+        phone: true,
+        available: true,
+        specialties: {
+          select: {
+            specialty: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
-    return doctors;
+    return doctors.map((doctor) => ({
+      ...doctor,
+      specialties: doctor.specialties.map(
+        (specialty) => specialty.specialty.name
+      ),
+    }));
   }
 
   async findById(id: string): Promise<IDoctor | null> {
