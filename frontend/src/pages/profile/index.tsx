@@ -61,8 +61,11 @@ export const Profile = () => {
   });
 
   const onSubmit = async (data: ProfileFormData) => {
-    //await usersService.update(data);
-    console.log(data);
+    await usersService.update({
+      ...data,
+      id: user!.id,
+      userType: user!.userType,
+    });
     toast.success("Perfil atualizado com sucesso!");
   };
 

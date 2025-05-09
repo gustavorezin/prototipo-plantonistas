@@ -2,12 +2,14 @@ import api from "@commons/lib/api";
 import { IDoctor } from "./doctors-service";
 import { IHospital } from "./hospitals-service";
 
+type UserType = "HOSPITAL" | "DOCTOR";
+
 export interface IUser {
   id: string;
   email: string;
   doctor?: IDoctor | null;
   hospital?: IHospital | null;
-  userType: "HOSPITAL" | "DOCTOR";
+  userType: UserType;
 }
 
 export interface IUserAuthProvider {
@@ -15,7 +17,7 @@ export interface IUserAuthProvider {
   name: string;
   status: boolean;
   email: string;
-  userType: "HOSPITAL" | "DOCTOR";
+  userType: UserType;
 }
 
 export interface ILoginRequest {
@@ -24,7 +26,7 @@ export interface ILoginRequest {
 }
 
 interface ICreateRequest {
-  userType: "HOSPITAL" | "DOCTOR";
+  userType: UserType;
   name: string;
   email: string;
   password: string;
@@ -32,6 +34,17 @@ interface ICreateRequest {
   phone?: string;
   crm?: string;
   specialty?: string;
+}
+
+interface IUpdateRequest {
+  id: string;
+  userType: UserType;
+  email: string;
+  name: string;
+  phone?: string;
+  address?: string;
+  crm?: string;
+  specialties?: string[];
 }
 
 const login = (data: ILoginRequest) => {
@@ -46,6 +59,10 @@ const create = (data: ICreateRequest) => {
   return api.post("/users", data);
 };
 
+const update = (data: IUpdateRequest) => {
+  return api.put<IUser>("/users", data);
+};
+
 const session = () => {
   return api.get<IUserAuthProvider>("/users/session");
 };
@@ -58,6 +75,7 @@ export const usersService = {
   login,
   logout,
   create,
+  update,
   session,
   show,
 };

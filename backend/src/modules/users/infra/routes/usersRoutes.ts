@@ -12,3 +12,4 @@ usersRouter.post("/logout", usersController.logout);
 usersRouter.use(isAuthenticated);
 usersRouter.get("/session", usersController.session);
 usersRouter.get("/profile", usersController.show);
+usersRouter.put("/", usersController.update);
