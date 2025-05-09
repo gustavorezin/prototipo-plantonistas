@@ -16,7 +16,7 @@ export class SessionUserService {
   async execute(id: string) {
     const user = await this.usersRepository.findById(id);
     if (!user) {
-      throw new AppError("User not found");
+      throw new AppError("Usuário não encontrado");
     }
 
     const userName =

@@ -13,7 +13,7 @@ export class UpdateUserService {
   async execute(data: IUpdateUser) {
     const userEmailExists = await this.usersRepository.findByEmail(data.email);
     if (userEmailExists?.id != data.id && userEmailExists) {
-      throw new AppError("Email already in use");
+      throw new AppError("E-mail já cadastrado");
     }
 
     const user = await this.usersRepository.update(data);

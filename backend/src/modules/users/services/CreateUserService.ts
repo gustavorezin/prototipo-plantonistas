@@ -19,13 +19,13 @@ export class CreateUserService {
   async execute(data: ICreateUser) {
     const userEmailExists = await this.usersRepository.findByEmail(data.email);
     if (userEmailExists) {
-      throw new AppError("Email already in use");
+      throw new AppError("E-mail já cadastrado");
     }
 
     if (data.crm && data.userType === "DOCTOR") {
       const doctorCrmExists = await this.doctorsRepository.findByCrm(data.crm);
       if (doctorCrmExists) {
-        throw new AppError("CRM already in use");
+        throw new AppError("CRM já cadastrado");
       }
     }
 

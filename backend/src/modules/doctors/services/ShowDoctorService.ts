@@ -12,7 +12,7 @@ export class ShowDoctorService {
   async execute(id: string) {
     const doctor = await this.doctorsRepository.findById(id);
     if (!doctor) {
-      throw new AppError("Doctor not found");
+      throw new AppError("Médico não encontrado");
     }
     return doctor;
   }
