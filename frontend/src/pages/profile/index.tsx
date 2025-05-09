@@ -60,12 +60,26 @@ export const Profile = () => {
     resolver: zodResolver(updatePasswordSchema),
   });
 
+  const onSubmit = async (data: ProfileFormData) => {
+    //await usersService.update(data);
+    console.log(data);
+    toast.success("Perfil atualizado com sucesso!");
+  };
+
+  const onSubmitPassword = async (data: UpdatePasswordFormData) => {
+    console.log(data);
+    toast.success("Senha atualizada com sucesso!");
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const [userRes, specialtiesRes] = await Promise.all([
         usersService.show(),
         specialtiesService.list(),
       ]);
+      const doctorSpecialtiesData = isUserDoctor
+        ? (await specialtiesService.listByDoctorId(user.id)).data
+        : [];
 
       const userData = userRes.data;
       const doctorOrHospital = isUserDoctor
@@ -77,10 +91,10 @@ export const Profile = () => {
       setValue("phone", doctorOrHospital?.phone);
       if (isUserDoctor) {
         setValue("crm", (doctorOrHospital as IDoctor).crm);
-        /*setValue(
+        setValue(
           "specialties",
-          doctorOrHospital!.specialties!.map((s: any) => s.id)
-        );*/
+          doctorSpecialtiesData.map((s: ISpecialty) => s.id)
+        );
       } else {
         setValue("address", (doctorOrHospital as IHospital).address);
       }
@@ -89,18 +103,7 @@ export const Profile = () => {
     };
 
     fetchData();
-  }, [isUserDoctor, setValue]);
-
-  const onSubmit = async (data: ProfileFormData) => {
-    //await usersService.update(data);
-    console.log(data);
-    toast.success("Perfil atualizado com sucesso!");
-  };
-
-  const onSubmitPassword = async (data: UpdatePasswordFormData) => {
-    console.log(data);
-    toast.success("Senha atualizada com sucesso!");
-  };
+  }, [isUserDoctor, user?.id, setValue]);
 
   return (
     <div className="flex h-screen bg-white p-4 gap-4">

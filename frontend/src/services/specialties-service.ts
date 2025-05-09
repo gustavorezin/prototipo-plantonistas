@@ -9,6 +9,11 @@ const list = () => {
   return api.get<ISpecialty[]>("/specialties");
 };
 
+const listByDoctorId = (doctorId: string) => {
+  return api.get<ISpecialty[]>(`/specialties/doctor/${doctorId}`);
+};
+
 export const specialtiesService = {
   list,
+  listByDoctorId,
 };
