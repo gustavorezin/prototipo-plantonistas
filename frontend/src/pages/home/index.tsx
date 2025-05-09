@@ -11,6 +11,7 @@ import {
   requestsService,
 } from "@services/requests-service";
 import { CardRequest } from "./components/card-request";
+import { specialtiesService } from "@services/specialties-service";
 
 export const Home = () => {
   const { user } = useAuth();
@@ -20,7 +21,10 @@ export const Home = () => {
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
   const [requests, setRequests] = useState<IRequest[]>([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("");
+  const [filterSpecialty, setFilterSpecialty] = useState("");
+  const [filterSpecialtyItens, setFilterSpecialtyItens] = useState<string[]>(
+    []
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReceiver, setSelectedReceiver] = useState<
     IHospital | IDoctor | null
@@ -36,20 +40,17 @@ export const Home = () => {
     const matchesName = doctor.name
       .toLowerCase()
       .includes(search.toLowerCase());
-    /* const matchesFilter = filter
-      ? doctor.available?.toString() === filter
-      : true; */
-    return matchesName /*  && matchesFilter */;
+    const matchesFilter = filterSpecialty
+      ? doctor.specialties?.includes(filterSpecialty)
+      : true;
+    return matchesName && matchesFilter;
   });
 
   const filteredHospitals = hospitals.filter((hospital) => {
     const matchesName = hospital.name
       .toLowerCase()
       .includes(search.toLowerCase());
-    /* const matchesFilter = filter
-      ? hospital.hiring?.toString() === filter
-      : true; */
-    return matchesName /*  && matchesFilter */;
+    return matchesName;
   });
 
   const filteredRequests = requests.filter((request) => {
@@ -100,10 +101,17 @@ export const Home = () => {
     setRequests(response.data);
   }, [isUserDoctor, user?.id]);
 
+  const fetchSpecialtyItems = useCallback(async () => {
+    const response = await specialtiesService.list();
+    const specialties = response.data.map((item) => item.name);
+    setFilterSpecialtyItens(specialties);
+  }, []);
+
   useEffect(() => {
     fetchUsers();
     fetchRequests();
-  }, [fetchUsers, fetchRequests]);
+    fetchSpecialtyItems();
+  }, [fetchUsers, fetchRequests, fetchSpecialtyItems]);
 
   return (
     <div className="flex flex-row h-screen bg-white p-4 gap-4">
@@ -119,19 +127,20 @@ export const Home = () => {
             onChange={(e) => setSearch(e.target.value)}
             className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary"
           />
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          >
-            <option value="">Todos</option>
-            <option value="true">
-              {isUserDoctor ? "Contratando" : "Disponível"}
-            </option>
-            <option value="false">
-              {isUserDoctor ? "Não contratando" : "Indisponível"}
-            </option>
-          </select>
+          {!isUserDoctor && (
+            <select
+              value={filterSpecialty}
+              onChange={(e) => setFilterSpecialty(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="">Todos</option>
+              {filterSpecialtyItens.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         <SectionCard.Content>
           <HospitalOrDoctorList
