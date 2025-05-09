@@ -5,11 +5,6 @@ import { IDoctorsRepository } from "../IDoctorsRepository";
 export class FakeDoctorsRepository implements IDoctorsRepository {
   private doctors: IDoctor[] = [];
 
-  async updateAvailableStatus(id: string, available: boolean): Promise<void> {
-    const doctor = this.doctors.find((d) => d.userId === id);
-    if (doctor) doctor.available = available;
-  }
-
   async findByCrm(crm: string): Promise<IDoctor | null> {
     return this.doctors.find((d) => d.crm === crm) || null;
   }

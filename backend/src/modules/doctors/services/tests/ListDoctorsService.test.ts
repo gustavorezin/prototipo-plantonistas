@@ -10,16 +10,14 @@ describe("ListDoctors", () => {
         userId: "1",
         name: "Doctor 1",
         crm: "123456",
-        specialty: "Cardiology",
-        available: true,
+        specialties: ["Cardiology"],
         phone: "1234567890",
       },
       {
         userId: "2",
         name: "Doctor 2",
         crm: "654321",
-        specialty: "Neurology",
-        available: false,
+        specialties: ["Neurology"],
         phone: "1234567890",
       },
     ];

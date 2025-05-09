@@ -2,7 +2,6 @@ interface CardUserProps {
   name: string;
   address?: string;
   phone: string;
-  available: boolean;
   crm?: string;
   specialties?: string[];
   onClick?: () => void;
@@ -12,7 +11,6 @@ export const CardUser = ({
   name,
   address = "",
   phone,
-  available,
   crm = "",
   specialties = [],
   onClick,
@@ -37,11 +35,6 @@ export const CardUser = ({
               ))}
             </div>
           </div>
-          {available && (
-            <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">
-              Disponível
-            </span>
-          )}
         </div>
         {crm && (
           <p className="text-sm text-gray-500">

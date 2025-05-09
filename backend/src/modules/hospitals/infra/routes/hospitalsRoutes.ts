@@ -7,6 +7,5 @@ const hospitalsController = new HospitalsController();
 
 hospitalsRouter.use(isAuthenticated);
 
-hospitalsRouter.put("/:id/hiring", hospitalsController.updateHiring);
 hospitalsRouter.get("/:id", hospitalsController.show);
 hospitalsRouter.get("/", hospitalsController.list);

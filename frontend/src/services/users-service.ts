@@ -15,7 +15,6 @@ export interface IUser {
 export interface IUserAuthProvider {
   id: string;
   name: string;
-  status: boolean;
   email: string;
   userType: UserType;
 }

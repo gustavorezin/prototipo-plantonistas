@@ -37,16 +37,10 @@ export class LoginUserService {
     const userName =
       user.userType === "DOCTOR" ? user.doctor?.name : user.hospital?.name;
 
-    const status =
-      user.userType === "DOCTOR"
-        ? user.doctor?.available
-        : user.hospital?.hiring;
-
     return {
       user: {
         id: user.id,
         name: userName,
-        status,
         email: user.email,
         userType: user.userType,
       },

@@ -1,6 +1,4 @@
 import { AuthContext } from "@commons/contexts/auth-context";
-import { doctorsService } from "@services/doctors-service";
-import { hospitalsService } from "@services/hospitals-service";
 import {
   ILoginRequest,
   IUserAuthProvider,
@@ -42,20 +40,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(null);
   };
 
-  const updateStatus = async (status: boolean) => {
-    if (user) {
-      const updatedUser = { ...user, status };
-      setUser(updatedUser);
-      if (user.userType === "DOCTOR") {
-        doctorsService.updateAvailable(user.id, status);
-      } else {
-        hospitalsService.updateHiring(user.id, status);
-      }
-    }
-  };
-
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateStatus }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {!loading && children}
     </AuthContext.Provider>
   );

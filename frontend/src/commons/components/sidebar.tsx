@@ -12,38 +12,13 @@ import { Link, useLocation } from "react-router";
 
 export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const { user, logout, updateStatus } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
 
   const menuItems = [
     { name: "Home", icon: <Home size={20} />, path: "/" },
     { name: "Perfil", icon: <User size={20} />, path: "/profile" },
   ];
-
-  const toggleStatus = async () => {
-    try {
-      const newStatus = !user?.status;
-      await updateStatus(newStatus);
-    } catch (error) {
-      console.error("Erro ao atualizar status:", error);
-    }
-  };
-
-  const getStatusText = () => {
-    if (user?.userType === "DOCTOR") {
-      return user?.status ? "Disponível" : "Indisponível";
-    } else {
-      return user?.status ? "Contratando" : "Não contratando";
-    }
-  };
-
-  const getStatusColor = () => {
-    if (user?.userType === "DOCTOR") {
-      return user?.status ? "bg-green-500" : "bg-red-500";
-    } else {
-      return user?.status ? "bg-blue-500" : "bg-gray-500";
-    }
-  };
 
   return (
     <div
@@ -100,28 +75,6 @@ export const Sidebar = () => {
           </div>
         </div>
       </nav>
-
-      {/* Status Toggle */}
-      {!collapsed && user && (
-        <div className="p-2 border-t border-gray-800">
-          <div
-            onClick={toggleStatus}
-            className={clsx(
-              "flex items-center justify-between p-2 rounded-md mb-2 cursor-pointer transition-colors",
-              getStatusColor(),
-              "hover:bg-opacity-90"
-            )}
-          >
-            <span className="text-sm font-medium">{getStatusText()}</span>
-            <div
-              className={clsx(
-                "w-4 h-4 rounded-full transition-all",
-                user?.status ? "bg-white" : "bg-gray-200"
-              )}
-            ></div>
-          </div>
-        </div>
-      )}
 
       <div className="p-2 border-t border-gray-800 flex items-center gap-2 h-16">
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-sm font-bold uppercase shrink-0">

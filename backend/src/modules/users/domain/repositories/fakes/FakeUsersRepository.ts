@@ -1,4 +1,5 @@
 import { ICreateUser } from "../../models/ICreateUser";
+import { IUpdateUser } from "../../models/IUpdateUser";
 import { IUser } from "../../models/IUser";
 import { IUsersRepository } from "../IUsersRepository";
 
@@ -14,6 +15,20 @@ export class FakeUsersRepository implements IUsersRepository {
     };
     this.users.push(user);
     return user;
+  }
+
+  async update(data: IUpdateUser): Promise<IUser> {
+    const userIndex = this.users.findIndex((user) => user.id === data.id);
+    if (userIndex === -1) {
+      throw new Error("User not found");
+    }
+    const updatedUser = {
+      ...this.users[userIndex],
+      ...data,
+      updatedAt: new Date(),
+    };
+    this.users[userIndex] = updatedUser;
+    return updatedUser;
   }
 
   async findByEmail(email: string): Promise<IUser | null> {

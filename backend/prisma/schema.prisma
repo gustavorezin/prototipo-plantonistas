@@ -33,11 +33,10 @@ enum UserType {
 }
 
 model Hospital {
-  userId  String  @id
+  userId  String @id
   name    String
   address String
   phone   String
-  hiring  Boolean @default(false)
 
   user     User      @relation(fields: [userId], references: [id])
   doctors  Doctor[]  @relation("HospitalDoctors")
@@ -47,11 +46,10 @@ model Hospital {
 }
 
 model Doctor {
-  userId    String  @id
-  name      String
-  crm       String  @unique
-  phone     String
-  available Boolean @default(true)
+  userId String @id
+  name   String
+  crm    String @unique
+  phone  String
 
   user        User              @relation(fields: [userId], references: [id])
   hospitals   Hospital[]        @relation("HospitalDoctors")

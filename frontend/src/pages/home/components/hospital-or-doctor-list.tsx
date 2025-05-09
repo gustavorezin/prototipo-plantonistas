@@ -22,7 +22,6 @@ export const HospitalOrDoctorList = ({
               name={hospital.name}
               phone={hospital.phone}
               address={hospital.address}
-              available={hospital.hiring}
               onClick={() => onCardClick(hospital)}
             />
           ))
@@ -37,7 +36,6 @@ export const HospitalOrDoctorList = ({
                   ? doctor.specialties
                   : ["Sem especialidade"]
               }
-              available={doctor.available}
               onClick={() => onCardClick(doctor)}
             />
           ))}

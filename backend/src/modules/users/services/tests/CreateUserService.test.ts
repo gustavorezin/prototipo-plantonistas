@@ -25,7 +25,7 @@ describe("CreateUser", () => {
       userType: "HOSPITAL",
     };
     // act
-    const user = await service.execute(newUser);
+    const { user } = await service.execute(newUser);
     // assert
     expect(user.id).toBe("1");
   });
@@ -60,7 +60,6 @@ describe("CreateUser", () => {
       name: "name",
       crm: "123456",
       userId: "1",
-      available: true,
       phone: "phone",
     });
     const newUser: ICreateUser = {
@@ -87,7 +86,7 @@ describe("CreateUser", () => {
       crm: "123456",
     };
     // act
-    const user = await service.execute(newUser);
+    const { user } = await service.execute(newUser);
     // assert
     const hashProvider = new HashProvider(); // Considerar fazer um fake depois
     expect(await hashProvider.compareHash("1234", user.password)).toBeTruthy();

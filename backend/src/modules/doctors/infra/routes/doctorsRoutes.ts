@@ -7,6 +7,5 @@ const doctorsController = new DoctorsController();
 
 doctorsRouter.use(isAuthenticated);
 
-doctorsRouter.put("/:id/available", doctorsController.updateAvailable);
 doctorsRouter.get("/:id", doctorsController.show);
 doctorsRouter.get("/", doctorsController.list);

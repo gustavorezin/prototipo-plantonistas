@@ -17,8 +17,7 @@ describe("ShowDoctor", () => {
       userId: "1",
       name: "Doctor 1",
       crm: "123456",
-      specialty: "specialty",
-      available: true,
+      specialties: ["specialty"],
       phone: "phone",
     });
     // act

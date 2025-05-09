@@ -3,5 +3,4 @@ export interface IHospital {
   name: string;
   address: string;
   phone: string;
-  hiring: boolean;
 }

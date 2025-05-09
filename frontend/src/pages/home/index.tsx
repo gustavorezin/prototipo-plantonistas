@@ -36,20 +36,20 @@ export const Home = () => {
     const matchesName = doctor.name
       .toLowerCase()
       .includes(search.toLowerCase());
-    const matchesFilter = filter
+    /* const matchesFilter = filter
       ? doctor.available?.toString() === filter
-      : true;
-    return matchesName && matchesFilter;
+      : true; */
+    return matchesName /*  && matchesFilter */;
   });
 
   const filteredHospitals = hospitals.filter((hospital) => {
     const matchesName = hospital.name
       .toLowerCase()
       .includes(search.toLowerCase());
-    const matchesFilter = filter
+    /* const matchesFilter = filter
       ? hospital.hiring?.toString() === filter
-      : true;
-    return matchesName && matchesFilter;
+      : true; */
+    return matchesName /*  && matchesFilter */;
   });
 
   const filteredRequests = requests.filter((request) => {

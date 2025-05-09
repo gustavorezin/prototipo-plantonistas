@@ -6,18 +6,12 @@ export interface IDoctor {
   crm: string;
   phone: string;
   specialties: string[];
-  available: boolean;
 }
-
-const updateAvailable = (userId: string, available: boolean) => {
-  api.put(`/doctors/${userId}/available`, { available });
-};
 
 const list = () => {
   return api.get<IDoctor[]>("/doctors");
 };
 
 export const doctorsService = {
-  updateAvailable,
   list,
 };
