@@ -6,6 +6,9 @@ import { specialtiesService } from "@services/specialties-service";
 import { useCallback, useEffect, useState } from "react";
 import { HospitalOrDoctorList } from "./components/hospital-or-doctor-list";
 import { RequestModal } from "./components/request-modal";
+import { IJob, jobsService } from "@services/jobs-service";
+import { CardJob } from "./components/card-job";
+import { Button } from "@commons/components/ui/button";
 
 export const Home = () => {
   const { user } = useAuth();
@@ -22,6 +25,7 @@ export const Home = () => {
   const [selectedReceiver, setSelectedReceiver] = useState<
     IHospital | IDoctor | null
   >(null);
+  const [jobs, setJobs] = useState<IJob[]>([]);
 
   const handleCardClick = (receiver: IHospital | IDoctor) => {
     setSelectedReceiver(receiver);
@@ -62,10 +66,16 @@ export const Home = () => {
     setFilterSpecialtyItens(specialties);
   }, []);
 
+  const fetchJobs = useCallback(async () => {
+    const response = await jobsService.listByHospital();
+    setJobs(response.data);
+  }, []);
+
   useEffect(() => {
     fetchUsers();
     fetchSpecialtyItems();
-  }, [fetchUsers, fetchSpecialtyItems]);
+    fetchJobs();
+  }, [fetchUsers, fetchSpecialtyItems, fetchJobs]);
 
   return (
     <div className="flex flex-row h-screen bg-white p-4 gap-4">
@@ -115,8 +125,15 @@ export const Home = () => {
       </SectionCard.Root>
 
       <SectionCard.Root className="basis-1/3">
-        <SectionCard.Header>Solicitações realizadas</SectionCard.Header>
-        <SectionCard.Content>oi</SectionCard.Content>
+        <SectionCard.Header>Vagas cadastradas</SectionCard.Header>
+        <SectionCard.Content>
+          <div className="flex flex-1 flex-col gap-4 my-4">
+            {jobs.map((job) => (
+              <CardJob {...job} />
+            ))}
+          </div>
+          <Button title="Cadastrar nova vaga" />
+        </SectionCard.Content>
       </SectionCard.Root>
     </div>
   );
