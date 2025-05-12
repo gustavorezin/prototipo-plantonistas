@@ -2,16 +2,10 @@ import { SectionCard } from "@commons/components/section-card";
 import { useAuth } from "@commons/hooks/use-auth";
 import { doctorsService, IDoctor } from "@services/doctors-service";
 import { hospitalsService, IHospital } from "@services/hospitals-service";
+import { specialtiesService } from "@services/specialties-service";
 import { useCallback, useEffect, useState } from "react";
 import { HospitalOrDoctorList } from "./components/hospital-or-doctor-list";
 import { RequestModal } from "./components/request-modal";
-import {
-  IRequest,
-  IRequestStatus,
-  requestsService,
-} from "@services/requests-service";
-import { CardRequest } from "./components/card-request";
-import { specialtiesService } from "@services/specialties-service";
 
 export const Home = () => {
   const { user } = useAuth();
@@ -19,7 +13,6 @@ export const Home = () => {
   const isUserDoctor = userType === "DOCTOR";
   const [hospitals, setHospitals] = useState<IHospital[]>([]);
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
-  const [requests, setRequests] = useState<IRequest[]>([]);
   const [search, setSearch] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("");
   const [filterSpecialtyItens, setFilterSpecialtyItens] = useState<string[]>(
@@ -29,7 +22,6 @@ export const Home = () => {
   const [selectedReceiver, setSelectedReceiver] = useState<
     IHospital | IDoctor | null
   >(null);
-  const [filterRequest, setFilterRequest] = useState<IRequestStatus | "">("");
 
   const handleCardClick = (receiver: IHospital | IDoctor) => {
     setSelectedReceiver(receiver);
@@ -53,36 +45,6 @@ export const Home = () => {
     return matchesName;
   });
 
-  const filteredRequests = requests.filter((request) => {
-    const matchesStatus =
-      filterRequest != "" ? request.status == filterRequest : true;
-    return matchesStatus;
-  });
-
-  const handleOnSendRequest = async (message: string) => {
-    if (!selectedReceiver || !user) return;
-
-    await requestsService.create({
-      message,
-      sender: isUserDoctor ? "DOCTOR" : "HOSPITAL",
-      doctorId: isUserDoctor ? user.id : selectedReceiver.userId,
-      hospitalId: isUserDoctor ? selectedReceiver.userId : user.id,
-    });
-
-    fetchRequests();
-  };
-
-  const handleOnStatusRequestChange = async (
-    id: string,
-    status: IRequestStatus
-  ) => {
-    await requestsService.updateStatus({
-      id,
-      status,
-    });
-    fetchRequests();
-  };
-
   const fetchUsers = useCallback(async () => {
     const response = isUserDoctor
       ? await hospitalsService.list()
@@ -94,13 +56,6 @@ export const Home = () => {
     }
   }, [isUserDoctor]);
 
-  const fetchRequests = useCallback(async () => {
-    const response = isUserDoctor
-      ? await requestsService.listByDoctor(user?.id || "")
-      : await requestsService.listByHospital(user?.id || "");
-    setRequests(response.data);
-  }, [isUserDoctor, user?.id]);
-
   const fetchSpecialtyItems = useCallback(async () => {
     const response = await specialtiesService.list();
     const specialties = response.data.map((item) => item.name);
@@ -109,9 +64,8 @@ export const Home = () => {
 
   useEffect(() => {
     fetchUsers();
-    fetchRequests();
     fetchSpecialtyItems();
-  }, [fetchUsers, fetchRequests, fetchSpecialtyItems]);
+  }, [fetchUsers, fetchSpecialtyItems]);
 
   return (
     <div className="flex flex-row h-screen bg-white p-4 gap-4">
@@ -154,7 +108,7 @@ export const Home = () => {
               onClose={() => setIsModalOpen(false)}
               userType={userType}
               receiver={selectedReceiver}
-              onSend={(message) => handleOnSendRequest(message)}
+              onSend={(message) => console.log(message)}
             />
           )}
         </SectionCard.Content>
@@ -162,35 +116,7 @@ export const Home = () => {
 
       <SectionCard.Root className="basis-1/3">
         <SectionCard.Header>Solicitações realizadas</SectionCard.Header>
-        <div className="my-4">
-          <select
-            value={filterRequest}
-            onChange={(e) => setFilterRequest(e.target.value as IRequestStatus)}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          >
-            <option value="">Todos</option>
-            <option value="PENDING">Pendentes</option>
-            <option value="ACCEPTED">Aceitos</option>
-            <option value="REJECTED">Rejeitados</option>
-            <option value="CANCELLED">Cancelados</option>
-            <option value="CONTRACTED">Contratados</option>
-          </select>
-        </div>
-        <SectionCard.Content>
-          {filteredRequests.map((request) => (
-            <CardRequest
-              key={request.id}
-              name={
-                isUserDoctor ? request.hospital!.name : request.doctor!.name
-              }
-              message={request.message}
-              status={request.status}
-              onStatusChange={async (newStatus) =>
-                handleOnStatusRequestChange(request.id, newStatus)
-              }
-            />
-          ))}
-        </SectionCard.Content>
+        <SectionCard.Content>oi</SectionCard.Content>
       </SectionCard.Root>
     </div>
   );

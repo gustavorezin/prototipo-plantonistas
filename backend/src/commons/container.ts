@@ -2,8 +2,6 @@ import { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctor
 import { DoctorsRepository } from "@modules/doctors/infra/repositories/DoctorsRepository";
 import { IHospitalsRepository } from "@modules/hospitals/domain/repositories/IHospitalsRepository";
 import { HospitalsRepository } from "@modules/hospitals/infra/repositories/HospitalsRepository";
-import { IRequestsRepository } from "@modules/requests/domain/repositories/IRequestsRepositoy";
-import { RequestsRepository } from "@modules/requests/infra/repositories/RequestsRepository";
 import { ISpecialtiesRepository } from "@modules/specialties/domain/repositories/ISpecialtiesRepository";
 import { SpecialtiesRepository } from "@modules/specialties/infra/repositories/SpecialtiesRepository";
 import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepository";
@@ -23,11 +21,6 @@ container.registerSingleton<IDoctorsRepository>(
 container.registerSingleton<IHospitalsRepository>(
   "HospitalsRepository",
   HospitalsRepository
-);
-
-container.registerSingleton<IRequestsRepository>(
-  "RequestsRepository",
-  RequestsRepository
 );
 
 container.registerSingleton<ISpecialtiesRepository>(

@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -38,9 +38,8 @@ model Hospital {
   address String
   phone   String
 
-  user     User      @relation(fields: [userId], references: [id])
-  doctors  Doctor[]  @relation("HospitalDoctors")
-  requests Request[]
+  user    User     @relation(fields: [userId], references: [id])
+  doctors Doctor[] @relation("HospitalDoctors")
 
   @@map("hospitals")
 }
@@ -54,40 +53,14 @@ model Doctor {
   user        User              @relation(fields: [userId], references: [id])
   hospitals   Hospital[]        @relation("HospitalDoctors")
   specialties DoctorSpecialty[]
-  requests    Request[]
 
   @@map("doctors")
 }
 
-model Request {
-  id         String        @id @default(uuid())
-  hospitalId String
-  doctorId   String
-  status     RequestStatus @default(PENDING)
-  message    String?
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
-
-  hospital    Hospital           @relation(fields: [hospitalId], references: [userId])
-  doctor      Doctor             @relation(fields: [doctorId], references: [userId])
-  specialties RequestSpecialty[]
-
-  @@map("requests")
-}
-
-enum RequestStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-  CANCELLED
-  CONTRACTED
-}
-
 model Specialty {
-  id       String             @id @default(uuid())
-  name     String             @unique
-  doctors  DoctorSpecialty[]
-  requests RequestSpecialty[]
+  id      String            @id @default(uuid())
+  name    String            @unique
+  doctors DoctorSpecialty[]
 
   @@map("specialties")
 }
@@ -101,15 +74,4 @@ model DoctorSpecialty {
 
   @@id([doctorId, specialtyId])
   @@map("doctor_specialties")
-}
-
-model RequestSpecialty {
-  requestId   String
-  specialtyId String
-
-  request   Request   @relation(fields: [requestId], references: [id])
-  specialty Specialty @relation(fields: [specialtyId], references: [id])
-
-  @@id([requestId, specialtyId])
-  @@map("request_specialties")
 }
