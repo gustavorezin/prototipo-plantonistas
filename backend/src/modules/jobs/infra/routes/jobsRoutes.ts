@@ -7,3 +7,4 @@ const jobsController = new JobsController();
 
 jobsRouter.use(isAuthenticated);
 jobsRouter.post("/", jobsController.create);
+jobsRouter.get("/", jobsController.listByHospital);
