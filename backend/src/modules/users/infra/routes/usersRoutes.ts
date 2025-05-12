@@ -13,3 +13,4 @@ usersRouter.use(isAuthenticated);
 usersRouter.get("/session", usersController.session);
 usersRouter.get("/profile", usersController.show);
 usersRouter.put("/", usersController.update);
+usersRouter.put("/password", usersController.updatePassword);

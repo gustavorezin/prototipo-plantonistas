@@ -62,6 +62,10 @@ const update = (data: IUpdateRequest) => {
   return api.put<IUser>("/users", data);
 };
 
+const updatePassword = (data: { password: string }) => {
+  return api.put<void>("/users/password", data);
+};
+
 const session = () => {
   return api.get<IUserAuthProvider>("/users/session");
 };
@@ -75,6 +79,7 @@ export const usersService = {
   logout,
   create,
   update,
+  updatePassword,
   session,
   show,
 };

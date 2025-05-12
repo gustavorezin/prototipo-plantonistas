@@ -55,6 +55,7 @@ export const Profile = () => {
   const {
     register: registerPassword,
     handleSubmit: handleSubmitPassword,
+    reset: resetFormPassword,
     formState: { errors: errorsPassword },
   } = useForm<UpdatePasswordFormData>({
     resolver: zodResolver(updatePasswordSchema),
@@ -70,7 +71,10 @@ export const Profile = () => {
   };
 
   const onSubmitPassword = async (data: UpdatePasswordFormData) => {
-    console.log(data);
+    await usersService.updatePassword({
+      password: data.newPassword,
+    });
+    resetFormPassword();
     toast.success("Senha atualizada com sucesso!");
   };
 
