@@ -130,4 +130,15 @@ export class UsersRepository implements IUsersRepository {
 
     return user;
   }
+
+  async updatePassword(id: string, password: string): Promise<void> {
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        password,
+      },
+    });
+  }
 }
