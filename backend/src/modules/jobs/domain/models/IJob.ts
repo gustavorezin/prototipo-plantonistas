@@ -1,4 +1,4 @@
-import { JobStatus } from "@prisma/client";
+import { JobStatus } from "prisma/generated/client";
 import { ISpecialty } from "@modules/specialties/domain/models/ISpecialty";
 
 export interface IJob {
@@ -6,7 +6,6 @@ export interface IJob {
   hospitalId: string;
   title: string;
   description: string | null;
-  date: string;
   startTime: string;
   endTime: string;
   slots: number;

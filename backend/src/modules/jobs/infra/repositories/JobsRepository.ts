@@ -1,17 +1,18 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
-import { ICreateJob } from "@modules/jobs/domain/models/ICreateJob";
 import { IJob } from "@modules/jobs/domain/models/IJob";
+import { CreateJobSchema } from "@modules/jobs/domain/models/schemas/CreateJobSchema";
 import { IJobsRepository } from "@modules/jobs/domain/repositories/IJobsRepository";
 
 export class JobsRepository implements IJobsRepository {
-  async create(data: ICreateJob): Promise<Omit<IJob, "specialties">> {
+  async create(
+    data: CreateJobSchema & { hospitalId: string }
+  ): Promise<Omit<IJob, "specialties">> {
     return await prisma.$transaction(async (prisma) => {
       const job = await prisma.job.create({
         data: {
           hospitalId: data.hospitalId,
           title: data.title,
           description: data.description,
-          date: data.date,
           startTime: data.startTime,
           endTime: data.endTime,
           slots: data.slots,
@@ -27,7 +28,6 @@ export class JobsRepository implements IJobsRepository {
 
       return {
         ...job,
-        date: job.date.toISOString(),
         startTime: job.startTime.toISOString(),
         endTime: job.endTime.toISOString(),
         createdAt: job.createdAt.toISOString(),
@@ -57,7 +57,6 @@ export class JobsRepository implements IJobsRepository {
 
     return jobs.map((job) => ({
       ...job,
-      date: job.date.toISOString(),
       startTime: job.startTime.toISOString(),
       endTime: job.endTime.toISOString(),
       createdAt: job.createdAt.toISOString(),
