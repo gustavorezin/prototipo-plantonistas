@@ -1,6 +1,6 @@
-import { IUpdateUser } from "../../models/IUpdateUser";
 import { IUser } from "../../models/IUser";
-import { CreateUserSchema } from "../../schemas/usersSchemas";
+import { CreateUserSchema } from "../../models/schemas/CreateUserSchema";
+import { UpdateUserSchema } from "../../models/schemas/UpdateUserSchema";
 import { IUsersRepository } from "../IUsersRepository";
 
 export class FakeUsersRepository implements IUsersRepository {
@@ -17,7 +17,7 @@ export class FakeUsersRepository implements IUsersRepository {
     return user;
   }
 
-  async update(data: IUpdateUser): Promise<IUser> {
+  async update(data: UpdateUserSchema): Promise<IUser> {
     const userIndex = this.users.findIndex((user) => user.id === data.id);
     if (userIndex === -1) {
       throw new Error("User not found");
@@ -29,6 +29,14 @@ export class FakeUsersRepository implements IUsersRepository {
     };
     this.users[userIndex] = updatedUser;
     return updatedUser;
+  }
+
+  async updatePassword(id: string, password: string): Promise<void> {
+    const userIndex = this.users.findIndex((user) => user.id === id);
+    if (userIndex === -1) {
+      throw new Error("User not found");
+    }
+    this.users[userIndex].password = password;
   }
 
   async findByEmail(email: string): Promise<IUser | null> {

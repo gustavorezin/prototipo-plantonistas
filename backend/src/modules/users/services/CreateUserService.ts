@@ -5,7 +5,7 @@ import type { IDoctorsRepository } from "@modules/doctors/domain/repositories/ID
 import { sign, SignOptions } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
-import { CreateUserSchema } from "../domain/schemas/usersSchemas";
+import { CreateUserSchema } from "../domain/models/schemas/CreateUserSchema";
 
 @injectable()
 export class CreateUserService {

@@ -3,7 +3,7 @@ import { CreateUserService } from "../CreateUserService";
 import { FakeUsersRepository } from "@modules/users/domain/repositories/fakes/FakeUsersRepository";
 import { AppError } from "@commons/error/AppError";
 import { HashProvider } from "@commons/providers/HashProvider";
-import { CreateUserSchema } from "@modules/users/domain/schemas/usersSchemas";
+import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
 
 let usersRepository: FakeUsersRepository;
 let doctorsRepository: FakeDoctorsRepository;
@@ -23,6 +23,7 @@ describe("CreateUser", () => {
       password: "1234",
       name: "name",
       userType: "HOSPITAL",
+      phone: "phone",
     };
     // act
     const { user } = await service.execute(newUser);
@@ -37,12 +38,14 @@ describe("CreateUser", () => {
       name: "name",
       password: "1234",
       userType: "HOSPITAL",
+      phone: "phone",
     });
     const newUser: CreateUserSchema = {
       email: "email@email.com",
       name: "name",
       password: "1234",
       userType: "HOSPITAL",
+      phone: "phone",
     };
     // act
     const user = service.execute(newUser);
@@ -50,7 +53,7 @@ describe("CreateUser", () => {
     await expect(user).rejects.toBeInstanceOf(AppError);
     await expect(user).rejects.toHaveProperty(
       "message",
-      "Email already in use"
+      "E-mail já cadastrado"
     );
   });
 
@@ -68,12 +71,13 @@ describe("CreateUser", () => {
       password: "1234",
       userType: "DOCTOR",
       crm: "123456",
+      phone: "phone",
     };
     // act
     const user = service.execute(newUser);
     // assert
     await expect(user).rejects.toBeInstanceOf(AppError);
-    await expect(user).rejects.toHaveProperty("message", "CRM already in use");
+    await expect(user).rejects.toHaveProperty("message", "CRM já cadastrado");
   });
 
   it("should hash the password before saving", async () => {
@@ -84,6 +88,7 @@ describe("CreateUser", () => {
       password: "1234",
       userType: "DOCTOR",
       crm: "123456",
+      phone: "phone",
     };
     // act
     const { user } = await service.execute(newUser);

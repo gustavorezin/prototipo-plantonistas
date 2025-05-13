@@ -1,4 +1,4 @@
-import { CreateUserSchema } from "@modules/users/domain/schemas/usersSchemas";
+import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
 import { CreateUserService } from "@modules/users/services/CreateUserService";
 import { LoginUserService } from "@modules/users/services/LoginUserService";
 import { SessionUserService } from "@modules/users/services/SessionUserService";

@@ -1,9 +1,9 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
-import { UserType } from "@prisma/client";
-import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepository";
 import { IUser } from "@modules/users/domain/models/IUser";
-import { IUpdateUser } from "@modules/users/domain/models/IUpdateUser";
-import { CreateUserSchema } from "@modules/users/domain/schemas/usersSchemas";
+import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
+import { UpdateUserSchema } from "@modules/users/domain/models/schemas/UpdateUserSchema";
+import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepository";
+import { UserType } from "@prisma/client";
 
 export class UsersRepository implements IUsersRepository {
   async create(data: CreateUserSchema) {
@@ -49,7 +49,7 @@ export class UsersRepository implements IUsersRepository {
     });
   }
 
-  async update(data: IUpdateUser) {
+  async update(data: UpdateUserSchema) {
     return prisma.$transaction(async (prisma) => {
       const user = await prisma.user.update({
         where: {
