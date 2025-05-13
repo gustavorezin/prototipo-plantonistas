@@ -14,11 +14,9 @@ export const errorHandler: ErrorRequestHandler = (
     });
     return;
   }
-
-  console.error(error);
-
+  console.log(error);
   response.status(500).json({
     status: 500,
-    message: "Internal server error",
+    message: "Erro interno do servidor",
   });
 };

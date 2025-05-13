@@ -1,3 +1,4 @@
+import { CreateUserSchema } from "@modules/users/domain/schemas/usersSchemas";
 import { CreateUserService } from "@modules/users/services/CreateUserService";
 import { LoginUserService } from "@modules/users/services/LoginUserService";
 import { SessionUserService } from "@modules/users/services/SessionUserService";
@@ -5,10 +6,11 @@ import { ShowUserService } from "@modules/users/services/ShowUserService";
 import { UpdatePasswordUserService } from "@modules/users/services/UpdatePasswordUserService";
 import { UpdateUserService } from "@modules/users/services/UpdateUserService";
 import { Request, Response } from "express";
+import { TypedRequestBody } from "src/@types/express/typed-request-body";
 import { container } from "tsyringe";
 
 export class UsersController {
-  async create(req: Request, res: Response) {
+  async create(req: TypedRequestBody<CreateUserSchema>, res: Response) {
     const {
       email,
       password,

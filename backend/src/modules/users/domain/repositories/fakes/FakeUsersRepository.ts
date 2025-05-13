@@ -1,12 +1,12 @@
-import { ICreateUser } from "../../models/ICreateUser";
 import { IUpdateUser } from "../../models/IUpdateUser";
 import { IUser } from "../../models/IUser";
+import { CreateUserSchema } from "../../schemas/usersSchemas";
 import { IUsersRepository } from "../IUsersRepository";
 
 export class FakeUsersRepository implements IUsersRepository {
   private users: IUser[] = [];
 
-  async create(data: ICreateUser): Promise<IUser> {
+  async create(data: CreateUserSchema): Promise<IUser> {
     const user: IUser = {
       id: (this.users.length + 1).toString(),
       ...data,

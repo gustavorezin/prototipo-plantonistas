@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { UsersController } from "../controllers/UsersController";
 import { isAuthenticated } from "@commons/middlewares/isAuthenticated";
+import { validateData } from "@commons/middlewares/validateData";
+import { createUserSchema } from "@modules/users/domain/schemas/usersSchemas";
 
 export const usersRouter = Router();
 const usersController = new UsersController();
 
-usersRouter.post("/", usersController.create);
+usersRouter.post("/", validateData(createUserSchema), usersController.create);
 usersRouter.post("/login", usersController.login);
 usersRouter.post("/logout", usersController.logout);
 

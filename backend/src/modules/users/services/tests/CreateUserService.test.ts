@@ -1,9 +1,9 @@
 import { FakeDoctorsRepository } from "@modules/doctors/domain/repositories/fakes/FakeDoctorsRepository";
 import { CreateUserService } from "../CreateUserService";
 import { FakeUsersRepository } from "@modules/users/domain/repositories/fakes/FakeUsersRepository";
-import { ICreateUser } from "@modules/users/domain/models/ICreateUser";
 import { AppError } from "@commons/error/AppError";
 import { HashProvider } from "@commons/providers/HashProvider";
+import { CreateUserSchema } from "@modules/users/domain/schemas/usersSchemas";
 
 let usersRepository: FakeUsersRepository;
 let doctorsRepository: FakeDoctorsRepository;
@@ -18,7 +18,7 @@ describe("CreateUser", () => {
 
   it("should be able to create a user", async () => {
     // arrange
-    const newUser: ICreateUser = {
+    const newUser: CreateUserSchema = {
       email: "email@email.com",
       password: "1234",
       name: "name",
@@ -38,7 +38,7 @@ describe("CreateUser", () => {
       password: "1234",
       userType: "HOSPITAL",
     });
-    const newUser: ICreateUser = {
+    const newUser: CreateUserSchema = {
       email: "email@email.com",
       name: "name",
       password: "1234",
@@ -62,7 +62,7 @@ describe("CreateUser", () => {
       userId: "1",
       phone: "phone",
     });
-    const newUser: ICreateUser = {
+    const newUser: CreateUserSchema = {
       email: "email@email.com",
       name: "name",
       password: "1234",
@@ -78,7 +78,7 @@ describe("CreateUser", () => {
 
   it("should hash the password before saving", async () => {
     // arrange
-    const newUser: ICreateUser = {
+    const newUser: CreateUserSchema = {
       email: "email@email.com",
       name: "name",
       password: "1234",

@@ -1,12 +1,12 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
 import { UserType } from "@prisma/client";
 import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepository";
-import { ICreateUser } from "@modules/users/domain/models/ICreateUser";
 import { IUser } from "@modules/users/domain/models/IUser";
 import { IUpdateUser } from "@modules/users/domain/models/IUpdateUser";
+import { CreateUserSchema } from "@modules/users/domain/schemas/usersSchemas";
 
 export class UsersRepository implements IUsersRepository {
-  async create(data: ICreateUser) {
+  async create(data: CreateUserSchema) {
     return prisma.$transaction(async (prisma) => {
       const user = await prisma.user.create({
         data: {
