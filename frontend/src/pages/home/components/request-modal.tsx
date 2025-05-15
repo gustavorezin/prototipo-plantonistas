@@ -2,13 +2,13 @@ import { useState } from "react";
 import { IHospital } from "@services/hospitals-service";
 import { IDoctor } from "@services/doctors-service";
 
-type RequestModalProps = {
+interface RequestModalProps {
   isOpen: boolean;
   onClose: () => void;
   userType: "DOCTOR" | "HOSPITAL";
   receiver: IHospital | IDoctor;
   onSend: (message: string) => void;
-};
+}
 
 export const RequestModal = ({
   isOpen,

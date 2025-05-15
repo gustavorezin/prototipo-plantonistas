@@ -3,10 +3,11 @@ import { Button } from "@commons/components/ui/button";
 import { CardJob } from "../components/card-job";
 import { IJob, jobsService } from "@services/jobs-service";
 import { useCallback, useEffect, useState } from "react";
+import { NewJobModal } from "../components/new-job-modal";
 
 export const JobsSection = () => {
   const [jobs, setJobs] = useState<IJob[]>([]);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const fetchJobs = useCallback(async () => {
     const response = await jobsService.listByHospital();
     setJobs(response.data);
@@ -24,7 +25,15 @@ export const JobsSection = () => {
             <CardJob {...job} />
           ))}
         </div>
-        <Button title="Cadastrar nova vaga" />
+        <Button
+          title="Cadastrar nova vaga"
+          onClick={() => setIsModalOpen(true)}
+        />
+        <NewJobModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSend={() => {}}
+        />
       </SectionCard.Content>
     </SectionCard.Root>
   );

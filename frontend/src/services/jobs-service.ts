@@ -20,7 +20,6 @@ export interface IJob {
 interface ICreateRequest {
   title: string;
   description?: string;
-  date: string;
   startTime: string;
   endTime: string;
   slots: number;
