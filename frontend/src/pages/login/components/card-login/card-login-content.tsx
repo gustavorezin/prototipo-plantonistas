@@ -21,7 +21,7 @@ const registerSchema = loginSchema.extend({
   userType: z.enum(["HOSPITAL", "DOCTOR"]),
   name: z.string().min(3, "Nome é obrigatório"),
   address: z.string().optional(),
-  phone: z.string().optional(),
+  phone: z.string().min(9, "Telefone é obrigatório"),
   crm: z.string().optional(),
   specialties: z.array(z.string()).optional(),
 });
@@ -135,7 +135,12 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
               />
             </>
           )}
-          <Input {...register("phone")} type="tel" placeholder="Telefone" />
+          <Input
+            {...register("phone")}
+            isError={isRegister && !!(errors as FieldErrors)?.phone}
+            type="tel"
+            placeholder="Telefone"
+          />
         </>
       )}
 
