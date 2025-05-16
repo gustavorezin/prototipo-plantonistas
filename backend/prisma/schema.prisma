@@ -85,7 +85,6 @@ model Job {
   hospitalId  String
   title       String
   description String?
-  date        DateTime
   startTime   DateTime
   endTime     DateTime
   slots       Int

@@ -1,4 +1,4 @@
-import { UserType } from "@prisma/client";
+import { UserType } from "./generated/client";
 import { prisma } from "../src/commons/infra/prisma/prismaClient";
 import { HashProvider } from "../src/commons/providers/HashProvider";
 
