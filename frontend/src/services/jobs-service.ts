@@ -23,7 +23,7 @@ interface ICreateRequest {
   startTime: string;
   endTime: string;
   slots: number;
-  specialtyIds: string[];
+  specialtyIds?: string[];
 }
 
 const create = (data: ICreateRequest) => {

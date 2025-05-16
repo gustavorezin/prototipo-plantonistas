@@ -22,7 +22,7 @@ export const JobsSection = () => {
       <SectionCard.Content>
         <div className="flex flex-1 flex-col gap-4 my-4">
           {jobs.map((job) => (
-            <CardJob {...job} />
+            <CardJob {...job} key={job.id} />
           ))}
         </div>
         <Button
@@ -31,8 +31,10 @@ export const JobsSection = () => {
         />
         <NewJobModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSend={() => {}}
+          onClose={() => {
+            setIsModalOpen(false);
+            fetchJobs();
+          }}
         />
       </SectionCard.Content>
     </SectionCard.Root>

@@ -12,10 +12,20 @@ import { z } from "zod";
 const newJobSchema = z.object({
   title: z.string().min(3),
   description: z.string().optional(),
-  startTime: z.string(),
-  endTime: z.string(),
-  slots: z.number().min(1),
-  specialtyIds: z.array(z.string()),
+  startTime: z
+    .string()
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: "Data/hora de início inválida",
+    })
+    .transform((val) => new Date(val).toISOString()),
+  endTime: z
+    .string()
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: "Data/hora de fim inválida",
+    })
+    .transform((val) => new Date(val).toISOString()),
+  slots: z.number().positive(),
+  specialtyIds: z.array(z.string()).optional(),
 });
 
 type NewJobFormData = z.infer<typeof newJobSchema>;
@@ -23,26 +33,31 @@ type NewJobFormData = z.infer<typeof newJobSchema>;
 interface NewJobModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSend: (message: string) => void;
 }
 
-export const NewJobModal = ({ isOpen, onClose, onSend }: NewJobModalProps) => {
+export const NewJobModal = ({ isOpen, onClose }: NewJobModalProps) => {
   const [specialties, setSpecialties] = useState<ISpecialty[]>([]);
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<NewJobFormData>({
     resolver: zodResolver(newJobSchema),
+    defaultValues: {
+      specialtyIds: [],
+    },
   });
 
   const onSubmit = async (data: NewJobFormData) => {
-    console.log(data);
-    /*  await jobsService.create({
+    await jobsService.create({
       ...data,
-    }); */
+      specialtyIds: data.specialtyIds || [],
+    });
     toast.success("Perfil atualizado com sucesso!");
+    onClose();
+    reset();
   };
 
   const fetchSpecialtyItems = useCallback(async () => {
@@ -82,18 +97,21 @@ export const NewJobModal = ({ isOpen, onClose, onSend }: NewJobModalProps) => {
               placeholder="Descrição"
             />
             <Input
-              {...register("slots")}
+              {...register("slots", { valueAsNumber: true })}
+              isError={!!errors.slots}
               placeholder="Vagas disponíveis"
               type="number"
             />
 
             <Input
               {...register("startTime")}
+              isError={!!errors.startTime}
               placeholder="Data/hora início"
               type="datetime-local"
             />
             <Input
               {...register("endTime")}
+              isError={!!errors.endTime}
               placeholder="Data/hora fim"
               type="datetime-local"
             />
@@ -108,7 +126,9 @@ export const NewJobModal = ({ isOpen, onClose, onSend }: NewJobModalProps) => {
                     label: s.name,
                   }))}
                   onChange={(selected) =>
-                    field.onChange(selected.map((opt) => opt.value))
+                    field.onChange(
+                      selected ? selected.map((opt) => opt.value) : []
+                    )
                   }
                   value={specialties
                     .filter((spec) => field.value?.includes(spec.id))
@@ -123,24 +143,6 @@ export const NewJobModal = ({ isOpen, onClose, onSend }: NewJobModalProps) => {
           </div>
           <Button type="submit" title="Salvar alterações" />
         </form>
-
-        {/* <div className="flex justify-end gap-2">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={() => {
-              onSend("");
-              onClose();
-            }}
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 transition"
-          >
-            Cadastrar
-          </button>
-        </div> */}
       </div>
     </div>
   );

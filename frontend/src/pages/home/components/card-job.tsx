@@ -3,7 +3,6 @@ import { JobStatus } from "@services/jobs-service";
 import { ISpecialty } from "@services/specialties-service";
 
 interface CardJobProps {
-  id: string;
   title: string;
   description?: string;
   startTime: string;
@@ -26,7 +25,6 @@ const STATUS_JOB_MAP = {
 } as const;
 
 export const CardJob = ({
-  id,
   title,
   description = "",
   startTime,
@@ -38,7 +36,6 @@ export const CardJob = ({
 }: CardJobProps) => {
   return (
     <div
-      key={id}
       onClick={() => {}}
       className="flex flex-col justify-between bg-white rounded-2xl p-4 shadow-md border border-gray-200 hover:shadow-lg transition cursor-pointer"
     >
