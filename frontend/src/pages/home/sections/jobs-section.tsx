@@ -25,6 +25,8 @@ export const JobsSection = () => {
             <CardJob {...job} key={job.id} />
           ))}
         </div>
+      </SectionCard.Content>
+      <SectionCard.Footer>
         <Button
           title="Cadastrar nova vaga"
           onClick={() => setIsModalOpen(true)}
@@ -36,7 +38,7 @@ export const JobsSection = () => {
             fetchJobs();
           }}
         />
-      </SectionCard.Content>
+      </SectionCard.Footer>
     </SectionCard.Root>
   );
 };

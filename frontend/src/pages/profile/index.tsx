@@ -12,6 +12,7 @@ import { ISpecialty, specialtiesService } from "@services/specialties-service";
 import { toast } from "sonner";
 import { IHospital } from "@services/hospitals-service";
 import { IDoctor } from "@services/doctors-service";
+import { SectionCardFooter } from "@commons/components/section-card/footer";
 
 const profileSchema = z.object({
   name: z.string().min(3, "Nome é obrigatório"),
@@ -117,7 +118,7 @@ export const Profile = () => {
       <SectionCard.Root className="basis-2/3 space-y-4">
         <SectionCard.Header>Perfil</SectionCard.Header>
         <SectionCard.Content>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form id="profileForm" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-2 gap-4 mb-8">
               <Input
                 {...register("name")}
@@ -162,14 +163,19 @@ export const Profile = () => {
                 <Input {...register("address")} placeholder="Endereço" />
               )}
             </div>
-            <Button type="submit" title="Salvar alterações" />
           </form>
         </SectionCard.Content>
+        <SectionCard.Footer>
+          <Button type="submit" form="profileForm" title="Salvar alterações" />
+        </SectionCard.Footer>
       </SectionCard.Root>
       <SectionCard.Root className="basis-1/3 space-y-4">
         <SectionCard.Header>Alterar senha</SectionCard.Header>
         <SectionCard.Content>
-          <form onSubmit={handleSubmitPassword(onSubmitPassword)}>
+          <form
+            id="passwordForm"
+            onSubmit={handleSubmitPassword(onSubmitPassword)}
+          >
             <div className="mb-8 space-y-4">
               <Input
                 {...registerPassword("newPassword")}
@@ -184,9 +190,11 @@ export const Profile = () => {
                 type="password"
               />
             </div>
-            <Button type="submit" title="Alterar" />
           </form>
         </SectionCard.Content>
+        <SectionCardFooter>
+          <Button type="submit" form="passwordForm" title="Alterar" />
+        </SectionCardFooter>
       </SectionCard.Root>
     </div>
   );
