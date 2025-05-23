@@ -31,10 +31,15 @@ const create = (data: ICreateRequest) => {
 };
 
 const listByHospital = () => {
+  return api.get<IJob[]>("/jobs/hospital");
+};
+
+const list = () => {
   return api.get<IJob[]>("/jobs");
 };
 
 export const jobsService = {
   create,
   listByHospital,
+  list,
 };

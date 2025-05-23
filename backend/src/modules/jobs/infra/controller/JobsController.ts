@@ -1,5 +1,6 @@
 import { CreateJobSchema } from "@modules/jobs/domain/models/schemas/CreateJobSchema";
 import { CreateJobService } from "@modules/jobs/services/CreateJobService";
+import { ListJobsService } from "@modules/jobs/services/ListHospitalsService";
 import { ListJobsByHospitalService } from "@modules/jobs/services/ListJobsByHospitalService";
 import { Request, Response } from "express";
 import { TypedRequestBody } from "src/@types/express/typed-request-body";
@@ -30,6 +31,13 @@ export class JobsController {
 
     const listJobsByHospital = container.resolve(ListJobsByHospitalService);
     const jobs = await listJobsByHospital.execute(hospitalId);
+
+    res.status(200).json(jobs);
+  }
+
+  async list(_req: Request, res: Response) {
+    const listJobs = container.resolve(ListJobsService);
+    const jobs = await listJobs.execute();
 
     res.status(200).json(jobs);
   }

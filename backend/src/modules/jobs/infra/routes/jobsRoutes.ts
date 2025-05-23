@@ -9,4 +9,5 @@ const jobsController = new JobsController();
 
 jobsRouter.use(isAuthenticated);
 jobsRouter.post("/", validateData(createJobSchema), jobsController.create);
-jobsRouter.get("/", jobsController.listByHospital);
+jobsRouter.get("/hospital", jobsController.listByHospital);
+jobsRouter.get("/", jobsController.list);

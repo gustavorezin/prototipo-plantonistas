@@ -12,10 +12,13 @@ interface JobsSectionProps {
 export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
   const [jobs, setJobs] = useState<IJob[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const fetchJobs = useCallback(async () => {
-    const response = await jobsService.listByHospital();
+    const response = isUserDoctor
+      ? await jobsService.list()
+      : await jobsService.listByHospital();
     setJobs(response.data);
-  }, []);
+  }, [isUserDoctor]);
 
   useEffect(() => {
     fetchJobs();
