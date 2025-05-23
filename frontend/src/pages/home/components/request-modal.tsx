@@ -5,7 +5,7 @@ import { IDoctor } from "@services/doctors-service";
 interface RequestModalProps {
   isOpen: boolean;
   onClose: () => void;
-  userType: "DOCTOR" | "HOSPITAL";
+  isUserDoctor: boolean;
   receiver: IHospital | IDoctor;
   onSend: (message: string) => void;
 }
@@ -13,16 +13,13 @@ interface RequestModalProps {
 export const RequestModal = ({
   isOpen,
   onClose,
-  userType,
+  isUserDoctor,
   receiver,
   onSend,
 }: RequestModalProps) => {
   const [message, setMessage] = useState("");
 
   if (!isOpen || !receiver) return null;
-
-  const isDoctorRequesting = userType === "DOCTOR";
-
   return (
     <div
       className="fixed inset-0 bg-black/30 flex items-center justify-center z-50"
@@ -33,7 +30,7 @@ export const RequestModal = ({
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold mb-4 text-primary">
-          {isDoctorRequesting
+          {isUserDoctor
             ? "Solicitar vínculo com hospital"
             : "Convidar médico para o hospital"}
         </h2>

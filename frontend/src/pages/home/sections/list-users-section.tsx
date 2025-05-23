@@ -1,5 +1,4 @@
 import { SectionCard } from "@commons/components/section-card";
-import { useAuth } from "@commons/hooks/use-auth";
 import { doctorsService, IDoctor } from "@services/doctors-service";
 import { hospitalsService, IHospital } from "@services/hospitals-service";
 import { specialtiesService } from "@services/specialties-service";
@@ -7,10 +6,11 @@ import { useCallback, useEffect, useState } from "react";
 import { HospitalOrDoctorList } from "../components/hospital-or-doctor-list";
 import { RequestModal } from "../components/request-modal";
 
-export const ListUsersSection = () => {
-  const { user } = useAuth();
-  const userType = user?.userType;
-  const isUserDoctor = userType === "DOCTOR";
+interface ListUsersSectionProps {
+  isUserDoctor: boolean;
+}
+
+export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
   const [hospitals, setHospitals] = useState<IHospital[]>([]);
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
   const [search, setSearch] = useState("");
@@ -97,15 +97,15 @@ export const ListUsersSection = () => {
       </div>
       <SectionCard.Content>
         <HospitalOrDoctorList
-          userType={userType}
+          isUserDoctor
           items={isUserDoctor ? filteredHospitals : filteredDoctors}
           onCardClick={handleCardClick}
         />
-        {selectedReceiver && userType && (
+        {selectedReceiver && (
           <RequestModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            userType={userType}
+            isUserDoctor
             receiver={selectedReceiver}
             onSend={(message) => console.log(message)}
           />

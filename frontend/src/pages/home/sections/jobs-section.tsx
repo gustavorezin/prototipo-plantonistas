@@ -5,7 +5,11 @@ import { IJob, jobsService } from "@services/jobs-service";
 import { useCallback, useEffect, useState } from "react";
 import { NewJobModal } from "../components/new-job-modal";
 
-export const JobsSection = () => {
+interface JobsSectionProps {
+  isUserDoctor: boolean;
+}
+
+export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
   const [jobs, setJobs] = useState<IJob[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fetchJobs = useCallback(async () => {
@@ -18,7 +22,9 @@ export const JobsSection = () => {
   }, [fetchJobs]);
   return (
     <SectionCard.Root className="basis-1/3">
-      <SectionCard.Header>Vagas cadastradas</SectionCard.Header>
+      <SectionCard.Header>
+        Vagas {isUserDoctor ? "disponíveis" : "cadastradas"}
+      </SectionCard.Header>
       <SectionCard.Content>
         <div className="flex flex-1 flex-col gap-4 my-4">
           {jobs.map((job) => (
