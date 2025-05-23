@@ -97,7 +97,7 @@ export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
       </div>
       <SectionCard.Content>
         <HospitalOrDoctorList
-          isUserDoctor
+          isUserDoctor={isUserDoctor}
           items={isUserDoctor ? filteredHospitals : filteredDoctors}
           onCardClick={handleCardClick}
         />
@@ -105,7 +105,7 @@ export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
           <RequestModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            isUserDoctor
+            isUserDoctor={isUserDoctor}
             receiver={selectedReceiver}
             onSend={(message) => console.log(message)}
           />
