@@ -4,6 +4,7 @@ import { CardJob } from "../components/card-job";
 import { IJob, jobsService } from "@services/jobs-service";
 import { useCallback, useEffect, useState } from "react";
 import { NewJobModal } from "../components/new-job-modal";
+import { EditJobModal } from "../components/edit-job-modal";
 
 interface JobsSectionProps {
   isUserDoctor: boolean;
@@ -11,7 +12,14 @@ interface JobsSectionProps {
 
 export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
   const [jobs, setJobs] = useState<IJob[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editJob, setEditJob] = useState<IJob | null>(null);
+  const [isModalNewJobOpen, setIsModalNewJobOpen] = useState(false);
+  const [isModalEditJobOpen, setIsModalEditJobOpen] = useState(false);
+
+  const handleCardClick = (job: IJob) => {
+    setEditJob(job);
+    setIsModalEditJobOpen(true);
+  };
 
   const fetchJobs = useCallback(async () => {
     const response = isUserDoctor
@@ -23,6 +31,7 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
+
   return (
     <SectionCard.Root className="basis-1/3">
       <SectionCard.Header>
@@ -31,23 +40,35 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
       <SectionCard.Content>
         <div className="flex flex-1 flex-col gap-4 my-4">
           {jobs.map((job) => (
-            <CardJob {...job} key={job.id} />
+            <CardJob
+              {...job}
+              key={job.id}
+              onClick={() => handleCardClick(job)}
+            />
           ))}
         </div>
       </SectionCard.Content>
       <SectionCard.Footer>
         <Button
           title="Cadastrar nova vaga"
-          onClick={() => setIsModalOpen(true)}
-        />
-        <NewJobModal
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            fetchJobs();
-          }}
+          onClick={() => setIsModalNewJobOpen(true)}
         />
       </SectionCard.Footer>
+      <NewJobModal
+        isOpen={isModalNewJobOpen}
+        onClose={() => {
+          setIsModalNewJobOpen(false);
+          fetchJobs();
+        }}
+      />
+      <EditJobModal
+        isOpen={isModalEditJobOpen}
+        onClose={() => {
+          setIsModalEditJobOpen(false);
+          fetchJobs();
+        }}
+        job={editJob}
+      />
     </SectionCard.Root>
   );
 };

@@ -11,6 +11,7 @@ interface CardJobProps {
   filledSlots: number;
   status: JobStatus;
   specialties: ISpecialty[];
+  onClick?: () => void;
 }
 
 const STATUS_JOB_MAP = {
@@ -33,10 +34,11 @@ export const CardJob = ({
   filledSlots,
   status,
   specialties,
+  onClick,
 }: CardJobProps) => {
   return (
     <div
-      onClick={() => {}}
+      onClick={onClick}
       className="flex flex-col justify-between bg-white rounded-2xl p-4 shadow-md border border-gray-200 hover:shadow-lg transition cursor-pointer"
     >
       <div className="flex flex-col gap-2 relative">

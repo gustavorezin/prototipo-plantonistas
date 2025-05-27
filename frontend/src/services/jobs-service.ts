@@ -26,8 +26,17 @@ interface ICreateRequest {
   specialtyIds?: string[];
 }
 
+interface IUpdateRequest extends ICreateRequest {
+  id: string;
+  status: JobStatus;
+}
+
 const create = (data: ICreateRequest) => {
   return api.post("/jobs", data);
+};
+
+const update = (data: IUpdateRequest) => {
+  return api.put(`/jobs/${data.id}`, data);
 };
 
 const listByHospital = () => {
@@ -40,6 +49,7 @@ const list = () => {
 
 export const jobsService = {
   create,
+  update,
   listByHospital,
   list,
 };

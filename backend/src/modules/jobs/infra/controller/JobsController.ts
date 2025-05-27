@@ -1,7 +1,9 @@
 import { CreateJobSchema } from "@modules/jobs/domain/models/schemas/CreateJobSchema";
+import { UpdateJobSchema } from "@modules/jobs/domain/models/schemas/UpdateJobSchema";
 import { CreateJobService } from "@modules/jobs/services/CreateJobService";
 import { ListJobsService } from "@modules/jobs/services/ListHospitalsService";
 import { ListJobsByHospitalService } from "@modules/jobs/services/ListJobsByHospitalService";
+import { UpdateJobService } from "@modules/jobs/services/UpdateJobService";
 import { Request, Response } from "express";
 import { TypedRequestBody } from "src/@types/express/typed-request-body";
 import { container } from "tsyringe";
@@ -24,6 +26,33 @@ export class JobsController {
     });
 
     res.status(201).json(job);
+  }
+
+  async update(req: TypedRequestBody<UpdateJobSchema>, res: Response) {
+    const id = req.params.id;
+    const {
+      title,
+      description,
+      startTime,
+      endTime,
+      slots,
+      specialtyIds,
+      status,
+    } = req.body;
+
+    const updateJob = container.resolve(UpdateJobService);
+    const job = await updateJob.execute({
+      id,
+      title,
+      description,
+      startTime,
+      endTime,
+      slots,
+      specialtyIds,
+      status,
+    });
+
+    res.status(200).json(job);
   }
 
   async listByHospital(req: Request, res: Response) {

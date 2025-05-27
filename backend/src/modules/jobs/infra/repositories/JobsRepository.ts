@@ -1,12 +1,11 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
 import { IJob } from "@modules/jobs/domain/models/IJob";
 import { CreateJobSchema } from "@modules/jobs/domain/models/schemas/CreateJobSchema";
+import { UpdateJobSchema } from "@modules/jobs/domain/models/schemas/UpdateJobSchema";
 import { IJobsRepository } from "@modules/jobs/domain/repositories/IJobsRepository";
 
 export class JobsRepository implements IJobsRepository {
-  async create(
-    data: CreateJobSchema & { hospitalId: string }
-  ): Promise<Omit<IJob, "specialties">> {
+  async create(data: CreateJobSchema): Promise<Omit<IJob, "specialties">> {
     return await prisma.$transaction(async (prisma) => {
       const job = await prisma.job.create({
         data: {
@@ -17,6 +16,41 @@ export class JobsRepository implements IJobsRepository {
           endTime: data.endTime,
           slots: data.slots,
         },
+      });
+
+      await prisma.jobSpecialty.createMany({
+        data: data.specialtyIds.map((specialtyId) => ({
+          jobId: job.id,
+          specialtyId,
+        })),
+      });
+
+      return {
+        ...job,
+        startTime: job.startTime.toISOString(),
+        endTime: job.endTime.toISOString(),
+        createdAt: job.createdAt.toISOString(),
+        updatedAt: job.updatedAt.toISOString(),
+      };
+    });
+  }
+
+  async update(data: UpdateJobSchema): Promise<Omit<IJob, "specialties">> {
+    return await prisma.$transaction(async (prisma) => {
+      const job = await prisma.job.update({
+        where: { id: data.id },
+        data: {
+          title: data.title,
+          description: data.description,
+          startTime: data.startTime,
+          endTime: data.endTime,
+          slots: data.slots,
+          status: data.status,
+        },
+      });
+
+      await prisma.jobSpecialty.deleteMany({
+        where: { jobId: job.id },
       });
 
       await prisma.jobSpecialty.createMany({
