@@ -1,6 +1,7 @@
 import { CreateJobSchema } from "@modules/jobs/domain/models/schemas/CreateJobSchema";
 import { UpdateJobSchema } from "@modules/jobs/domain/models/schemas/UpdateJobSchema";
 import { CreateJobService } from "@modules/jobs/services/CreateJobService";
+import { DeleteJobService } from "@modules/jobs/services/DeleteJobService";
 import { ListJobsService } from "@modules/jobs/services/ListHospitalsService";
 import { ListJobsByHospitalService } from "@modules/jobs/services/ListJobsByHospitalService";
 import { UpdateJobService } from "@modules/jobs/services/UpdateJobService";
@@ -69,5 +70,14 @@ export class JobsController {
     const jobs = await listJobs.execute();
 
     res.status(200).json(jobs);
+  }
+
+  async delete(req: Request, res: Response) {
+    const id = req.params.id;
+
+    const deleteJob = container.resolve(DeleteJobService);
+    await deleteJob.execute(id);
+
+    res.status(204).send();
   }
 }

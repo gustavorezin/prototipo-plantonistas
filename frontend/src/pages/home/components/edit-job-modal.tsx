@@ -5,6 +5,7 @@ import { dateUtil } from "@commons/utils/date-util";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IJob, jobsService } from "@services/jobs-service";
 import { ISpecialty, specialtiesService } from "@services/specialties-service";
+import { Trash } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -69,6 +70,12 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
     const response = await specialtiesService.list();
     setSpecialties(response.data);
   }, []);
+
+  const handleOnDelete = async () => {
+    await jobsService.remove(job!.id);
+    toast.success("Vaga excluída com sucesso!");
+    onClose();
+  };
 
   useEffect(() => {
     fetchSpecialtyItems();
@@ -154,7 +161,15 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
               )}
             />
           </div>
-          <Button type="submit" title="Salvar alterações" />
+          <div className="flex justify-end gap-2">
+            <Button
+              type="button"
+              className="flex-1 bg-red-800 hover:!bg-red-500"
+              children={<Trash />}
+              onClick={handleOnDelete}
+            />
+            <Button type="submit" title="Salvar alterações" />
+          </div>
         </form>
       </div>
     </div>

@@ -47,9 +47,14 @@ const list = () => {
   return api.get<IJob[]>("/jobs");
 };
 
+const remove = (id: string) => {
+  return api.delete(`/jobs/${id}`);
+};
+
 export const jobsService = {
   create,
   update,
   listByHospital,
   list,
+  remove,
 };

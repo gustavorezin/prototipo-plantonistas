@@ -111,7 +111,7 @@ model JobSpecialty {
   jobId       String
   specialtyId String
 
-  job       Job       @relation(fields: [jobId], references: [id])
+  job       Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
   specialty Specialty @relation(fields: [specialtyId], references: [id])
 
   @@id([jobId, specialtyId])

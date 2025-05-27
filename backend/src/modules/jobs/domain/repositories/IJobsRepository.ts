@@ -7,4 +7,5 @@ export interface IJobsRepository {
   update(data: UpdateJobSchema): Promise<Omit<IJob, "specialties">>;
   findAllByHospitalId(hospitalId: string): Promise<IJob[]>;
   findAll(): Promise<IJob[]>;
+  delete(id: string): Promise<void>;
 }

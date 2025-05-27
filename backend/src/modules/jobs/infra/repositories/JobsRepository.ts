@@ -130,4 +130,10 @@ export class JobsRepository implements IJobsRepository {
       })),
     }));
   }
+
+  async delete(id: string): Promise<void> {
+    await prisma.job.delete({
+      where: { id },
+    });
+  }
 }

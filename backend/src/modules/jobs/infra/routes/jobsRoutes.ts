@@ -13,3 +13,4 @@ jobsRouter.post("/", validateData(createJobSchema), jobsController.create);
 jobsRouter.put("/:id", validateData(updateJobSchema), jobsController.update);
 jobsRouter.get("/hospital", jobsController.listByHospital);
 jobsRouter.get("/", jobsController.list);
+jobsRouter.delete("/:id", jobsController.delete);
