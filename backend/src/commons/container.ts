@@ -1,3 +1,5 @@
+import { IApplicationsRepository } from "@modules/applications/domain/repositories/IApplicationsRepository";
+import { ApplicationsRepository } from "@modules/applications/infra/repositories/ApplicationsRepository";
 import { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
 import { DoctorsRepository } from "@modules/doctors/infra/repositories/DoctorsRepository";
 import { IHospitalsRepository } from "@modules/hospitals/domain/repositories/IHospitalsRepository";
@@ -31,3 +33,8 @@ container.registerSingleton<ISpecialtiesRepository>(
 );
 
 container.registerSingleton<IJobsRepository>("JobsRepository", JobsRepository);
+
+container.registerSingleton<IApplicationsRepository>(
+  "ApplicationsRepository",
+  ApplicationsRepository
+);

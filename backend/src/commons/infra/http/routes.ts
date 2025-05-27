@@ -1,3 +1,4 @@
+import { applicationsRouter } from "@modules/applications/infra/routes/applicationsRoutes";
 import { doctorsRouter } from "@modules/doctors/infra/routes/doctorsRoutes";
 import { hospitalsRouter } from "@modules/hospitals/infra/routes/hospitalsRoutes";
 import { jobsRouter } from "@modules/jobs/infra/routes/jobsRoutes";
@@ -12,3 +13,4 @@ routes.use("/doctors", doctorsRouter);
 routes.use("/hospitals", hospitalsRouter);
 routes.use("/specialties", specialtiesRouter);
 routes.use("/jobs", jobsRouter);
+routes.use("/applications", applicationsRouter);

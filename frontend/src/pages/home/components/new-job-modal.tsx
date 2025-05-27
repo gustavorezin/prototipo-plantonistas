@@ -55,7 +55,7 @@ export const NewJobModal = ({ isOpen, onClose }: NewJobModalProps) => {
       ...data,
       specialtyIds: data.specialtyIds || [],
     });
-    toast.success("Perfil atualizado com sucesso!");
+    toast.success("Vaga cadastrada com sucesso!");
     onClose();
     reset();
   };

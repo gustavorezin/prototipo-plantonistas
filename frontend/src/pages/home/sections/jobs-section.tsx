@@ -5,6 +5,7 @@ import { IJob, jobsService } from "@services/jobs-service";
 import { useCallback, useEffect, useState } from "react";
 import { NewJobModal } from "../components/new-job-modal";
 import { EditJobModal } from "../components/edit-job-modal";
+import { ApplyJobModal } from "../components/apply-job-modal";
 
 interface JobsSectionProps {
   isUserDoctor: boolean;
@@ -12,13 +13,18 @@ interface JobsSectionProps {
 
 export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
   const [jobs, setJobs] = useState<IJob[]>([]);
-  const [editJob, setEditJob] = useState<IJob | null>(null);
+  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
   const [isModalNewJobOpen, setIsModalNewJobOpen] = useState(false);
   const [isModalEditJobOpen, setIsModalEditJobOpen] = useState(false);
+  const [isModalApplyJobOpen, setIsModalApplyJobOpen] = useState(false);
 
   const handleCardClick = (job: IJob) => {
-    setEditJob(job);
-    setIsModalEditJobOpen(true);
+    setSelectedJob(job);
+    if (isUserDoctor) {
+      setIsModalApplyJobOpen(true);
+    } else {
+      setIsModalEditJobOpen(true);
+    }
   };
 
   const fetchJobs = useCallback(async () => {
@@ -42,18 +48,21 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
           {jobs.map((job) => (
             <CardJob
               {...job}
+              isUserDoctor={isUserDoctor}
               key={job.id}
               onClick={() => handleCardClick(job)}
             />
           ))}
         </div>
       </SectionCard.Content>
-      <SectionCard.Footer>
-        <Button
-          title="Cadastrar nova vaga"
-          onClick={() => setIsModalNewJobOpen(true)}
-        />
-      </SectionCard.Footer>
+      {!isUserDoctor && (
+        <SectionCard.Footer>
+          <Button
+            title="Cadastrar nova vaga"
+            onClick={() => setIsModalNewJobOpen(true)}
+          />
+        </SectionCard.Footer>
+      )}
       <NewJobModal
         isOpen={isModalNewJobOpen}
         onClose={() => {
@@ -67,7 +76,15 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
           setIsModalEditJobOpen(false);
           fetchJobs();
         }}
-        job={editJob}
+        job={selectedJob}
+      />
+      <ApplyJobModal
+        isOpen={isModalApplyJobOpen}
+        onClose={() => {
+          setIsModalApplyJobOpen(false);
+          fetchJobs();
+        }}
+        job={selectedJob}
       />
     </SectionCard.Root>
   );

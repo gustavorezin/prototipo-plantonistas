@@ -12,14 +12,15 @@ interface CardJobProps {
   status: JobStatus;
   specialties: ISpecialty[];
   onClick?: () => void;
+  isUserDoctor: boolean;
 }
 
 const STATUS_JOB_MAP = {
-  OPEN: { label: "Aberto", bg: "bg-green-100", text: "text-green-700" },
-  CLOSED: { label: "Fechado", bg: "bg-yellow-100", text: "text-yellow-700" },
-  CANCELLED: { label: "Cancelado", bg: "bg-gray-200", text: "text-gray-700" },
+  OPEN: { label: "Aberta", bg: "bg-green-100", text: "text-green-700" },
+  CLOSED: { label: "Fechada", bg: "bg-yellow-100", text: "text-yellow-700" },
+  CANCELLED: { label: "Cancelada", bg: "bg-gray-200", text: "text-gray-700" },
   COMPLETED: {
-    label: "Completado",
+    label: "Completada",
     bg: "bg-blue-100",
     text: "text-blue-700",
   },
@@ -35,6 +36,7 @@ export const CardJob = ({
   status,
   specialties,
   onClick,
+  isUserDoctor,
 }: CardJobProps) => {
   return (
     <div
@@ -45,7 +47,7 @@ export const CardJob = ({
         <div
           className={`absolute top-0 right-0 rounded-full px-2 py-1 text-xs font-semibold ${STATUS_JOB_MAP[status].bg} ${STATUS_JOB_MAP[status].text}`}
         >
-          {status}
+          {STATUS_JOB_MAP[status].label}
         </div>
         <div>
           <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
@@ -65,24 +67,26 @@ export const CardJob = ({
           {dateUtil.formatDateTimeIsoString(startTime)} -{" "}
           {dateUtil.formatDateTimeIsoString(endTime)}
         </p>
-        <div className="flex justify-between">
-          <div>
-            <p className="text-sm text-gray-500">
-              Vagas:{" "}
-              <span className="font-bold bg-gray-300 px-2 rounded-full">
-                {slots}
-              </span>
-            </p>
+        {!isUserDoctor && (
+          <div className="flex justify-between">
+            <div>
+              <p className="text-sm text-gray-500">
+                Vagas:{" "}
+                <span className="font-bold bg-gray-300 px-2 rounded-full">
+                  {slots}
+                </span>
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">
+                Preenchido:{" "}
+                <span className="font-bold bg-green-100 text-green-700 px-2 rounded-full">
+                  {filledSlots}
+                </span>
+              </p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm text-gray-500">
-              Preenchido:{" "}
-              <span className="font-bold bg-green-100 text-green-700 px-2 rounded-full">
-                {filledSlots}
-              </span>
-            </p>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

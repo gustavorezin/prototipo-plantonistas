@@ -2,7 +2,7 @@ import { CreateJobSchema } from "@modules/jobs/domain/models/schemas/CreateJobSc
 import { UpdateJobSchema } from "@modules/jobs/domain/models/schemas/UpdateJobSchema";
 import { CreateJobService } from "@modules/jobs/services/CreateJobService";
 import { DeleteJobService } from "@modules/jobs/services/DeleteJobService";
-import { ListJobsService } from "@modules/jobs/services/ListHospitalsService";
+import { ListJobsService } from "@modules/jobs/services/ListJobsService";
 import { ListJobsByHospitalService } from "@modules/jobs/services/ListJobsByHospitalService";
 import { UpdateJobService } from "@modules/jobs/services/UpdateJobService";
 import { Request, Response } from "express";
