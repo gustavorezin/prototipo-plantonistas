@@ -7,7 +7,6 @@ export const createJobSchema = z.object({
   endTime: z.string(),
   slots: z.number().min(1),
   specialtyIds: z.array(z.string()),
-  hospitalId: z.string(),
 });
 
 export type CreateJobSchema = z.infer<typeof createJobSchema>;

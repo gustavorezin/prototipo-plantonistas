@@ -13,7 +13,7 @@ export class CreateJobService {
     private usersRepository: IUsersRepository
   ) {}
 
-  async execute(data: CreateJobSchema) {
+  async execute(data: CreateJobSchema & { hospitalId: string }) {
     const user = await this.usersRepository.findById(data.hospitalId);
     if (!user) {
       throw new AppError("Usuário não encontrado");

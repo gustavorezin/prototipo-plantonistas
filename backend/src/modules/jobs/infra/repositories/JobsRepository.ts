@@ -5,7 +5,9 @@ import { UpdateJobSchema } from "@modules/jobs/domain/models/schemas/UpdateJobSc
 import { IJobsRepository } from "@modules/jobs/domain/repositories/IJobsRepository";
 
 export class JobsRepository implements IJobsRepository {
-  async create(data: CreateJobSchema): Promise<Omit<IJob, "specialties">> {
+  async create(
+    data: CreateJobSchema & { hospitalId: string }
+  ): Promise<Omit<IJob, "specialties">> {
     return await prisma.$transaction(async (prisma) => {
       const job = await prisma.job.create({
         data: {
