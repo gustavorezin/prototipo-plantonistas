@@ -1,4 +1,5 @@
 import { IApplication } from "../models/IApplication";
+import { IApplicationWithDoctorInfo } from "../models/IApplicationWithDoctorInfo";
 
 export interface IApplicationsRepository {
   create: (jobId: string, doctorId: string) => Promise<IApplication>;
@@ -6,4 +7,5 @@ export interface IApplicationsRepository {
     jobId: string,
     doctorId: string
   ) => Promise<IApplication | null>;
+  findAllByJobId: (jobId: string) => Promise<IApplicationWithDoctorInfo[]>;
 }

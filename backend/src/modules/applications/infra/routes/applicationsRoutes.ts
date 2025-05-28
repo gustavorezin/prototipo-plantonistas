@@ -7,3 +7,4 @@ const applicationsController = new ApplicationController();
 
 applicationsRouter.use(isAuthenticated);
 applicationsRouter.post("/", applicationsController.create);
+applicationsRouter.get("/:jobId", applicationsController.listByJob);

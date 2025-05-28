@@ -1,5 +1,6 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
 import { IApplication } from "@modules/applications/domain/models/IApplication";
+import { IApplicationWithDoctorInfo } from "@modules/applications/domain/models/IApplicationWithDoctorInfo";
 import { IApplicationsRepository } from "@modules/applications/domain/repositories/IApplicationsRepository";
 
 export class ApplicationsRepository implements IApplicationsRepository {
@@ -11,11 +12,7 @@ export class ApplicationsRepository implements IApplicationsRepository {
       },
     });
 
-    return {
-      ...application,
-      createdAt: application.createdAt.toISOString(),
-      updatedAt: application.updatedAt.toISOString(),
-    };
+    return application;
   }
 
   async findByJobIdAndDoctorId(
@@ -28,15 +25,24 @@ export class ApplicationsRepository implements IApplicationsRepository {
         doctorId,
       },
     });
+    return application;
+  }
 
-    if (!application) {
-      return null;
-    }
+  async findAllByJobId(jobId: string): Promise<IApplicationWithDoctorInfo[]> {
+    const applications = await prisma.application.findMany({
+      where: {
+        jobId,
+      },
+      include: {
+        doctor: {
+          select: {
+            name: true,
+            crm: true,
+          },
+        },
+      },
+    });
 
-    return {
-      ...application,
-      createdAt: application.createdAt.toISOString(),
-      updatedAt: application.updatedAt.toISOString(),
-    };
+    return applications;
   }
 }

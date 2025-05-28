@@ -5,6 +5,4 @@ export interface IApplication {
   jobId: string;
   doctorId: string;
   status: ApplicationStatus;
-  createdAt: string;
-  updatedAt: string;
 }

@@ -3,6 +3,10 @@ import { Input } from "@commons/components/ui/input";
 import { MultiSelect } from "@commons/components/ui/multi-select";
 import { dateUtil } from "@commons/utils/date-util";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  applicationService,
+  IApplicationWithDoctorInfo,
+} from "@services/applications-service";
 import { IJob, jobsService } from "@services/jobs-service";
 import { ISpecialty, specialtiesService } from "@services/specialties-service";
 import { Trash } from "lucide-react";
@@ -40,6 +44,9 @@ interface EditJobModalProps {
 
 export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
   const [specialties, setSpecialties] = useState<ISpecialty[]>([]);
+  const [applications, setApplications] = useState<
+    IApplicationWithDoctorInfo[]
+  >([]);
   const {
     register,
     handleSubmit,
@@ -53,6 +60,8 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
       specialtyIds: [],
     },
   });
+
+  const isEditable = applications.length === 0;
 
   const onSubmit = async (data: EditJobFormData) => {
     await jobsService.update({
@@ -71,6 +80,11 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
     setSpecialties(response.data);
   }, []);
 
+  const fetchApplications = useCallback(async () => {
+    const response = await applicationService.listByJobId(job!.id);
+    setApplications(response.data);
+  }, [job]);
+
   const handleOnDelete = async () => {
     await jobsService.remove(job!.id);
     toast.success("Vaga excluída com sucesso!");
@@ -78,8 +92,9 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
   };
 
   useEffect(() => {
-    fetchSpecialtyItems();
     if (!job) return;
+    fetchSpecialtyItems();
+    fetchApplications();
     setValue("title", job.title);
     setValue("description", job.description || "");
     setValue("slots", job.slots);
@@ -89,7 +104,7 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
       "specialtyIds",
       job.specialties.map((s) => s.id)
     );
-  }, [fetchSpecialtyItems, job, setValue]);
+  }, [fetchSpecialtyItems, fetchApplications, job, setValue]);
 
   if (!isOpen || !job) return null;
 
@@ -110,17 +125,20 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
               {...register("title")}
               isError={!!errors.title}
               placeholder="Título"
+              disabled={!isEditable}
             />
             <Input
               {...register("description")}
               isError={!!errors.description}
               placeholder="Descrição"
+              disabled={!isEditable}
             />
             <Input
               {...register("slots", { valueAsNumber: true })}
               isError={!!errors.slots}
               placeholder="Vagas disponíveis"
               type="number"
+              disabled={!isEditable}
             />
 
             <Input
@@ -128,16 +146,19 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
               isError={!!errors.startTime}
               placeholder="Data/hora início"
               type="datetime-local"
+              disabled={!isEditable}
             />
             <Input
               {...register("endTime")}
               isError={!!errors.endTime}
               placeholder="Data/hora fim"
               type="datetime-local"
+              disabled={!isEditable}
             />
             <Controller
               name="specialtyIds"
               control={control}
+              disabled={!isEditable}
               render={({ field }) => (
                 <MultiSelect
                   isMulti
@@ -161,6 +182,22 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
               )}
             />
           </div>
+
+          {applications.length > 0 && (
+            <div className="mb-4">
+              <h3 className="font-semibold text-sm mb-1">
+                Candidaturas recebidas:
+              </h3>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                {applications.map((a) => (
+                  <li key={a.id}>
+                    {a.doctor.name} — CRM {a.doctor.crm}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="flex justify-end gap-2">
             <Button
               type="button"

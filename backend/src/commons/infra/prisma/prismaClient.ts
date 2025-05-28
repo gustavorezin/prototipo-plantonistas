@@ -1,3 +1,10 @@
 import { PrismaClient } from "../../../../prisma/generated/client";
 
-export const prisma = new PrismaClient();
+export const prisma = new PrismaClient({
+  omit: {
+    application: {
+      createdAt: true,
+      updatedAt: true,
+    },
+  },
+});
