@@ -62,6 +62,8 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
   const [applications, setApplications] = useState<
     IApplicationWithDoctorInfo[]
   >([]);
+  const [isEditable, setIsEditable] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -75,8 +77,6 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
       specialtyIds: [],
     },
   });
-
-  const isEditable = applications.length === 0;
 
   const onSubmit = async (data: EditJobFormData) => {
     await jobsService.update({
@@ -113,6 +113,7 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
     await applicationService.updateStatus(applicationId, newStatus);
     toast.success("Status da candidatura atualizado!");
     fetchApplications();
+    setIsEditable(job?.status === "OPEN" && job.filledSlots === 0);
   };
 
   useEffect(() => {
@@ -128,6 +129,7 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
       "specialtyIds",
       job.specialties.map((s) => s.id)
     );
+    setIsEditable(job.status === "OPEN" && job.filledSlots === 0);
   }, [fetchSpecialtyItems, fetchApplications, job, setValue]);
 
   if (!isOpen || !job) return null;
@@ -204,20 +206,23 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
                         label: spec.name,
                       }))}
                     placeholder="Especialidades desejadas"
+                    isDisabled={!isEditable}
                   />
                 )}
               />
             </div>
 
-            <div className="flex justify-end gap-2">
-              <Button
-                type="button"
-                className="flex-1 bg-red-800 hover:!bg-red-500"
-                children={<Trash />}
-                onClick={handleOnDelete}
-              />
-              <Button type="submit" title="Salvar alterações" />
-            </div>
+            {isEditable && (
+              <div className="flex justify-end gap-2">
+                <Button
+                  type="button"
+                  className="flex-1 bg-red-800 hover:!bg-red-500"
+                  children={<Trash />}
+                  onClick={handleOnDelete}
+                />
+                <Button type="submit" title="Salvar alterações" />
+              </div>
+            )}
           </form>
         </div>
 

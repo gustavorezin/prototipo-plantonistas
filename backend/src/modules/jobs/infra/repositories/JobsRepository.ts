@@ -5,9 +5,7 @@ import { UpdateJobSchema } from "@modules/jobs/domain/models/schemas/UpdateJobSc
 import { IJobsRepository } from "@modules/jobs/domain/repositories/IJobsRepository";
 
 export class JobsRepository implements IJobsRepository {
-  async create(
-    data: CreateJobSchema & { hospitalId: string }
-  ): Promise<Omit<IJob, "specialties">> {
+  async create(data: CreateJobSchema & { hospitalId: string }): Promise<IJob> {
     return await prisma.$transaction(async (prisma) => {
       const job = await prisma.job.create({
         data: {
@@ -31,13 +29,11 @@ export class JobsRepository implements IJobsRepository {
         ...job,
         startTime: job.startTime.toISOString(),
         endTime: job.endTime.toISOString(),
-        createdAt: job.createdAt.toISOString(),
-        updatedAt: job.updatedAt.toISOString(),
       };
     });
   }
 
-  async update(data: UpdateJobSchema): Promise<Omit<IJob, "specialties">> {
+  async update(data: UpdateJobSchema): Promise<IJob> {
     return await prisma.$transaction(async (prisma) => {
       const job = await prisma.job.update({
         where: { id: data.id },
@@ -66,13 +62,11 @@ export class JobsRepository implements IJobsRepository {
         ...job,
         startTime: job.startTime.toISOString(),
         endTime: job.endTime.toISOString(),
-        createdAt: job.createdAt.toISOString(),
-        updatedAt: job.updatedAt.toISOString(),
       };
     });
   }
 
-  async findById(id: string): Promise<Omit<IJob, "specialties"> | null> {
+  async findById(id: string): Promise<IJob | null> {
     const job = await prisma.job.findUnique({
       where: { id },
     });
@@ -85,8 +79,6 @@ export class JobsRepository implements IJobsRepository {
       ...job,
       startTime: job.startTime.toISOString(),
       endTime: job.endTime.toISOString(),
-      createdAt: job.createdAt.toISOString(),
-      updatedAt: job.updatedAt.toISOString(),
     };
   }
 
@@ -135,8 +127,6 @@ export class JobsRepository implements IJobsRepository {
       ...job,
       startTime: job.startTime.toISOString(),
       endTime: job.endTime.toISOString(),
-      createdAt: job.createdAt.toISOString(),
-      updatedAt: job.updatedAt.toISOString(),
       specialties: job.specialties.map((jobSpecialty) => ({
         id: jobSpecialty.specialty.id,
         name: jobSpecialty.specialty.name,
@@ -164,8 +154,6 @@ export class JobsRepository implements IJobsRepository {
       ...job,
       startTime: job.startTime.toISOString(),
       endTime: job.endTime.toISOString(),
-      createdAt: job.createdAt.toISOString(),
-      updatedAt: job.updatedAt.toISOString(),
       specialties: job.specialties.map((jobSpecialty) => ({
         id: jobSpecialty.specialty.id,
         name: jobSpecialty.specialty.name,

@@ -1,5 +1,4 @@
 import { JobStatus } from "prisma/generated/client";
-import { ISpecialty } from "@modules/specialties/domain/models/ISpecialty";
 
 export interface IJob {
   id: string;
@@ -11,7 +10,5 @@ export interface IJob {
   slots: number;
   filledSlots: number;
   status: JobStatus;
-  specialties: ISpecialty[];
-  createdAt: string;
-  updatedAt: string;
+  //specialties: ISpecialty[];
 }

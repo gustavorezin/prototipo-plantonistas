@@ -3,11 +3,11 @@ import { CreateJobSchema } from "../models/schemas/CreateJobSchema";
 import { UpdateJobSchema } from "../models/schemas/UpdateJobSchema";
 
 export interface IJobsRepository {
-  create(data: CreateJobSchema): Promise<Omit<IJob, "specialties">>;
-  update(data: UpdateJobSchema): Promise<Omit<IJob, "specialties">>;
+  create(data: CreateJobSchema): Promise<IJob>;
+  update(data: UpdateJobSchema): Promise<IJob>;
   incrementFilledSlots(id: string): Promise<void>;
   decrementFilledSlots(id: string): Promise<void>;
-  findById(id: string): Promise<Omit<IJob, "specialties"> | null>;
+  findById(id: string): Promise<IJob | null>;
   findAllByHospitalId(hospitalId: string): Promise<IJob[]>;
   findAll(): Promise<IJob[]>;
   delete(id: string): Promise<void>;

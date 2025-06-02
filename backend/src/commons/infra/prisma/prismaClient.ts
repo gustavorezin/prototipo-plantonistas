@@ -6,5 +6,9 @@ export const prisma = new PrismaClient({
       createdAt: true,
       updatedAt: true,
     },
+    job: {
+      createdAt: true,
+      updatedAt: true,
+    },
   },
 });

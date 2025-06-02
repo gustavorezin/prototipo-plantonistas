@@ -70,7 +70,7 @@ export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
   return (
     <SectionCard.Root className="basis-2/3">
       <SectionCard.Header>
-        Solicitar {isUserDoctor ? "hospital" : "médico"}
+        Buscar {isUserDoctor ? "hospitais" : "médicos"}
       </SectionCard.Header>
       <div className="flex flex-row gap-4 my-4">
         <input
