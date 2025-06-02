@@ -5,6 +5,7 @@ import { dateUtil } from "@commons/utils/date-util";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   applicationService,
+  ApplicationStatus,
   IApplicationWithDoctorInfo,
 } from "@services/applications-service";
 import { IJob, jobsService } from "@services/jobs-service";
@@ -14,6 +15,20 @@ import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+
+const statusOptions = [
+  {
+    value: "PENDING",
+    label: "Pendente",
+    color: "bg-yellow-100 text-yellow-800",
+  },
+  {
+    value: "ACCEPTED",
+    label: "Aceito",
+    color: "bg-green-100 text-green-800",
+  },
+  { value: "REJECTED", label: "Rejeitado", color: "bg-red-100 text-red-800" },
+] satisfies { value: ApplicationStatus; label: string; color: string }[];
 
 const editJobSchema = z.object({
   title: z.string().min(3),
@@ -91,6 +106,15 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
     onClose();
   };
 
+  const handleStatusChange = async (
+    applicationId: string,
+    newStatus: ApplicationStatus
+  ) => {
+    await applicationService.updateStatus(applicationId, newStatus);
+    toast.success("Status da candidatura atualizado!");
+    fetchApplications();
+  };
+
   useEffect(() => {
     if (!job) return;
     fetchSpecialtyItems();
@@ -114,100 +138,123 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
       onClick={onClose}
     >
       <div
-        className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl"
+        className="bg-white p-6 rounded-lg w-full max-w-4xl shadow-xl flex"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-bold mb-4 text-primary">Editar vaga</h2>
+        {/* Formulário de edição */}
+        <div className="flex-1 pr-6">
+          <h2 className="text-lg font-bold mb-4 text-primary">Editar vaga</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 gap-4 mb-8">
-            <Input
-              {...register("title")}
-              isError={!!errors.title}
-              placeholder="Título"
-              disabled={!isEditable}
-            />
-            <Input
-              {...register("description")}
-              isError={!!errors.description}
-              placeholder="Descrição"
-              disabled={!isEditable}
-            />
-            <Input
-              {...register("slots", { valueAsNumber: true })}
-              isError={!!errors.slots}
-              placeholder="Vagas disponíveis"
-              type="number"
-              disabled={!isEditable}
-            />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-1 gap-4 mb-8">
+              <Input
+                {...register("title")}
+                isError={!!errors.title}
+                placeholder="Título"
+                disabled={!isEditable}
+              />
+              <Input
+                {...register("description")}
+                isError={!!errors.description}
+                placeholder="Descrição"
+                disabled={!isEditable}
+              />
+              <Input
+                {...register("slots", { valueAsNumber: true })}
+                isError={!!errors.slots}
+                placeholder="Vagas disponíveis"
+                type="number"
+                disabled={!isEditable}
+              />
 
-            <Input
-              {...register("startTime")}
-              isError={!!errors.startTime}
-              placeholder="Data/hora início"
-              type="datetime-local"
-              disabled={!isEditable}
-            />
-            <Input
-              {...register("endTime")}
-              isError={!!errors.endTime}
-              placeholder="Data/hora fim"
-              type="datetime-local"
-              disabled={!isEditable}
-            />
-            <Controller
-              name="specialtyIds"
-              control={control}
-              disabled={!isEditable}
-              render={({ field }) => (
-                <MultiSelect
-                  isMulti
-                  options={specialties.map((s) => ({
-                    value: s.id,
-                    label: s.name,
-                  }))}
-                  onChange={(selected) =>
-                    field.onChange(
-                      selected ? selected.map((opt) => opt.value) : []
-                    )
-                  }
-                  value={specialties
-                    .filter((spec) => field.value?.includes(spec.id))
-                    .map((spec) => ({
-                      value: spec.id,
-                      label: spec.name,
+              <Input
+                {...register("startTime")}
+                isError={!!errors.startTime}
+                placeholder="Data/hora início"
+                type="datetime-local"
+                disabled={!isEditable}
+              />
+              <Input
+                {...register("endTime")}
+                isError={!!errors.endTime}
+                placeholder="Data/hora fim"
+                type="datetime-local"
+                disabled={!isEditable}
+              />
+              <Controller
+                name="specialtyIds"
+                control={control}
+                disabled={!isEditable}
+                render={({ field }) => (
+                  <MultiSelect
+                    isMulti
+                    options={specialties.map((s) => ({
+                      value: s.id,
+                      label: s.name,
                     }))}
-                  placeholder="Especialidades desejadas"
-                />
-              )}
-            />
-          </div>
-
-          {applications.length > 0 && (
-            <div className="mb-4">
-              <h3 className="font-semibold text-sm mb-1">
-                Candidaturas recebidas:
-              </h3>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                {applications.map((a) => (
-                  <li key={a.id}>
-                    {a.doctor.name} — CRM {a.doctor.crm}
-                  </li>
-                ))}
-              </ul>
+                    onChange={(selected) =>
+                      field.onChange(
+                        selected ? selected.map((opt) => opt.value) : []
+                      )
+                    }
+                    value={specialties
+                      .filter((spec) => field.value?.includes(spec.id))
+                      .map((spec) => ({
+                        value: spec.id,
+                        label: spec.name,
+                      }))}
+                    placeholder="Especialidades desejadas"
+                  />
+                )}
+              />
             </div>
-          )}
 
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              className="flex-1 bg-red-800 hover:!bg-red-500"
-              children={<Trash />}
-              onClick={handleOnDelete}
-            />
-            <Button type="submit" title="Salvar alterações" />
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                className="flex-1 bg-red-800 hover:!bg-red-500"
+                children={<Trash />}
+                onClick={handleOnDelete}
+              />
+              <Button type="submit" title="Salvar alterações" />
+            </div>
+          </form>
+        </div>
+
+        <div className="w-72 border-l border-gray-300 pl-6 flex flex-col">
+          <h3 className="font-semibold text-sm mb-3">
+            Candidaturas ({applications.length})
+          </h3>
+
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-2 max-h-[calc(100vh-200px)]">
+            <ul className="space-y-3">
+              {applications.map((a) => (
+                <li key={a.id} className="text-sm p-2 rounded-lg bg-gray-50">
+                  <div className="font-medium">{a.doctor.name}</div>
+                  <div className="text-muted-foreground text-xs">
+                    CRM {a.doctor.crm}
+                  </div>
+
+                  <div className="flex gap-1 flex-wrap mt-2">
+                    {statusOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => handleStatusChange(a.id, option.value)}
+                        className={`text-xs px-2 py-1 rounded-full cursor-pointer hover:opacity-80 ${
+                          a.status === option.value
+                            ? option.color
+                            : "bg-gray-100"
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

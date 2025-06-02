@@ -7,4 +7,5 @@ const applicationsController = new ApplicationController();
 
 applicationsRouter.use(isAuthenticated);
 applicationsRouter.post("/", applicationsController.create);
+applicationsRouter.put("/status", applicationsController.updateStatus);
 applicationsRouter.get("/:jobId", applicationsController.listByJob);

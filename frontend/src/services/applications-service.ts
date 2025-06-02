@@ -1,6 +1,6 @@
 import api from "@commons/lib/api";
 
-export type ApplicationStatus = "PENDING" | "ACCEPT" | "REJECTED";
+export type ApplicationStatus = "PENDING" | "ACCEPTED" | "REJECTED";
 
 export interface IApplication {
   id: string;
@@ -20,11 +20,16 @@ const create = (jobId: string) => {
   return api.post(`/applications`, { jobId });
 };
 
+const updateStatus = (applicationId: string, status: ApplicationStatus) => {
+  return api.put(`/applications/status`, { applicationId, status });
+};
+
 const listByJobId = (jobId: string) => {
   return api.get<IApplicationWithDoctorInfo[]>(`/applications/${jobId}`);
 };
 
 export const applicationService = {
   create,
+  updateStatus,
   listByJobId,
 };
