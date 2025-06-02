@@ -1,19 +1,7 @@
 import { dateUtil } from "@commons/utils/date-util";
+import { ApplicationStatus } from "@services/applications-service";
 import { JobStatus } from "@services/jobs-service";
 import { ISpecialty } from "@services/specialties-service";
-
-interface CardJobProps {
-  title: string;
-  description?: string;
-  startTime: string;
-  endTime: string;
-  slots: number;
-  filledSlots: number;
-  status: JobStatus;
-  specialties: ISpecialty[];
-  onClick?: () => void;
-  isUserDoctor: boolean;
-}
 
 const STATUS_JOB_MAP = {
   OPEN: { label: "Aberta", bg: "bg-green-100", text: "text-green-700" },
@@ -26,6 +14,38 @@ const STATUS_JOB_MAP = {
   },
 } as const;
 
+const APPLICATION_STATUS_MAP = {
+  PENDING: {
+    label: "Pendente",
+    bg: "bg-yellow-100",
+    text: "text-yellow-700",
+  },
+  ACCEPTED: {
+    label: "Aceito",
+    bg: "bg-green-100",
+    text: "text-green-700",
+  },
+  REJECTED: {
+    label: "Recusado",
+    bg: "bg-red-100",
+    text: "text-red-700",
+  },
+} as const;
+
+interface CardJobProps {
+  title: string;
+  description?: string;
+  startTime: string;
+  endTime: string;
+  slots: number;
+  filledSlots: number;
+  status: JobStatus;
+  specialties: ISpecialty[];
+  onClick?: () => void;
+  isUserDoctor: boolean;
+  applicationStatus?: ApplicationStatus;
+}
+
 export const CardJob = ({
   title,
   description = "",
@@ -37,6 +57,7 @@ export const CardJob = ({
   specialties,
   onClick,
   isUserDoctor,
+  applicationStatus,
 }: CardJobProps) => {
   return (
     <div
@@ -44,6 +65,14 @@ export const CardJob = ({
       className="flex flex-col justify-between bg-white rounded-2xl p-4 shadow-md border border-gray-200 hover:shadow-lg transition cursor-pointer"
     >
       <div className="flex flex-col gap-2 relative">
+        {isUserDoctor && applicationStatus && (
+          <div
+            className={`absolute -top-6 -left-2 rounded-full px-2 py-1 text-xs font-semibold ${APPLICATION_STATUS_MAP[applicationStatus].bg} ${APPLICATION_STATUS_MAP[applicationStatus].text}`}
+          >
+            {APPLICATION_STATUS_MAP[applicationStatus].label}
+          </div>
+        )}
+
         <div
           className={`absolute top-0 right-0 rounded-full px-2 py-1 text-xs font-semibold ${STATUS_JOB_MAP[status].bg} ${STATUS_JOB_MAP[status].text}`}
         >

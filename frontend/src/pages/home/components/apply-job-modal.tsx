@@ -1,16 +1,43 @@
 import { Button } from "@commons/components/ui/button";
 import { dateUtil } from "@commons/utils/date-util";
-import { applicationService } from "@services/applications-service";
+import {
+  applicationService,
+  ApplicationStatus,
+} from "@services/applications-service";
 import { IJob } from "@services/jobs-service";
 import { toast } from "sonner";
+
+const APPLICATION_STATUS_MAP = {
+  PENDING: {
+    label: "Pendente",
+    text: "text-yellow-700",
+    bg: "bg-yellow-100",
+  },
+  ACCEPTED: {
+    label: "Aceito",
+    text: "text-green-700",
+    bg: "bg-green-100",
+  },
+  REJECTED: {
+    label: "Recusado",
+    text: "text-red-700",
+    bg: "bg-red-100",
+  },
+} as const;
 
 interface ApplyJobModalProps {
   job: IJob | null;
   isOpen: boolean;
   onClose: () => void;
+  applicationStatus?: ApplicationStatus;
 }
 
-export const ApplyJobModal = ({ job, isOpen, onClose }: ApplyJobModalProps) => {
+export const ApplyJobModal = ({
+  job,
+  isOpen,
+  onClose,
+  applicationStatus,
+}: ApplyJobModalProps) => {
   const handleClickApply = async () => {
     await applicationService.create(job!.id);
     toast.success("Candidatura enviada com sucesso!");
@@ -49,7 +76,17 @@ export const ApplyJobModal = ({ job, isOpen, onClose }: ApplyJobModalProps) => {
           </p>
         </div>
 
-        <Button onClick={handleClickApply} title="Candidatar-se" />
+        {applicationStatus && (
+          <div
+            className={`px-6 py-3 rounded-2xl font-medium text-lg text-center ${APPLICATION_STATUS_MAP[applicationStatus].bg} ${APPLICATION_STATUS_MAP[applicationStatus].text}`}
+          >
+            {APPLICATION_STATUS_MAP[applicationStatus].label}
+          </div>
+        )}
+
+        {!applicationStatus && (
+          <Button onClick={handleClickApply} title="Candidatar-se" />
+        )}
       </div>
     </div>
   );

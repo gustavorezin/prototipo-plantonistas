@@ -28,8 +28,13 @@ const listByJobId = (jobId: string) => {
   return api.get<IApplicationWithDoctorInfo[]>(`/applications/${jobId}`);
 };
 
+const listByDoctor = () => {
+  return api.get<IApplication[]>("/applications");
+};
+
 export const applicationService = {
   create,
   updateStatus,
   listByJobId,
+  listByDoctor,
 };

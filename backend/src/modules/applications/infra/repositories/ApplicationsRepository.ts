@@ -71,4 +71,14 @@ export class ApplicationsRepository implements IApplicationsRepository {
 
     return applications;
   }
+
+  async findAllByDoctorId(doctorId: string): Promise<IApplication[]> {
+    const applications = await prisma.application.findMany({
+      where: {
+        doctorId,
+      },
+    });
+
+    return applications;
+  }
 }

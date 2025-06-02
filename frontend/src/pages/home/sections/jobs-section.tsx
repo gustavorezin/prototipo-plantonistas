@@ -6,6 +6,10 @@ import { useCallback, useEffect, useState } from "react";
 import { NewJobModal } from "../components/new-job-modal";
 import { EditJobModal } from "../components/edit-job-modal";
 import { ApplyJobModal } from "../components/apply-job-modal";
+import {
+  applicationService,
+  IApplication,
+} from "@services/applications-service";
 
 interface JobsSectionProps {
   isUserDoctor: boolean;
@@ -14,6 +18,7 @@ interface JobsSectionProps {
 export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
   const [jobs, setJobs] = useState<IJob[]>([]);
   const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
+  const [applications, setApplications] = useState<IApplication[]>([]);
   const [isModalNewJobOpen, setIsModalNewJobOpen] = useState(false);
   const [isModalEditJobOpen, setIsModalEditJobOpen] = useState(false);
   const [isModalApplyJobOpen, setIsModalApplyJobOpen] = useState(false);
@@ -32,6 +37,11 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
       ? await jobsService.list()
       : await jobsService.listByHospital();
     setJobs(response.data);
+
+    if (isUserDoctor) {
+      const appResponse = await applicationService.listByDoctor();
+      setApplications(appResponse.data);
+    }
   }, [isUserDoctor]);
 
   useEffect(() => {
@@ -45,14 +55,20 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
       </SectionCard.Header>
       <SectionCard.Content>
         <div className="flex flex-1 flex-col gap-4 my-4">
-          {jobs.map((job) => (
-            <CardJob
-              {...job}
-              isUserDoctor={isUserDoctor}
-              key={job.id}
-              onClick={() => handleCardClick(job)}
-            />
-          ))}
+          {jobs.map((job) => {
+            const application = applications.find(
+              (app) => app.jobId === job.id
+            );
+            return (
+              <CardJob
+                {...job}
+                isUserDoctor={isUserDoctor}
+                key={job.id}
+                onClick={() => handleCardClick(job)}
+                applicationStatus={application?.status}
+              />
+            );
+          })}
         </div>
       </SectionCard.Content>
       {!isUserDoctor && (
@@ -86,8 +102,12 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
         onClose={() => {
           setIsModalApplyJobOpen(false);
           fetchJobs();
+          setSelectedJob(null);
         }}
         job={selectedJob}
+        applicationStatus={
+          applications.find((a) => a.jobId === selectedJob?.id)?.status
+        }
       />
     </SectionCard.Root>
   );

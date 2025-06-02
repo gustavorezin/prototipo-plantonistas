@@ -14,4 +14,5 @@ export interface IApplicationsRepository {
     doctorId: string
   ) => Promise<IApplication | null>;
   findAllByJobId: (jobId: string) => Promise<IApplicationWithDoctorInfo[]>;
+  findAllByDoctorId: (doctorId: string) => Promise<IApplication[]>;
 }

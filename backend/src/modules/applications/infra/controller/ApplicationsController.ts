@@ -1,5 +1,6 @@
 import { UpdateStatusApplicationSchema } from "@modules/applications/domain/models/schemas/UpdateStatusApplicationSchema";
 import { CreateApplicationService } from "@modules/applications/services/CreateApplicationService";
+import { ListByDoctorApplicationService } from "@modules/applications/services/ListByDoctorApplicationService";
 import { ListByJobApplicationService } from "@modules/applications/services/ListByJobApplicationService";
 import { UpdateStatusApplicationService } from "@modules/applications/services/UpdateStatusApplicationService";
 import { Request, Response } from "express";
@@ -44,6 +45,17 @@ export class ApplicationController {
       ListByJobApplicationService
     );
     const applications = await listByJobApplicationService.execute(jobId);
+
+    res.status(200).json(applications);
+  }
+
+  async listByDoctor(req: Request, res: Response) {
+    const doctorId = req.user.id;
+
+    const listByDoctorApplicationService = container.resolve(
+      ListByDoctorApplicationService
+    );
+    const applications = await listByDoctorApplicationService.execute(doctorId);
 
     res.status(200).json(applications);
   }
