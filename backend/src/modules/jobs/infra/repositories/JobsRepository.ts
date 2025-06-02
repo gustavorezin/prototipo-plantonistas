@@ -72,6 +72,46 @@ export class JobsRepository implements IJobsRepository {
     });
   }
 
+  async findById(id: string): Promise<Omit<IJob, "specialties"> | null> {
+    const job = await prisma.job.findUnique({
+      where: { id },
+    });
+
+    if (!job) {
+      return null;
+    }
+
+    return {
+      ...job,
+      startTime: job.startTime.toISOString(),
+      endTime: job.endTime.toISOString(),
+      createdAt: job.createdAt.toISOString(),
+      updatedAt: job.updatedAt.toISOString(),
+    };
+  }
+
+  async incrementFilledSlots(id: string): Promise<void> {
+    await prisma.job.update({
+      where: { id },
+      data: {
+        filledSlots: {
+          increment: 1,
+        },
+      },
+    });
+  }
+
+  async decrementFilledSlots(id: string): Promise<void> {
+    await prisma.job.update({
+      where: { id },
+      data: {
+        filledSlots: {
+          decrement: 1,
+        },
+      },
+    });
+  }
+
   async findAllByHospitalId(hospitalId: string): Promise<IJob[]> {
     const jobs = await prisma.job.findMany({
       where: {

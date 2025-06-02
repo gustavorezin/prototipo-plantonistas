@@ -8,6 +8,7 @@ export interface IApplicationsRepository {
     applicationId: string,
     status: ApplicationStatus
   ) => Promise<IApplication>;
+  findById: (id: string) => Promise<IApplication | null>;
   findByJobIdAndDoctorId: (
     jobId: string,
     doctorId: string

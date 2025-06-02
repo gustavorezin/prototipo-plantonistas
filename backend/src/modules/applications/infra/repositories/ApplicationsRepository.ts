@@ -32,6 +32,15 @@ export class ApplicationsRepository implements IApplicationsRepository {
     return application;
   }
 
+  async findById(id: string): Promise<IApplication | null> {
+    const application = await prisma.application.findUnique({
+      where: {
+        id,
+      },
+    });
+    return application;
+  }
+
   async findByJobIdAndDoctorId(
     jobId: string,
     doctorId: string
