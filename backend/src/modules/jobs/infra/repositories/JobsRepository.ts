@@ -69,6 +69,18 @@ export class JobsRepository implements IJobsRepository {
   async findById(id: string): Promise<IJob | null> {
     const job = await prisma.job.findUnique({
       where: { id },
+      include: {
+        specialties: {
+          select: {
+            specialty: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!job) {
@@ -79,6 +91,10 @@ export class JobsRepository implements IJobsRepository {
       ...job,
       startTime: job.startTime.toISOString(),
       endTime: job.endTime.toISOString(),
+      specialties: job.specialties.map((jobSpecialty) => ({
+        id: jobSpecialty.specialty.id,
+        name: jobSpecialty.specialty.name,
+      })),
     };
   }
 

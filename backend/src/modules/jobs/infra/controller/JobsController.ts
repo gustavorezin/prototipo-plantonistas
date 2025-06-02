@@ -8,6 +8,7 @@ import { UpdateJobService } from "@modules/jobs/services/UpdateJobService";
 import { Request, Response } from "express";
 import { TypedRequestBody } from "src/@types/express/typed-request-body";
 import { container } from "tsyringe";
+import { ShowJobService } from "@modules/jobs/services/ShowJobService";
 
 export class JobsController {
   async create(req: TypedRequestBody<CreateJobSchema>, res: Response) {
@@ -53,6 +54,13 @@ export class JobsController {
       status,
     });
 
+    res.status(200).json(job);
+  }
+
+  async show(req: Request, res: Response) {
+    const id = req.params.id;
+    const showJob = container.resolve(ShowJobService);
+    const job = await showJob.execute(id);
     res.status(200).json(job);
   }
 

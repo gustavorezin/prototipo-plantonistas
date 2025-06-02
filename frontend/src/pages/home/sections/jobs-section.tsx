@@ -70,14 +70,17 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
           fetchJobs();
         }}
       />
-      <EditJobModal
-        isOpen={isModalEditJobOpen}
-        onClose={() => {
-          setIsModalEditJobOpen(false);
-          fetchJobs();
-        }}
-        job={selectedJob}
-      />
+      {selectedJob && (
+        <EditJobModal
+          isOpen={isModalEditJobOpen}
+          onClose={() => {
+            setIsModalEditJobOpen(false);
+            fetchJobs();
+            setSelectedJob(null);
+          }}
+          id={selectedJob.id}
+        />
+      )}
       <ApplyJobModal
         isOpen={isModalApplyJobOpen}
         onClose={() => {

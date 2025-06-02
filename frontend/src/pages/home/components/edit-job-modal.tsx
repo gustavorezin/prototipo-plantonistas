@@ -52,12 +52,13 @@ const editJobSchema = z.object({
 type EditJobFormData = z.infer<typeof editJobSchema>;
 
 interface EditJobModalProps {
-  job: IJob | null;
+  id: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
+export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
+  const [job, setJob] = useState<IJob | null>(null);
   const [specialties, setSpecialties] = useState<ISpecialty[]>([]);
   const [applications, setApplications] = useState<
     IApplicationWithDoctorInfo[]
@@ -86,7 +87,7 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
       specialtyIds: data.specialtyIds || [],
     });
     toast.success("Vaga atualizada com sucesso!");
-    onClose();
+    handleClose();
     reset();
   };
 
@@ -97,13 +98,30 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
 
   const fetchApplications = useCallback(async () => {
     const response = await applicationService.listByJobId(job!.id);
-    setApplications(response.data);
+    const applicationsData = response.data;
+    setApplications(applicationsData);
+    setIsEditable(applicationsData.length === 0);
   }, [job]);
+
+  const fetchJob = useCallback(async () => {
+    const response = await jobsService.show(id);
+    const jobData = response.data;
+    setJob(jobData);
+
+    await fetchSpecialtyItems();
+
+    setValue("title", jobData.title);
+    setValue("description", jobData.description || "");
+    setValue("slots", jobData.slots);
+    setValue("startTime", dateUtil.formatToDatetimeLocal(jobData.startTime));
+    setValue("endTime", dateUtil.formatToDatetimeLocal(jobData.endTime));
+    setValue("specialtyIds", jobData.specialties?.map((s) => s.id) || []);
+  }, [id, fetchSpecialtyItems, setValue]);
 
   const handleOnDelete = async () => {
     await jobsService.remove(job!.id);
     toast.success("Vaga excluída com sucesso!");
-    onClose();
+    handleClose();
   };
 
   const handleStatusChange = async (
@@ -113,31 +131,32 @@ export const EditJobModal = ({ job, isOpen, onClose }: EditJobModalProps) => {
     await applicationService.updateStatus(applicationId, newStatus);
     toast.success("Status da candidatura atualizado!");
     fetchApplications();
-    setIsEditable(job?.status === "OPEN" && job.filledSlots === 0);
+  };
+
+  const handleClose = () => {
+    onClose();
+    reset();
+    setJob(null);
+    setApplications([]);
+    setIsEditable(false);
   };
 
   useEffect(() => {
-    if (!job) return;
-    fetchSpecialtyItems();
-    fetchApplications();
-    setValue("title", job.title);
-    setValue("description", job.description || "");
-    setValue("slots", job.slots);
-    setValue("startTime", dateUtil.formatToDatetimeLocal(job.startTime));
-    setValue("endTime", dateUtil.formatToDatetimeLocal(job.endTime));
-    setValue(
-      "specialtyIds",
-      job.specialties.map((s) => s.id)
-    );
-    setIsEditable(job.status === "OPEN" && job.filledSlots === 0);
-  }, [fetchSpecialtyItems, fetchApplications, job, setValue]);
+    fetchJob();
+  }, [fetchJob]);
+
+  useEffect(() => {
+    if (job) {
+      fetchApplications();
+    }
+  }, [job, fetchApplications]);
 
   if (!isOpen || !job) return null;
 
   return (
     <div
       className="fixed inset-0 bg-black/30 flex items-center justify-center z-50"
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         className="bg-white p-6 rounded-lg w-full max-w-4xl shadow-xl flex"
