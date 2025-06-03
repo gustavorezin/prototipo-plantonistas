@@ -20,13 +20,13 @@ export class UpdateStatusJobService {
   async execute({ jobId, status }: UpdateStatusJobSchema) {
     const job = await this.jobsRepository.updateStatus(jobId, status);
 
-    if (status === "CLOSED" || status === "CANCELLED") {
+    if (status !== "OPEN") {
       const applications = await this.listByJobApplicationService.execute(
         jobId
       );
 
       for (const application of applications) {
-        if (application.status === "PENDING") {
+        if (application.status === "PENDING" || status === "CANCELLED") {
           await this.updateStatusApplicationService.execute({
             applicationId: application.id,
             status: "REJECTED",

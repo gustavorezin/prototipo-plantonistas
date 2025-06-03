@@ -27,7 +27,7 @@ export class UpdateStatusApplicationService {
         throw new AppError("Vaga não encontrada");
       }
       if (job.status !== "OPEN") {
-        throw new AppError("A vaga não está aberta para candidaturas");
+        throw new AppError("A vaga não está aberta");
       }
       if (job.filledSlots >= job.slots) {
         throw new AppError("Todas as vagas já foram preenchidas");
