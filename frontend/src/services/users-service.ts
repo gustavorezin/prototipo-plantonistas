@@ -2,7 +2,7 @@ import api from "@commons/lib/api";
 import { IDoctor } from "./doctors-service";
 import { IHospital } from "./hospitals-service";
 
-type UserType = "HOSPITAL" | "DOCTOR";
+export type UserType = "HOSPITAL" | "DOCTOR";
 
 export interface IUser {
   id: string;

@@ -10,18 +10,19 @@ import {
   applicationService,
   IApplication,
 } from "@services/applications-service";
+import { useAuth } from "@commons/hooks/use-auth";
 
-interface JobsSectionProps {
-  isUserDoctor: boolean;
-}
-
-export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
+export const JobsSection = () => {
   const [jobs, setJobs] = useState<IJob[]>([]);
   const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
   const [applications, setApplications] = useState<IApplication[]>([]);
   const [isModalNewJobOpen, setIsModalNewJobOpen] = useState(false);
   const [isModalEditJobOpen, setIsModalEditJobOpen] = useState(false);
   const [isModalApplyJobOpen, setIsModalApplyJobOpen] = useState(false);
+
+  const { user } = useAuth();
+  const userType = user?.userType;
+  const isUserDoctor = userType === "DOCTOR";
 
   const handleCardClick = (job: IJob) => {
     setSelectedJob(job);
@@ -33,16 +34,16 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
   };
 
   const fetchJobs = useCallback(async () => {
+    if (!userType) return;
     const response = isUserDoctor
       ? await jobsService.list()
       : await jobsService.listByHospital();
     setJobs(response.data);
 
-    if (isUserDoctor) {
-      const appResponse = await applicationService.listByDoctor();
-      setApplications(appResponse.data);
-    }
-  }, [isUserDoctor]);
+    const applicationsResponse = await applicationService.listByUser(userType);
+
+    setApplications(applicationsResponse.data);
+  }, [isUserDoctor, userType]);
 
   useEffect(() => {
     fetchJobs();
@@ -59,6 +60,9 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
             const application = applications.find(
               (app) => app.jobId === job.id
             );
+            const applicationsCount = applications.filter(
+              (app) => app.jobId === job.id
+            ).length;
             return (
               <CardJob
                 {...job}
@@ -66,6 +70,7 @@ export const JobsSection = ({ isUserDoctor }: JobsSectionProps) => {
                 key={job.id}
                 onClick={() => handleCardClick(job)}
                 applicationStatus={application?.status}
+                applicationsCount={applicationsCount}
               />
             );
           })}

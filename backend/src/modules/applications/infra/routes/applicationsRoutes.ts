@@ -15,4 +15,5 @@ applicationsRouter.put(
   applicationsController.updateStatus
 );
 applicationsRouter.get("/:jobId", applicationsController.listByJob);
-applicationsRouter.get("/", applicationsController.listByDoctor);
+applicationsRouter.get("/user/:userType", applicationsController.listByUser);
+/* applicationsRouter.get("/hospital", applicationsController.listByHospital); */

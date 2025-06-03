@@ -10,7 +10,7 @@ export const Home = () => {
   return (
     <div className="flex flex-row h-screen bg-white p-4 gap-4">
       <ListUsersSection isUserDoctor={isUserDoctor} />
-      <JobsSection isUserDoctor={isUserDoctor} />
+      <JobsSection />
     </div>
   );
 };

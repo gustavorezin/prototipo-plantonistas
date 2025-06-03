@@ -1,4 +1,5 @@
 import api from "@commons/lib/api";
+import { UserType } from "./users-service";
 
 export type ApplicationStatus = "PENDING" | "ACCEPTED" | "REJECTED";
 
@@ -28,13 +29,13 @@ const listByJobId = (jobId: string) => {
   return api.get<IApplicationWithDoctorInfo[]>(`/applications/${jobId}`);
 };
 
-const listByDoctor = () => {
-  return api.get<IApplication[]>("/applications");
+const listByUser = (userType: UserType) => {
+  return api.get<IApplication[]>(`/applications/user/${userType}`);
 };
 
 export const applicationService = {
   create,
   updateStatus,
   listByJobId,
-  listByDoctor,
+  listByUser,
 };

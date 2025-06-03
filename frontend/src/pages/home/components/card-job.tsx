@@ -44,6 +44,7 @@ interface CardJobProps {
   onClick?: () => void;
   isUserDoctor: boolean;
   applicationStatus?: ApplicationStatus;
+  applicationsCount?: number;
 }
 
 export const CardJob = ({
@@ -58,6 +59,7 @@ export const CardJob = ({
   onClick,
   isUserDoctor,
   applicationStatus,
+  applicationsCount = 0,
 }: CardJobProps) => {
   return (
     <div
@@ -111,6 +113,14 @@ export const CardJob = ({
                 Preenchido:{" "}
                 <span className="font-bold bg-green-100 text-green-700 px-2 rounded-full">
                   {filledSlots}
+                </span>
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">
+                Candidatos:{" "}
+                <span className="font-bold bg-blue-100 text-blue-700 px-2 rounded-full">
+                  {applicationsCount}
                 </span>
               </p>
             </div>
