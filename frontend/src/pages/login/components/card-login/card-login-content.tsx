@@ -90,6 +90,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
           />
           <input type="hidden" value={userType} {...register("userType")} />
           <Input
+            id="name"
+            label="Nome"
             {...register("name")}
             isError={isRegister && !!(errors as FieldErrors)?.name}
             placeholder={
@@ -98,6 +100,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
           />
           {userType === "HOSPITAL" ? (
             <Input
+              id="address"
+              label="Endereço"
               {...register("address")}
               type="text"
               placeholder="Endereço"
@@ -105,6 +109,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
           ) : (
             <>
               <Input
+                id="crm"
+                label="CRM"
                 {...register("crm")}
                 isError={isRegister && !!(errors as FieldErrors)?.crm}
                 placeholder="CRM"
@@ -114,6 +120,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
+                    label="Especialidades"
+                    id="specialties"
                     {...register("specialties")}
                     isMulti
                     options={specialties.map((spec) => ({
@@ -136,6 +144,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
             </>
           )}
           <Input
+            id="phone"
+            label="Telefone"
             {...register("phone")}
             isError={isRegister && !!(errors as FieldErrors)?.phone}
             type="tel"
@@ -145,6 +155,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
       )}
 
       <Input
+        id="email"
+        label="E-mail"
         {...register("email")}
         isError={!!errors.email}
         type="email"
@@ -152,6 +164,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
       />
 
       <Input
+        id="password"
+        label="Senha"
         {...register("password")}
         isError={!!errors.password}
         type="password"

@@ -85,18 +85,24 @@ export const NewJobModal = ({ isOpen, onClose }: NewJobModalProps) => {
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 gap-4 mb-8">
+          <div className="grid grid-cols-1 gap-1 mb-8">
             <Input
+              id="title"
+              label="Título"
               {...register("title")}
               isError={!!errors.title}
               placeholder="Título"
             />
             <Input
+              id="description"
+              label="Descrição"
               {...register("description")}
               isError={!!errors.description}
               placeholder="Descrição"
             />
             <Input
+              id="slots"
+              label="Vagas disponíveis"
               {...register("slots", { valueAsNumber: true })}
               isError={!!errors.slots}
               placeholder="Vagas disponíveis"
@@ -104,12 +110,16 @@ export const NewJobModal = ({ isOpen, onClose }: NewJobModalProps) => {
             />
 
             <Input
+              id="startTime"
+              label="Data/hora início"
               {...register("startTime")}
               isError={!!errors.startTime}
               placeholder="Data/hora início"
               type="datetime-local"
             />
             <Input
+              id="endTime"
+              label="Data/hora fim"
               {...register("endTime")}
               isError={!!errors.endTime}
               placeholder="Data/hora fim"
@@ -120,6 +130,8 @@ export const NewJobModal = ({ isOpen, onClose }: NewJobModalProps) => {
               control={control}
               render={({ field }) => (
                 <MultiSelect
+                  label="Especialidades"
+                  id="specialtyIds"
                   isMulti
                   options={specialties.map((s) => ({
                     value: s.id,

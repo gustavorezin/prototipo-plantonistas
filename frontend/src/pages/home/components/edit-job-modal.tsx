@@ -189,12 +189,14 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
           <h2 className="text-lg font-bold mb-4 text-primary">Editar vaga</h2>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 gap-4 mb-8">
+            <div className="grid grid-cols-1 gap-1 mb-8">
               <Controller
                 name="status"
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
+                    label="Status da vaga"
+                    id="status"
                     options={jobStatusOptions}
                     onChange={(selected) => {
                       const status = selected?.value as JobStatus;
@@ -221,18 +223,24 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
                 )}
               />
               <Input
+                id="title"
+                label="Título"
                 {...register("title")}
                 isError={!!errors.title}
                 placeholder="Título"
                 disabled={!isEditable}
               />
               <Input
+                id="description"
+                label="Descrição"
                 {...register("description")}
                 isError={!!errors.description}
                 placeholder="Descrição"
                 disabled={!isEditable}
               />
               <Input
+                id="slots"
+                label="Vagas"
                 {...register("slots", { valueAsNumber: true })}
                 isError={!!errors.slots}
                 placeholder="Vagas disponíveis"
@@ -241,6 +249,8 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
               />
 
               <Input
+                id="startTime"
+                label="Data/hora início"
                 {...register("startTime")}
                 isError={!!errors.startTime}
                 placeholder="Data/hora início"
@@ -248,6 +258,8 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
                 disabled={!isEditable}
               />
               <Input
+                id="endTime"
+                label="Data/hora fim"
                 {...register("endTime")}
                 isError={!!errors.endTime}
                 placeholder="Data/hora fim"
@@ -259,6 +271,8 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
+                    label="Especialidades"
+                    id="specialtyIds"
                     isMulti
                     options={specialties.map((s) => ({
                       value: s.id,

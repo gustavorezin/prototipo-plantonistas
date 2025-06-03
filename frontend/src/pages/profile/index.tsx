@@ -121,25 +121,41 @@ export const Profile = () => {
           <form id="profileForm" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-2 gap-4 mb-8">
               <Input
+                id="name"
+                label="Nome"
                 {...register("name")}
                 isError={!!errors.name}
                 placeholder="Nome"
               />
               <Input
+                id="email"
+                label="E-mail"
                 {...register("email")}
                 isError={!!errors.email}
                 placeholder="E-mail"
               />
-              <Input {...register("phone")} placeholder="Telefone" />
+              <Input
+                id="phone"
+                label="Telefone"
+                {...register("phone")}
+                placeholder="Telefone"
+              />
 
               {isUserDoctor ? (
                 <>
-                  <Input {...register("crm")} placeholder="CRM" />
+                  <Input
+                    id="crm"
+                    label="CRM"
+                    {...register("crm")}
+                    placeholder="CRM"
+                  />
                   <Controller
                     name="specialties"
                     control={control}
                     render={({ field }) => (
                       <MultiSelect
+                        label="Especialidades"
+                        id="specialties"
                         isMulti
                         options={specialties.map((s) => ({
                           value: s.id,
@@ -160,7 +176,12 @@ export const Profile = () => {
                   />
                 </>
               ) : (
-                <Input {...register("address")} placeholder="Endereço" />
+                <Input
+                  id="address"
+                  label="Endereço"
+                  {...register("address")}
+                  placeholder="Endereço"
+                />
               )}
             </div>
           </form>
@@ -178,12 +199,16 @@ export const Profile = () => {
           >
             <div className="mb-8 space-y-4">
               <Input
+                id="newPassword"
+                label="Nova senha"
                 {...registerPassword("newPassword")}
                 isError={!!errorsPassword.newPassword}
                 placeholder="Nova senha"
                 type="password"
               />
               <Input
+                id="confirmNewPassword"
+                label="Confirmar nova senha"
                 {...registerPassword("confirmNewPassword")}
                 isError={!!errorsPassword.confirmNewPassword}
                 placeholder="Confirmar nova senha"
