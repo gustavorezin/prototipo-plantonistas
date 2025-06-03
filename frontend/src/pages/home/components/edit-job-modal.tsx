@@ -15,6 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { RequestModal } from "./request-modal";
 
 const applicationStatusOptions = [
   {
@@ -72,6 +73,13 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
     IApplicationWithDoctorInfo[]
   >([]);
   const [isEditable, setIsEditable] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  const handleCardClick = (id: string) => {
+    setUserId(id);
+    setIsModalOpen(true);
+  };
 
   const {
     register,
@@ -293,10 +301,14 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
             Candidaturas ({applications.length})
           </h3>
 
-          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-2 max-h-[calc(100vh-200px)]">
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-2 max-h-[calc(100vh-200px)] cursor-pointer">
             <ul className="space-y-3">
               {applications.map((a) => (
-                <li key={a.id} className="text-sm p-2 rounded-lg bg-gray-50">
+                <li
+                  key={a.id}
+                  className="text-sm p-2 rounded-lg bg-gray-50"
+                  onClick={() => handleCardClick(a.doctorId)}
+                >
                   <div className="font-medium">{a.doctor.name}</div>
                   <div className="text-muted-foreground text-xs">
                     CRM {a.doctor.crm}
@@ -323,6 +335,14 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
               ))}
             </ul>
           </div>
+          {userId && (
+            <RequestModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              userId={userId}
+              onSend={(message) => console.log(message)}
+            />
+          )}
         </div>
       </div>
     </div>

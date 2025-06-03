@@ -22,7 +22,7 @@ export class LoginUserService {
     const hashProvider = new HashProvider();
     const passwordMatched = await hashProvider.compareHash(
       password,
-      user.password
+      user.password!
     );
 
     if (!passwordMatched) {

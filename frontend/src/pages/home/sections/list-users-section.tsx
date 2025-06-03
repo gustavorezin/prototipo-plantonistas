@@ -105,8 +105,7 @@ export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
           <RequestModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            isUserDoctor={isUserDoctor}
-            receiver={selectedReceiver}
+            userId={selectedReceiver.userId}
             onSend={(message) => console.log(message)}
           />
         )}

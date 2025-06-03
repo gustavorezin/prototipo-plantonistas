@@ -92,10 +92,17 @@ export class UsersController {
     res.status(200).json(user);
   }
 
-  async show(req: Request, res: Response) {
+  async profile(req: Request, res: Response) {
     const userId = req.user.id;
     const showUser = container.resolve(ShowUserService);
     const user = await showUser.execute(userId);
+    res.status(200).json(user);
+  }
+
+  async show(req: Request, res: Response) {
+    const { id } = req.params;
+    const showUser = container.resolve(ShowUserService);
+    const user = await showUser.execute(id);
     res.status(200).json(user);
   }
 }

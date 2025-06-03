@@ -19,6 +19,7 @@ usersRouter.post("/logout", usersController.logout);
 
 usersRouter.use(isAuthenticated);
 usersRouter.get("/session", usersController.session);
-usersRouter.get("/profile", usersController.show);
+usersRouter.get("/profile", usersController.profile);
+usersRouter.get("/:id", usersController.show);
 usersRouter.put("/", validateData(updateUserSchema), usersController.update);
 usersRouter.put("/password", usersController.updatePassword);

@@ -10,5 +10,10 @@ export const prisma = new PrismaClient({
       createdAt: true,
       updatedAt: true,
     },
+    user: {
+      createdAt: true,
+      updatedAt: true,
+      password: true,
+    },
   },
 });

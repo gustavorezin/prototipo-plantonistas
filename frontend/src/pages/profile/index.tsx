@@ -82,7 +82,7 @@ export const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       const [userRes, specialtiesRes] = await Promise.all([
-        usersService.show(),
+        usersService.profile(),
         specialtiesService.list(),
       ]);
       const doctorSpecialtiesData = isUserDoctor

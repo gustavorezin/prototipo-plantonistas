@@ -15,7 +15,6 @@ export class ShowUserService {
       throw new AppError("Usuário não encontrado");
     }
 
-    const { password, createdAt, updatedAt, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    return user;
   }
 }

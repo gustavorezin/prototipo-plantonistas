@@ -1,25 +1,42 @@
-import { useState } from "react";
-import { IHospital } from "@services/hospitals-service";
 import { IDoctor } from "@services/doctors-service";
+import { IHospital } from "@services/hospitals-service";
+import { specialtiesService } from "@services/specialties-service";
+import { usersService } from "@services/users-service";
+import { useCallback, useEffect, useState } from "react";
 
 interface RequestModalProps {
   isOpen: boolean;
   onClose: () => void;
-  isUserDoctor: boolean;
-  receiver: IHospital | IDoctor;
+  userId: string;
   onSend: (message: string) => void;
 }
 
 export const RequestModal = ({
   isOpen,
   onClose,
-  isUserDoctor,
-  receiver,
+  userId,
   onSend,
 }: RequestModalProps) => {
   const [message, setMessage] = useState("");
+  const [user, setUser] = useState<IDoctor | IHospital | null>(null);
 
-  if (!isOpen || !receiver) return null;
+  const fetchUser = useCallback(async () => {
+    const response = await usersService.show(userId);
+    const userData = response.data;
+    if (userData.userType === "DOCTOR") {
+      const specialties = await specialtiesService.listByDoctorId(userData.id);
+      userData.doctor!.specialties = specialties.data.map((s) => s.name);
+      setUser(userData.doctor!);
+    } else {
+      setUser(userData.hospital!);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
+  if (!isOpen || !user) return null;
   return (
     <div
       className="fixed inset-0 bg-black/30 flex items-center justify-center z-50"
@@ -29,35 +46,28 @@ export const RequestModal = ({
         className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-bold mb-4 text-primary">
-          {isUserDoctor
-            ? "Solicitar vínculo com hospital"
-            : "Convidar médico para o hospital"}
-        </h2>
+        <h2 className="text-lg font-bold mb-4 text-primary">{user.name}</h2>
 
         <div className="mb-3 text-sm text-gray-700 space-y-1">
-          <p>
-            <strong>Nome:</strong> {receiver.name}
-          </p>
-          {"specialties" in receiver && (
+          {"specialties" in user && (
             <p>
               <strong>Especialidade:</strong>{" "}
-              {receiver.specialties.length > 0
-                ? receiver.specialties.join(", ")
+              {user.specialties.length > 0
+                ? user.specialties.join(", ")
                 : "Sem especialidade"}
             </p>
           )}
-          {"crm" in receiver && (
+          {"crm" in user && (
             <p>
-              <strong>CRM:</strong> {receiver.crm}
+              <strong>CRM:</strong> {user.crm}
             </p>
           )}
           <p>
-            <strong>Telefone:</strong> {receiver.phone}
+            <strong>Telefone:</strong> {user.phone}
           </p>
-          {"address" in receiver && (
+          {"address" in user && (
             <p>
-              <strong>Endereço:</strong> {receiver.address}
+              <strong>Endereço:</strong> {user.address}
             </p>
           )}
         </div>

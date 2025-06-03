@@ -70,8 +70,12 @@ const session = () => {
   return api.get<IUserAuthProvider>("/users/session");
 };
 
-const show = () => {
+const profile = () => {
   return api.get<IUser>("/users/profile");
+};
+
+const show = (id: string) => {
+  return api.get<IUser>(`/users/${id}`);
 };
 
 export const usersService = {
@@ -81,5 +85,6 @@ export const usersService = {
   update,
   updatePassword,
   session,
+  profile,
   show,
 };
