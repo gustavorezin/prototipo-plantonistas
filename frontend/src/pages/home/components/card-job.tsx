@@ -34,6 +34,7 @@ const APPLICATION_STATUS_MAP = {
 
 interface CardJobProps {
   title: string;
+  hospitalName?: string;
   description?: string;
   startTime: string;
   endTime: string;
@@ -49,6 +50,7 @@ interface CardJobProps {
 
 export const CardJob = ({
   title,
+  hospitalName = "",
   description = "",
   startTime,
   endTime,
@@ -93,7 +95,12 @@ export const CardJob = ({
             ))}
           </div>
         </div>
-        <p className="text-sm text-gray-500 line-clamp-2">{description}</p>
+        {hospitalName && (
+          <p className="text-sm text-gray-500 font-bold">{hospitalName}</p>
+        )}
+        {description && (
+          <p className="text-sm text-gray-500 line-clamp-2">{description}</p>
+        )}
         <p className="text-sm text-gray-500 font-bold">
           {dateUtil.formatDateTimeIsoString(startTime)} -{" "}
           {dateUtil.formatDateTimeIsoString(endTime)}
@@ -102,26 +109,18 @@ export const CardJob = ({
           <div className="flex justify-between">
             <div>
               <p className="text-sm text-gray-500">
-                Vagas:{" "}
-                <span className="font-bold bg-gray-300 px-2 rounded-full">
-                  {slots}
-                </span>
+                Vagas: <span className="font-bold">{slots}</span>
               </p>
             </div>
             <div>
               <p className="text-sm text-gray-500">
-                Preenchido:{" "}
-                <span className="font-bold bg-green-100 text-green-700 px-2 rounded-full">
-                  {filledSlots}
-                </span>
+                Preenchido: <span className="font-bold">{filledSlots}</span>
               </p>
             </div>
             <div>
               <p className="text-sm text-gray-500">
                 Candidatos:{" "}
-                <span className="font-bold bg-blue-100 text-blue-700 px-2 rounded-full">
-                  {applicationsCount}
-                </span>
+                <span className="font-bold">{applicationsCount}</span>
               </p>
             </div>
           </div>

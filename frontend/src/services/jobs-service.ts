@@ -6,6 +6,9 @@ export type JobStatus = "OPEN" | "CLOSED" | "CANCELLED" | "COMPLETED";
 export interface IJob {
   id: string;
   hospitalId: string;
+  hospital?: {
+    name: string;
+  };
   title: string;
   description?: string;
   date: string;

@@ -71,6 +71,7 @@ export const JobsSection = () => {
                 onClick={() => handleCardClick(job)}
                 applicationStatus={application?.status}
                 applicationsCount={applicationsCount}
+                hospitalName={job?.hospital?.name}
               />
             );
           })}

@@ -1,5 +1,6 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
 import { IJob } from "@modules/jobs/domain/models/IJob";
+import { IJobWithHospitalInfo } from "@modules/jobs/domain/models/IJobWithHospitalInfo";
 import { CreateJobSchema } from "@modules/jobs/domain/models/schemas/CreateJobSchema";
 import { UpdateJobSchema } from "@modules/jobs/domain/models/schemas/UpdateJobSchema";
 import { IJobsRepository } from "@modules/jobs/domain/repositories/IJobsRepository";
@@ -164,9 +165,14 @@ export class JobsRepository implements IJobsRepository {
     }));
   }
 
-  async findAll(): Promise<IJob[]> {
+  async findAll(): Promise<IJobWithHospitalInfo[]> {
     const jobs = await prisma.job.findMany({
       include: {
+        hospital: {
+          select: {
+            name: true,
+          },
+        },
         specialties: {
           select: {
             specialty: {

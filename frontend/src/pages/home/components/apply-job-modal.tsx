@@ -64,6 +64,13 @@ export const ApplyJobModal = ({
             <strong>Vaga:</strong> {job.title}
           </p>
           <p>
+            <strong>Especialidades:</strong>{" "}
+            {job.specialties.map((s) => s.name).join(", ") || "Nenhuma"}
+          </p>
+          <p>
+            <strong>Hospital:</strong> {job.hospital?.name}
+          </p>
+          <p>
             <strong>Descrição:</strong> {job.description || "Sem descrição"}
           </p>
           <p>
