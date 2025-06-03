@@ -5,7 +5,7 @@ import { CardUser } from "./card-user";
 interface HospitalOrDoctorListProps {
   isUserDoctor: boolean;
   items: IHospital[] | IDoctor[];
-  onCardClick: (receiver: IHospital | IDoctor) => void;
+  onCardClick: (id: string) => void;
 }
 
 export const HospitalOrDoctorList = ({
@@ -22,7 +22,7 @@ export const HospitalOrDoctorList = ({
               name={hospital.name}
               phone={hospital.phone}
               address={hospital.address}
-              onClick={() => onCardClick(hospital)}
+              onClick={() => onCardClick(hospital.userId)}
             />
           ))
         : (items as IDoctor[]).map((doctor) => (
@@ -36,7 +36,7 @@ export const HospitalOrDoctorList = ({
                   ? doctor.specialties
                   : ["Sem especialidade"]
               }
-              onClick={() => onCardClick(doctor)}
+              onClick={() => onCardClick(doctor.userId)}
             />
           ))}
     </div>

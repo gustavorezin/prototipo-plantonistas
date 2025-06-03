@@ -4,7 +4,7 @@ import { hospitalsService, IHospital } from "@services/hospitals-service";
 import { specialtiesService } from "@services/specialties-service";
 import { useCallback, useEffect, useState } from "react";
 import { HospitalOrDoctorList } from "../components/hospital-or-doctor-list";
-import { RequestModal } from "../components/request-modal";
+import { UserModal } from "../components/user-modal";
 
 interface ListUsersSectionProps {
   isUserDoctor: boolean;
@@ -19,12 +19,10 @@ export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
     []
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedReceiver, setSelectedReceiver] = useState<
-    IHospital | IDoctor | null
-  >(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  const handleCardClick = (receiver: IHospital | IDoctor) => {
-    setSelectedReceiver(receiver);
+  const handleCardClick = (id: string) => {
+    setUserId(id);
     setIsModalOpen(true);
   };
 
@@ -101,11 +99,11 @@ export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
           items={isUserDoctor ? filteredHospitals : filteredDoctors}
           onCardClick={handleCardClick}
         />
-        {selectedReceiver && (
-          <RequestModal
+        {userId && (
+          <UserModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            userId={selectedReceiver.userId}
+            userId={userId}
             onSend={(message) => console.log(message)}
           />
         )}

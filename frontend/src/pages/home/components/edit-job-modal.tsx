@@ -15,7 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { RequestModal } from "./request-modal";
+import { UserModal } from "./user-modal";
 
 const applicationStatusOptions = [
   {
@@ -336,7 +336,7 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
             </ul>
           </div>
           {userId && (
-            <RequestModal
+            <UserModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
               userId={userId}

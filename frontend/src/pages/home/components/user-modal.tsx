@@ -4,19 +4,19 @@ import { specialtiesService } from "@services/specialties-service";
 import { usersService } from "@services/users-service";
 import { useCallback, useEffect, useState } from "react";
 
-interface RequestModalProps {
+interface UserModalProps {
   isOpen: boolean;
   onClose: () => void;
   userId: string;
   onSend: (message: string) => void;
 }
 
-export const RequestModal = ({
+export const UserModal = ({
   isOpen,
   onClose,
   userId,
   onSend,
-}: RequestModalProps) => {
+}: UserModalProps) => {
   const [message, setMessage] = useState("");
   const [user, setUser] = useState<IDoctor | IHospital | null>(null);
 
