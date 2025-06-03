@@ -6,11 +6,21 @@ interface Option {
   value: string;
 }
 
-type MultiSelectProps = SelectProps<Option, true, GroupBase<Option>>;
+type MultiSelectProps<IsMulti extends boolean = false> = SelectProps<
+  Option,
+  IsMulti,
+  GroupBase<Option>
+> & {
+  isMulti?: IsMulti;
+};
 
-export const MultiSelect = ({ ...props }: MultiSelectProps) => {
+export const MultiSelect = <IsMulti extends boolean = false>({
+  isMulti,
+  ...props
+}: MultiSelectProps<IsMulti>) => {
   return (
     <Select
+      isMulti={isMulti}
       classNamePrefix="custom-select"
       className="react-select-container w-full"
       styles={{

@@ -9,6 +9,8 @@ import { Request, Response } from "express";
 import { TypedRequestBody } from "src/@types/express/typed-request-body";
 import { container } from "tsyringe";
 import { ShowJobService } from "@modules/jobs/services/ShowJobService";
+import { UpdateStatusJobSchema } from "@modules/jobs/domain/models/schemas/UpdateStatusJobSchema";
+import { UpdateStatusJobService } from "@modules/jobs/services/UpdateStatusJobService";
 
 export class JobsController {
   async create(req: TypedRequestBody<CreateJobSchema>, res: Response) {
@@ -53,6 +55,18 @@ export class JobsController {
       specialtyIds,
       status,
     });
+
+    res.status(200).json(job);
+  }
+
+  async updateStatus(
+    req: TypedRequestBody<UpdateStatusJobSchema>,
+    res: Response
+  ) {
+    const { jobId, status } = req.body;
+
+    const updateStatusJob = container.resolve(UpdateStatusJobService);
+    const job = await updateStatusJob.execute({ jobId, status });
 
     res.status(200).json(job);
   }

@@ -3,6 +3,7 @@ import { IJob } from "@modules/jobs/domain/models/IJob";
 import { CreateJobSchema } from "@modules/jobs/domain/models/schemas/CreateJobSchema";
 import { UpdateJobSchema } from "@modules/jobs/domain/models/schemas/UpdateJobSchema";
 import { IJobsRepository } from "@modules/jobs/domain/repositories/IJobsRepository";
+import { JobStatus } from "prisma/generated/client";
 
 export class JobsRepository implements IJobsRepository {
   async create(data: CreateJobSchema & { hospitalId: string }): Promise<IJob> {
@@ -64,6 +65,19 @@ export class JobsRepository implements IJobsRepository {
         endTime: job.endTime.toISOString(),
       };
     });
+  }
+
+  async updateStatus(id: string, status: JobStatus): Promise<IJob> {
+    const job = await prisma.job.update({
+      where: { id },
+      data: { status },
+    });
+
+    return {
+      ...job,
+      startTime: job.startTime.toISOString(),
+      endTime: job.endTime.toISOString(),
+    };
   }
 
   async findById(id: string): Promise<IJob | null> {

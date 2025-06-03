@@ -8,7 +8,7 @@ import {
   ApplicationStatus,
   IApplicationWithDoctorInfo,
 } from "@services/applications-service";
-import { IJob, jobsService } from "@services/jobs-service";
+import { IJob, jobsService, JobStatus } from "@services/jobs-service";
 import { ISpecialty, specialtiesService } from "@services/specialties-service";
 import { Trash } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -16,7 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const statusOptions = [
+const applicationStatusOptions = [
   {
     value: "PENDING",
     label: "Pendente",
@@ -29,6 +29,13 @@ const statusOptions = [
   },
   { value: "REJECTED", label: "Rejeitado", color: "bg-red-100 text-red-800" },
 ] satisfies { value: ApplicationStatus; label: string; color: string }[];
+
+const jobStatusOptions = [
+  { value: "OPEN", label: "Aberta" },
+  { value: "CLOSED", label: "Fechada" },
+  { value: "CANCELLED", label: "Cancelada" },
+  { value: "COMPLETED", label: "Concluída" },
+] satisfies { value: JobStatus; label: string }[];
 
 const editJobSchema = z.object({
   title: z.string().min(3),
@@ -47,6 +54,7 @@ const editJobSchema = z.object({
     .transform((val) => new Date(val).toISOString()),
   slots: z.number().positive(),
   specialtyIds: z.array(z.string()).optional(),
+  status: z.enum(["OPEN", "CLOSED", "CANCELLED", "COMPLETED"]),
 });
 
 type EditJobFormData = z.infer<typeof editJobSchema>;
@@ -83,7 +91,6 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
     await jobsService.update({
       ...data,
       id: job!.id,
-      status: job!.status,
       specialtyIds: data.specialtyIds || [],
     });
     toast.success("Vaga atualizada com sucesso!");
@@ -116,6 +123,7 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
     setValue("startTime", dateUtil.formatToDatetimeLocal(jobData.startTime));
     setValue("endTime", dateUtil.formatToDatetimeLocal(jobData.endTime));
     setValue("specialtyIds", jobData.specialties?.map((s) => s.id) || []);
+    setValue("status", jobData.status);
   }, [id, fetchSpecialtyItems, setValue]);
 
   const handleOnDelete = async () => {
@@ -124,7 +132,13 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
     handleClose();
   };
 
-  const handleStatusChange = async (
+  const handleStatusJobChange = async (newStatus: JobStatus) => {
+    await jobsService.updateStatus(job!.id, newStatus);
+    toast.success("Status da vaga atualizado!");
+    fetchJob();
+  };
+
+  const handleStatusApplicationChange = async (
     applicationId: string,
     newStatus: ApplicationStatus
   ) => {
@@ -168,6 +182,36 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 gap-4 mb-8">
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <MultiSelect
+                    options={jobStatusOptions}
+                    onChange={(selected) => {
+                      const status = selected?.value as JobStatus;
+                      field.onChange(status);
+                      handleStatusJobChange(status);
+                    }}
+                    value={
+                      field.value
+                        ? {
+                            value: field.value,
+                            label:
+                              field.value === "OPEN"
+                                ? "Aberta"
+                                : field.value === "CLOSED"
+                                ? "Fechada"
+                                : field.value === "CANCELLED"
+                                ? "Cancelada"
+                                : "Concluída",
+                          }
+                        : null
+                    }
+                    placeholder="Status da vaga"
+                  />
+                )}
+              />
               <Input
                 {...register("title")}
                 isError={!!errors.title}
@@ -205,7 +249,6 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
               <Controller
                 name="specialtyIds"
                 control={control}
-                disabled={!isEditable}
                 render={({ field }) => (
                   <MultiSelect
                     isMulti
@@ -260,10 +303,12 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
                   </div>
 
                   <div className="flex gap-1 flex-wrap mt-2">
-                    {statusOptions.map((option) => (
+                    {applicationStatusOptions.map((option) => (
                       <button
                         key={option.value}
-                        onClick={() => handleStatusChange(a.id, option.value)}
+                        onClick={() =>
+                          handleStatusApplicationChange(a.id, option.value)
+                        }
                         className={`text-xs px-2 py-1 rounded-full cursor-pointer hover:opacity-80 ${
                           a.status === option.value
                             ? option.color

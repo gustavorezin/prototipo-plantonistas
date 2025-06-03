@@ -39,6 +39,10 @@ const update = (data: IUpdateRequest) => {
   return api.put(`/jobs/${data.id}`, data);
 };
 
+const updateStatus = (jobId: string, status: JobStatus) => {
+  return api.put(`/jobs/status`, { jobId, status });
+};
+
 const show = (id: string) => {
   return api.get<IJob>(`/jobs/${id}`);
 };
@@ -58,6 +62,7 @@ const remove = (id: string) => {
 export const jobsService = {
   create,
   update,
+  updateStatus,
   show,
   listByHospital,
   list,

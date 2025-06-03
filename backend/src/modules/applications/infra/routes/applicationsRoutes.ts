@@ -16,4 +16,3 @@ applicationsRouter.put(
 );
 applicationsRouter.get("/:jobId", applicationsController.listByJob);
 applicationsRouter.get("/user/:userType", applicationsController.listByUser);
-/* applicationsRouter.get("/hospital", applicationsController.listByHospital); */
