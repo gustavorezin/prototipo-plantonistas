@@ -6,9 +6,9 @@ import { ISpecialty } from "@services/specialties-service";
 const STATUS_JOB_MAP = {
   OPEN: { label: "Aberta", bg: "bg-green-100", text: "text-green-700" },
   CLOSED: { label: "Fechada", bg: "bg-yellow-100", text: "text-yellow-700" },
-  CANCELLED: { label: "Cancelada", bg: "bg-gray-200", text: "text-gray-700" },
+  CANCELLED: { label: "Cancelada", bg: "bg-red-100", text: "text-red-700" },
   COMPLETED: {
-    label: "Completada",
+    label: "Concluída",
     bg: "bg-blue-100",
     text: "text-blue-700",
   },
