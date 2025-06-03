@@ -332,9 +332,10 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
                     {applicationStatusOptions.map((option) => (
                       <button
                         key={option.value}
-                        onClick={() =>
-                          handleStatusApplicationChange(a.id, option.value)
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleStatusApplicationChange(a.id, option.value);
+                        }}
                         className={`text-xs px-2 py-1 rounded-full cursor-pointer hover:opacity-80 ${
                           a.status === option.value
                             ? option.color
