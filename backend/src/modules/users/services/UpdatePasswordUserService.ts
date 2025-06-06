@@ -1,7 +1,7 @@
 import { AppError } from "@commons/error/AppError";
 import { inject, injectable } from "tsyringe";
 import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
-import { HashProvider } from "@commons/providers/HashProvider";
+import { HashProvider } from "@commons/infra/providers/HashProvider";
 
 @injectable()
 export class UpdatePasswordUserService {

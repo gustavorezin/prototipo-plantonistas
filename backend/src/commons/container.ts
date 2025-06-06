@@ -13,6 +13,7 @@ import { SpecialtiesRepository } from "@modules/specialties/infra/repositories/S
 import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepository";
 import { UsersRepository } from "@modules/users/infra/repositories/UsersRepository";
 import { container } from "tsyringe";
+import { EtherealMailProvider } from "./infra/providers/EtherealMailProvider";
 
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
@@ -50,3 +51,6 @@ container.registerSingleton(
   "UpdateStatusApplicationService",
   UpdateStatusApplicationService
 );
+
+// Providers
+container.registerSingleton("MailProvider", EtherealMailProvider);

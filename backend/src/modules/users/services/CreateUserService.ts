@@ -1,6 +1,6 @@
 import { authConfig } from "@commons/config/authConfig";
 import { AppError } from "@commons/error/AppError";
-import { HashProvider } from "@commons/providers/HashProvider";
+import { HashProvider } from "@commons/infra/providers/HashProvider";
 import type { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
 import { sign, SignOptions } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";

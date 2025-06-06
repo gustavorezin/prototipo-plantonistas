@@ -2,7 +2,7 @@ import { FakeDoctorsRepository } from "@modules/doctors/domain/repositories/fake
 import { CreateUserService } from "../CreateUserService";
 import { FakeUsersRepository } from "@modules/users/domain/repositories/fakes/FakeUsersRepository";
 import { AppError } from "@commons/error/AppError";
-import { HashProvider } from "@commons/providers/HashProvider";
+import { HashProvider } from "@commons/infra/providers/HashProvider";
 import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
 
 let usersRepository: FakeUsersRepository;

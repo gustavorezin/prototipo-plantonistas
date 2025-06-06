@@ -1,19 +1,11 @@
+import {
+  IMailProvider,
+  ISendMail,
+} from "@commons/domain/providers/IMailProvider";
 import nodemailer from "nodemailer";
 
-interface IMailContact {
-  name: string;
-  email: string;
-}
-
-interface ISendMail {
-  to: IMailContact;
-  from: IMailContact;
-  subject: string;
-  content?: string;
-}
-
-export class EtherealMailProvider {
-  static async sendMail({ to, from, subject, content }: ISendMail) {
+export class EtherealMailProvider implements IMailProvider {
+  async sendMail({ to, from, subject, content }: ISendMail): Promise<void> {
     const account = await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
       host: account.smtp.host,

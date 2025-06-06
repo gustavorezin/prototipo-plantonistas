@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
 import { AppError } from "@commons/error/AppError";
-import { HashProvider } from "@commons/providers/HashProvider";
+import { HashProvider } from "@commons/infra/providers/HashProvider";
 import { sign, SignOptions } from "jsonwebtoken";
 import { authConfig } from "@commons/config/authConfig";
 import { LoginUserSchema } from "../domain/models/schemas/LoginUserSchema";
