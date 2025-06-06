@@ -1,6 +1,8 @@
 import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
+import { SendMailToUserSchema } from "@modules/users/domain/models/schemas/SendMailToUserSchema";
 import { CreateUserService } from "@modules/users/services/CreateUserService";
 import { LoginUserService } from "@modules/users/services/LoginUserService";
+import { SendMailToUserService } from "@modules/users/services/SendMailToUserService";
 import { SessionUserService } from "@modules/users/services/SessionUserService";
 import { ShowUserService } from "@modules/users/services/ShowUserService";
 import { UpdatePasswordUserService } from "@modules/users/services/UpdatePasswordUserService";
@@ -104,5 +106,15 @@ export class UsersController {
     const showUser = container.resolve(ShowUserService);
     const user = await showUser.execute(id);
     res.status(200).json(user);
+  }
+
+  async sendMailTo(req: TypedRequestBody<SendMailToUserSchema>, res: Response) {
+    const { toUserId, content } = req.body;
+    const fromUserId = req.user.id;
+
+    const sendMailToUser = container.resolve(SendMailToUserService);
+    await sendMailToUser.execute({ fromUserId, toUserId, content });
+
+    res.sendStatus(204);
   }
 }
