@@ -94,6 +94,6 @@ describe("CreateUser", () => {
     const { user } = await service.execute(newUser);
     // assert
     const hashProvider = new HashProvider(); // Considerar fazer um fake depois
-    expect(await hashProvider.compareHash("1234", user.password)).toBeTruthy();
+    expect(await hashProvider.compareHash("1234", user.password!)).toBeTruthy();
   });
 });
