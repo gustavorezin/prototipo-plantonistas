@@ -3,6 +3,13 @@ import { UpdateStatusApplicationSchema } from "../domain/models/schemas/UpdateSt
 import type { IApplicationsRepository } from "../domain/repositories/IApplicationsRepository";
 import { AppError } from "@commons/error/AppError";
 import type { IJobsRepository } from "@modules/jobs/domain/repositories/IJobsRepository";
+import { SendMailToUserService } from "@modules/users/services/SendMailToUserService";
+
+const statusLabels: Record<"PENDING" | "ACCEPTED" | "REJECTED", string> = {
+  PENDING: "Pendente",
+  ACCEPTED: "Aceita",
+  REJECTED: "Rejeitada",
+};
 
 @injectable()
 export class UpdateStatusApplicationService {
@@ -10,7 +17,9 @@ export class UpdateStatusApplicationService {
     @inject("ApplicationsRepository")
     private applicationsRepository: IApplicationsRepository,
     @inject("JobsRepository")
-    private jobsRepository: IJobsRepository
+    private jobsRepository: IJobsRepository,
+    @inject("SendMailToUserService")
+    private sendMailToUserService: SendMailToUserService
   ) {}
 
   async execute({ applicationId, status }: UpdateStatusApplicationSchema) {
@@ -21,11 +30,12 @@ export class UpdateStatusApplicationService {
       throw new AppError("Candidatura não encontrada");
     }
 
+    const job = await this.jobsRepository.findById(applicationExists?.jobId);
+    if (!job) {
+      throw new AppError("Vaga não encontrada");
+    }
+
     if (applicationExists.status !== "ACCEPTED" && status === "ACCEPTED") {
-      const job = await this.jobsRepository.findById(applicationExists?.jobId);
-      if (!job) {
-        throw new AppError("Vaga não encontrada");
-      }
       if (job.status !== "OPEN") {
         throw new AppError("A vaga não está aberta");
       }
@@ -43,6 +53,15 @@ export class UpdateStatusApplicationService {
       applicationId,
       status
     );
+
+    const translatedStatus = statusLabels[status];
+
+    this.sendMailToUserService.execute({
+      fromUserId: job.hospitalId,
+      toUserId: application.doctorId,
+      content: `Sua candidatura para a vaga "${job.title}" foi atualizada para o status "${translatedStatus}".`,
+    });
+
     return application;
   }
 }
