@@ -104,7 +104,6 @@ export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             userId={userId}
-            onSend={(message) => console.log(message)}
           />
         )}
       </SectionCard.Content>

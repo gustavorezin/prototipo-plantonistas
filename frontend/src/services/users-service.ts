@@ -78,6 +78,13 @@ const show = (id: string) => {
   return api.get<IUser>(`/users/${id}`);
 };
 
+const sendMail = (toUserId: string, content?: string) => {
+  return api.post("/users/send-mail", {
+    toUserId,
+    content,
+  });
+};
+
 export const usersService = {
   login,
   logout,
@@ -87,4 +94,5 @@ export const usersService = {
   session,
   profile,
   show,
+  sendMail,
 };

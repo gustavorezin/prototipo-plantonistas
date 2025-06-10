@@ -1,22 +1,18 @@
+import { whatsappUtil } from "@commons/utils/whatsapp-util";
 import { IDoctor } from "@services/doctors-service";
 import { IHospital } from "@services/hospitals-service";
 import { specialtiesService } from "@services/specialties-service";
 import { usersService } from "@services/users-service";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface UserModalProps {
   isOpen: boolean;
   onClose: () => void;
   userId: string;
-  onSend: (message: string) => void;
 }
 
-export const UserModal = ({
-  isOpen,
-  onClose,
-  userId,
-  onSend,
-}: UserModalProps) => {
+export const UserModal = ({ isOpen, onClose, userId }: UserModalProps) => {
   const [message, setMessage] = useState("");
   const [user, setUser] = useState<IDoctor | IHospital | null>(null);
 
@@ -82,20 +78,25 @@ export const UserModal = ({
 
         <div className="flex justify-end gap-2">
           <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={() => {
-              onSend(message);
+            onClick={async () => {
+              await usersService.sendMail(user.userId, message);
+              toast.success("E-mail enviado com sucesso!");
               setMessage("");
               onClose();
             }}
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 transition"
+            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 cursor-pointer"
           >
-            Enviar solicitação
+            E-mail
+          </button>
+          <button
+            onClick={() => {
+              whatsappUtil.sendMessage(message, user.phone);
+              setMessage("");
+              onClose();
+            }}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 cursor-pointer"
+          >
+            Whatsapp
           </button>
         </div>
       </div>
