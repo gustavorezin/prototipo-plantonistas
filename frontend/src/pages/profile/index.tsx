@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { IHospital } from "@services/hospitals-service";
 import { IDoctor } from "@services/doctors-service";
 import { SectionCardFooter } from "@commons/components/section-card/footer";
+import { formatterUtil } from "@commons/utils/formatter-util";
 
 const profileSchema = z.object({
   name: z.string().min(3, "Nome é obrigatório"),
@@ -96,7 +97,10 @@ export const Profile = () => {
 
       setValue("name", doctorOrHospital!.name);
       setValue("email", userData.email);
-      setValue("phone", doctorOrHospital?.phone);
+      setValue(
+        "phone",
+        formatterUtil.formatPhone(doctorOrHospital?.phone || "")
+      );
       if (isUserDoctor) {
         setValue("crm", (doctorOrHospital as IDoctor).crm);
         setValue(
@@ -138,7 +142,11 @@ export const Profile = () => {
                 id="phone"
                 label="Telefone"
                 {...register("phone")}
+                isError={!!errors.phone}
+                type="tel"
                 placeholder="Telefone"
+                mask="(__) _____-____"
+                replacement={{ _: /\d/ }}
               />
 
               {isUserDoctor ? (
