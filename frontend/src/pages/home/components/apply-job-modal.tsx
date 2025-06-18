@@ -7,7 +7,7 @@ import {
 import { IJob } from "@services/jobs-service";
 import { toast } from "sonner";
 
-const APPLICATION_STATUS_MAP = {
+const STATUS_MAP = {
   PENDING: {
     label: "Pendente",
     text: "text-yellow-700",
@@ -20,6 +20,11 @@ const APPLICATION_STATUS_MAP = {
   },
   REJECTED: {
     label: "Recusado",
+    text: "text-red-700",
+    bg: "bg-red-100",
+  },
+  CANCELLED: {
+    label: "Cancelado",
     text: "text-red-700",
     bg: "bg-red-100",
   },
@@ -45,6 +50,8 @@ export const ApplyJobModal = ({
   };
 
   if (!isOpen || !job) return null;
+
+  const status = job.status === "CANCELLED" ? job.status : applicationStatus;
 
   return (
     <div
@@ -83,17 +90,15 @@ export const ApplyJobModal = ({
           </p>
         </div>
 
-        {applicationStatus && (
+        {status && (
           <div
-            className={`px-6 py-3 rounded-2xl font-medium text-lg text-center ${APPLICATION_STATUS_MAP[applicationStatus].bg} ${APPLICATION_STATUS_MAP[applicationStatus].text}`}
+            className={`px-6 py-3 rounded-2xl font-medium text-lg text-center ${STATUS_MAP[status].bg} ${STATUS_MAP[status].text}`}
           >
-            {APPLICATION_STATUS_MAP[applicationStatus].label}
+            {STATUS_MAP[status].label}
           </div>
         )}
 
-        {!applicationStatus && (
-          <Button onClick={handleClickApply} title="Candidatar-se" />
-        )}
+        {!status && <Button onClick={handleClickApply} title="Candidatar-se" />}
       </div>
     </div>
   );
