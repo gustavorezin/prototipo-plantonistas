@@ -13,8 +13,8 @@ import { SpecialtiesRepository } from "@modules/specialties/infra/repositories/S
 import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepository";
 import { UsersRepository } from "@modules/users/infra/repositories/UsersRepository";
 import { container } from "tsyringe";
-import { EtherealMailProvider } from "./infra/providers/EtherealMailProvider";
 import { SendMailToUserService } from "@modules/users/services/SendMailToUserService";
+import { MailProvider } from "./infra/providers/MailProvider";
 
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
@@ -55,4 +55,4 @@ container.registerSingleton(
 container.registerSingleton("SendMailToUserService", SendMailToUserService);
 
 // Providers
-container.registerSingleton("MailProvider", EtherealMailProvider);
+container.registerSingleton("MailProvider", MailProvider);
