@@ -18,7 +18,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "allowJs": true,
-    "outDir": "build",
+    "outDir": "./dist",
     "noImplicitAny": true,
     "strictPropertyInitialization": false
   },
