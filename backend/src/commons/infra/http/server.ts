@@ -7,11 +7,22 @@ import cookieParser from "cookie-parser";
 import { routes } from "@commons/infra/http/routes";
 import { errorHandler } from "@commons/middlewares/errorHandler";
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://prototipo-plantonistas.vercel.app",
+];
+
 const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
