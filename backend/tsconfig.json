@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["ES2023"],
-    "module": "node16",
+    "module": "CommonJS",
     "target": "ES2023",
     "baseUrl": "./",
     "paths": {
@@ -22,6 +22,6 @@
     "noImplicitAny": true,
     "strictPropertyInitialization": false
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/generated/**/*"],
   "exclude": ["node_modules"]
 }

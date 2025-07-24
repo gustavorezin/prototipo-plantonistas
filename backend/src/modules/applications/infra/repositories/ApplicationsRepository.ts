@@ -1,8 +1,8 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
+import { ApplicationStatus } from "@modules/applications/domain/models/enums/ApplicationStatus";
 import { IApplication } from "@modules/applications/domain/models/IApplication";
 import { IApplicationWithDoctorInfo } from "@modules/applications/domain/models/IApplicationWithDoctorInfo";
 import { IApplicationsRepository } from "@modules/applications/domain/repositories/IApplicationsRepository";
-import { ApplicationStatus } from "prisma/generated/client";
 
 export class ApplicationsRepository implements IApplicationsRepository {
   async create(jobId: string, doctorId: string): Promise<IApplication> {

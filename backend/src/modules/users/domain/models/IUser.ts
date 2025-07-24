@@ -1,6 +1,6 @@
 import { IDoctor } from "@modules/doctors/domain/models/IDoctor";
 import { IHospital } from "@modules/hospitals/domain/models/IHospital";
-import { UserType } from "prisma/generated/client";
+import { UserType } from "./enums/UserType";
 
 export interface IUser {
   id: string;

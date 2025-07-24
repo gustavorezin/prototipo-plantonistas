@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { IApplicationsRepository } from "../domain/repositories/IApplicationsRepository";
-import { UserType } from "prisma/generated/client";
+import { UserType } from "@modules/users/domain/models/enums/UserType";
 
 @injectable()
 export class ListByUserApplicationService {

@@ -1,4 +1,4 @@
-import { ApplicationStatus } from "prisma/generated/client";
+import { ApplicationStatus } from "./enums/ApplicationStatus";
 
 export interface IApplication {
   id: string;

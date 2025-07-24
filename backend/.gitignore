@@ -11,6 +11,7 @@ prisma/dev.db-journal
 prisma/migrations/
 prisma/generated/
 prisma/.env
+/src/generated/prisma
 
 # Docker
 docker-compose.override.yml

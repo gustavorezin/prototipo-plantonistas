@@ -1,9 +1,9 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
+import { UserType } from "@modules/users/domain/models/enums/UserType";
 import { IUser } from "@modules/users/domain/models/IUser";
 import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
 import { UpdateUserSchema } from "@modules/users/domain/models/schemas/UpdateUserSchema";
 import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepository";
-import { UserType } from "prisma/generated/client";
 
 export class UsersRepository implements IUsersRepository {
   async create(data: CreateUserSchema) {

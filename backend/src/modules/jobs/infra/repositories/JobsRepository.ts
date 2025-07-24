@@ -1,10 +1,10 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
+import { JobStatus } from "@modules/jobs/domain/models/enums/JobStatus";
 import { IJob } from "@modules/jobs/domain/models/IJob";
 import { IJobWithHospitalInfo } from "@modules/jobs/domain/models/IJobWithHospitalInfo";
 import { CreateJobSchema } from "@modules/jobs/domain/models/schemas/CreateJobSchema";
 import { UpdateJobSchema } from "@modules/jobs/domain/models/schemas/UpdateJobSchema";
 import { IJobsRepository } from "@modules/jobs/domain/repositories/IJobsRepository";
-import { JobStatus } from "prisma/generated/client";
 
 export class JobsRepository implements IJobsRepository {
   async create(data: CreateJobSchema & { hospitalId: string }): Promise<IJob> {

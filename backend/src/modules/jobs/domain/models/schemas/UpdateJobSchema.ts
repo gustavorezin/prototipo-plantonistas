@@ -1,4 +1,3 @@
-import { JobStatus } from "prisma/generated/client";
 import { z } from "zod";
 
 export const updateJobSchema = z.object({

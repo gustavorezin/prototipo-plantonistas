@@ -1,5 +1,5 @@
-import { JobStatus } from "prisma/generated/client";
 import { ISpecialty } from "@modules/specialties/domain/models/ISpecialty";
+import { JobStatus } from "./enums/JobStatus";
 
 export interface IJob {
   id: string;

@@ -1,6 +1,6 @@
 import { UserType } from "./generated/client";
 import { prisma } from "../src/commons/infra/prisma/prismaClient";
-import { HashProvider } from "../src/commons/providers/HashProvider";
+import { HashProvider } from "../src/commons/infra/providers/HashProvider";
 
 const hashProvider = new HashProvider();
 

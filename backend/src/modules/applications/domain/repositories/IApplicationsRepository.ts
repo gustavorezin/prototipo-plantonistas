@@ -1,4 +1,4 @@
-import { ApplicationStatus } from "prisma/generated/client";
+import { ApplicationStatus } from "../models/enums/ApplicationStatus";
 import { IApplication } from "../models/IApplication";
 import { IApplicationWithDoctorInfo } from "../models/IApplicationWithDoctorInfo";
 

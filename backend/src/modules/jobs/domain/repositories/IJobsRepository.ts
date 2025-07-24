@@ -1,8 +1,8 @@
-import { JobStatus } from "prisma/generated/client";
 import { IJob } from "../models/IJob";
 import { CreateJobSchema } from "../models/schemas/CreateJobSchema";
 import { UpdateJobSchema } from "../models/schemas/UpdateJobSchema";
 import { IJobWithHospitalInfo } from "../models/IJobWithHospitalInfo";
+import { JobStatus } from "../models/enums/JobStatus";
 
 export interface IJobsRepository {
   create(data: CreateJobSchema): Promise<IJob>;
