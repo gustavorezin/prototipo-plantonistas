@@ -11,7 +11,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "build": "tsc && tsc-alias",
-    "start": "node dist/commons/infra/http/server.js"
+    "start": "node dist/commons/infra/http/server.js",
+    "postinstall": "prisma generate && prisma migrate deploy"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
