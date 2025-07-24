@@ -20,7 +20,7 @@ export class UpdatePasswordUserService {
     const hashProvider = new HashProvider();
     const passwordMatched = await hashProvider.compareHash(
       newPassword,
-      user.password
+      user.password || ""
     );
 
     if (passwordMatched) {
