@@ -1,12 +1,12 @@
 import { prisma } from "@commons/infra/prisma/prismaClient";
-import { UserType } from "@prisma/client";
-import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepository";
-import { ICreateUser } from "@modules/users/domain/models/ICreateUser";
 import { IUser } from "@modules/users/domain/models/IUser";
-import { IUpdateUser } from "@modules/users/domain/models/IUpdateUser";
+import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
+import { UpdateUserSchema } from "@modules/users/domain/models/schemas/UpdateUserSchema";
+import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepository";
+import { UserType } from "prisma/generated/client";
 
 export class UsersRepository implements IUsersRepository {
-  async create(data: ICreateUser) {
+  async create(data: CreateUserSchema) {
     return prisma.$transaction(async (prisma) => {
       const user = await prisma.user.create({
         data: {
@@ -49,7 +49,7 @@ export class UsersRepository implements IUsersRepository {
     });
   }
 
-  async update(data: IUpdateUser) {
+  async update(data: UpdateUserSchema) {
     return prisma.$transaction(async (prisma) => {
       const user = await prisma.user.update({
         where: {
@@ -107,6 +107,9 @@ export class UsersRepository implements IUsersRepository {
     const user = await prisma.user.findUnique({
       where: {
         email,
+      },
+      omit: {
+        password: false,
       },
       include: {
         doctor: true,

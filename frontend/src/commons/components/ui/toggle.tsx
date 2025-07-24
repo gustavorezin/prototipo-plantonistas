@@ -11,7 +11,7 @@ export const Toggle = ({ options, selected, onChange }: ToggleProps) => {
         <button
           type="button"
           key={option.value}
-          className={`px-4 py-2 rounded-md transition-all ${
+          className={`px-4 py-2 rounded-md transition-all cursor-pointer hover:bg-primary hover:shadow-lg hover:text-white ${
             selected === option.value
               ? "bg-secondary text-white"
               : "bg-transparent text-gray-700"

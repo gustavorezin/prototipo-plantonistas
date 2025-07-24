@@ -3,26 +3,26 @@ import { IHospital } from "@services/hospitals-service";
 import { CardUser } from "./card-user";
 
 interface HospitalOrDoctorListProps {
-  userType: "HOSPITAL" | "DOCTOR" | undefined;
+  isUserDoctor: boolean;
   items: IHospital[] | IDoctor[];
-  onCardClick: (receiver: IHospital | IDoctor) => void;
+  onCardClick: (id: string) => void;
 }
 
 export const HospitalOrDoctorList = ({
-  userType,
+  isUserDoctor,
   items,
   onCardClick,
 }: HospitalOrDoctorListProps) => {
   return (
     <div className="grid grid-cols-2 gap-4">
-      {userType == "DOCTOR"
+      {isUserDoctor
         ? (items as IHospital[]).map((hospital) => (
             <CardUser
               key={hospital.userId}
               name={hospital.name}
               phone={hospital.phone}
               address={hospital.address}
-              onClick={() => onCardClick(hospital)}
+              onClick={() => onCardClick(hospital.userId)}
             />
           ))
         : (items as IDoctor[]).map((doctor) => (
@@ -36,7 +36,7 @@ export const HospitalOrDoctorList = ({
                   ? doctor.specialties
                   : ["Sem especialidade"]
               }
-              onClick={() => onCardClick(doctor)}
+              onClick={() => onCardClick(doctor.userId)}
             />
           ))}
     </div>

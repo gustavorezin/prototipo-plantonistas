@@ -1,7 +1,7 @@
 import { AppError } from "@commons/error/AppError";
 import { inject, injectable } from "tsyringe";
-import { IUpdateUser } from "../domain/models/IUpdateUser";
 import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
+import { UpdateUserSchema } from "../domain/models/schemas/UpdateUserSchema";
 
 @injectable()
 export class UpdateUserService {
@@ -10,7 +10,7 @@ export class UpdateUserService {
     private usersRepository: IUsersRepository
   ) {}
 
-  async execute(data: IUpdateUser) {
+  async execute(data: UpdateUserSchema) {
     const userEmailExists = await this.usersRepository.findByEmail(data.email);
     if (userEmailExists?.id != data.id && userEmailExists) {
       throw new AppError("E-mail já cadastrado");

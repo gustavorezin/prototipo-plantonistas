@@ -1,13 +1,18 @@
+import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
+import { SendMailToUserSchema } from "@modules/users/domain/models/schemas/SendMailToUserSchema";
 import { CreateUserService } from "@modules/users/services/CreateUserService";
 import { LoginUserService } from "@modules/users/services/LoginUserService";
+import { SendMailToUserService } from "@modules/users/services/SendMailToUserService";
 import { SessionUserService } from "@modules/users/services/SessionUserService";
 import { ShowUserService } from "@modules/users/services/ShowUserService";
+import { UpdatePasswordUserService } from "@modules/users/services/UpdatePasswordUserService";
 import { UpdateUserService } from "@modules/users/services/UpdateUserService";
 import { Request, Response } from "express";
+import { TypedRequestBody } from "src/@types/express/typed-request-body";
 import { container } from "tsyringe";
 
 export class UsersController {
-  async create(req: Request, res: Response) {
+  async create(req: TypedRequestBody<CreateUserSchema>, res: Response) {
     const {
       email,
       password,
@@ -49,6 +54,15 @@ export class UsersController {
     res.status(200).json(user);
   }
 
+  async updatePassword(req: Request, res: Response) {
+    const userId = req.user.id;
+    const { password } = req.body;
+
+    const updatePassword = container.resolve(UpdatePasswordUserService);
+    await updatePassword.execute({ id: userId, newPassword: password });
+    res.sendStatus(204);
+  }
+
   async login(req: Request, res: Response) {
     const { email, password } = req.body;
 
@@ -80,10 +94,27 @@ export class UsersController {
     res.status(200).json(user);
   }
 
-  async show(req: Request, res: Response) {
+  async profile(req: Request, res: Response) {
     const userId = req.user.id;
     const showUser = container.resolve(ShowUserService);
     const user = await showUser.execute(userId);
     res.status(200).json(user);
+  }
+
+  async show(req: Request, res: Response) {
+    const { id } = req.params;
+    const showUser = container.resolve(ShowUserService);
+    const user = await showUser.execute(id);
+    res.status(200).json(user);
+  }
+
+  async sendMailTo(req: TypedRequestBody<SendMailToUserSchema>, res: Response) {
+    const { toUserId, content } = req.body;
+    const fromUserId = req.user.id;
+
+    const sendMailToUser = container.resolve(SendMailToUserService);
+    await sendMailToUser.execute({ fromUserId, toUserId, content });
+
+    res.sendStatus(204);
   }
 }

@@ -1,19 +1,20 @@
-import { inject, injectable } from "tsyringe";
-import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
-import { ILoginUser } from "../domain/models/ILoginUser";
+import type { ITokenProvider } from "@commons/domain/providers/ITokenProvider";
 import { AppError } from "@commons/error/AppError";
-import { HashProvider } from "@commons/providers/HashProvider";
-import { sign, SignOptions } from "jsonwebtoken";
-import { authConfig } from "@commons/config/authConfig";
+import { HashProvider } from "@commons/infra/providers/HashProvider";
+import { inject, injectable } from "tsyringe";
+import { LoginUserSchema } from "../domain/models/schemas/LoginUserSchema";
+import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
 
 @injectable()
 export class LoginUserService {
   constructor(
     @inject("UsersRepository")
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+    @inject("TokenProvider")
+    private tokenProvider: ITokenProvider
   ) {}
 
-  async execute({ email, password }: ILoginUser) {
+  async execute({ email, password }: LoginUserSchema) {
     const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new AppError("Usuário não encontrado", 401);
@@ -22,17 +23,14 @@ export class LoginUserService {
     const hashProvider = new HashProvider();
     const passwordMatched = await hashProvider.compareHash(
       password,
-      user.password
+      user.password!
     );
 
     if (!passwordMatched) {
       throw new AppError("Senha incorreta", 401);
     }
 
-    const token = sign({}, authConfig.jwt.secret, {
-      subject: user.id,
-      expiresIn: authConfig.jwt.expiresIn,
-    } as SignOptions);
+    const token = this.tokenProvider.generateToken({}, user.id);
 
     const userName =
       user.userType === "DOCTOR" ? user.doctor?.name : user.hospital?.name;

@@ -1,28 +1,37 @@
 import { FakeDoctorsRepository } from "@modules/doctors/domain/repositories/fakes/FakeDoctorsRepository";
 import { CreateUserService } from "../CreateUserService";
 import { FakeUsersRepository } from "@modules/users/domain/repositories/fakes/FakeUsersRepository";
-import { ICreateUser } from "@modules/users/domain/models/ICreateUser";
 import { AppError } from "@commons/error/AppError";
-import { HashProvider } from "@commons/providers/HashProvider";
+import { HashProvider } from "@commons/infra/providers/HashProvider";
+import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
+import { ITokenProvider } from "@commons/domain/providers/ITokenProvider";
+import { FakeTokenProvider } from "@commons/domain/providers/fakes/FakeTokenProvider";
 
 let usersRepository: FakeUsersRepository;
 let doctorsRepository: FakeDoctorsRepository;
+let tokenProvider: ITokenProvider;
 let service: CreateUserService;
 
 describe("CreateUser", () => {
   beforeEach(() => {
     usersRepository = new FakeUsersRepository();
     doctorsRepository = new FakeDoctorsRepository();
-    service = new CreateUserService(usersRepository, doctorsRepository);
+    tokenProvider = new FakeTokenProvider();
+    service = new CreateUserService(
+      usersRepository,
+      doctorsRepository,
+      tokenProvider
+    );
   });
 
   it("should be able to create a user", async () => {
     // arrange
-    const newUser: ICreateUser = {
+    const newUser: CreateUserSchema = {
       email: "email@email.com",
       password: "1234",
       name: "name",
       userType: "HOSPITAL",
+      phone: "phone",
     };
     // act
     const { user } = await service.execute(newUser);
@@ -37,12 +46,14 @@ describe("CreateUser", () => {
       name: "name",
       password: "1234",
       userType: "HOSPITAL",
+      phone: "phone",
     });
-    const newUser: ICreateUser = {
+    const newUser: CreateUserSchema = {
       email: "email@email.com",
       name: "name",
       password: "1234",
       userType: "HOSPITAL",
+      phone: "phone",
     };
     // act
     const user = service.execute(newUser);
@@ -50,7 +61,7 @@ describe("CreateUser", () => {
     await expect(user).rejects.toBeInstanceOf(AppError);
     await expect(user).rejects.toHaveProperty(
       "message",
-      "Email already in use"
+      "E-mail já cadastrado"
     );
   });
 
@@ -62,33 +73,35 @@ describe("CreateUser", () => {
       userId: "1",
       phone: "phone",
     });
-    const newUser: ICreateUser = {
+    const newUser: CreateUserSchema = {
       email: "email@email.com",
       name: "name",
       password: "1234",
       userType: "DOCTOR",
       crm: "123456",
+      phone: "phone",
     };
     // act
     const user = service.execute(newUser);
     // assert
     await expect(user).rejects.toBeInstanceOf(AppError);
-    await expect(user).rejects.toHaveProperty("message", "CRM already in use");
+    await expect(user).rejects.toHaveProperty("message", "CRM já cadastrado");
   });
 
   it("should hash the password before saving", async () => {
     // arrange
-    const newUser: ICreateUser = {
+    const newUser: CreateUserSchema = {
       email: "email@email.com",
       name: "name",
       password: "1234",
       userType: "DOCTOR",
       crm: "123456",
+      phone: "phone",
     };
     // act
     const { user } = await service.execute(newUser);
     // assert
     const hashProvider = new HashProvider(); // Considerar fazer um fake depois
-    expect(await hashProvider.compareHash("1234", user.password)).toBeTruthy();
+    expect(await hashProvider.compareHash("1234", user.password!)).toBeTruthy();
   });
 });

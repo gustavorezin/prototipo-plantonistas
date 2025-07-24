@@ -1,4 +1,4 @@
-import { UserType, RequestStatus } from "@prisma/client";
+import { UserType } from "./generated/client";
 import { prisma } from "../src/commons/infra/prisma/prismaClient";
 import { HashProvider } from "../src/commons/providers/HashProvider";
 
@@ -22,7 +22,7 @@ async function main() {
     },
   });
 
-  const doctorUser = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email: "medico@email.com",
       password: hashedPassword,

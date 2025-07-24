@@ -11,7 +11,7 @@ export const SectionCardRoot = ({
 }: SectionCardRootProps) => {
   return (
     <div
-      className={`flex flex-col bg-white shadow-2xl/30 shadow-primary rounded-2xl p-4 ${className}`}
+      className={`flex flex-col h-full bg-white shadow-2xl/30 shadow-primary rounded-2xl p-4 ${className}`}
     >
       {children}
     </div>

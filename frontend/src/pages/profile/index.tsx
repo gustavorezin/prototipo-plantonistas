@@ -12,6 +12,8 @@ import { ISpecialty, specialtiesService } from "@services/specialties-service";
 import { toast } from "sonner";
 import { IHospital } from "@services/hospitals-service";
 import { IDoctor } from "@services/doctors-service";
+import { SectionCardFooter } from "@commons/components/section-card/footer";
+import { formatterUtil } from "@commons/utils/formatter-util";
 
 const profileSchema = z.object({
   name: z.string().min(3, "Nome é obrigatório"),
@@ -55,6 +57,7 @@ export const Profile = () => {
   const {
     register: registerPassword,
     handleSubmit: handleSubmitPassword,
+    reset: resetFormPassword,
     formState: { errors: errorsPassword },
   } = useForm<UpdatePasswordFormData>({
     resolver: zodResolver(updatePasswordSchema),
@@ -70,14 +73,17 @@ export const Profile = () => {
   };
 
   const onSubmitPassword = async (data: UpdatePasswordFormData) => {
-    console.log(data);
+    await usersService.updatePassword({
+      password: data.newPassword,
+    });
+    resetFormPassword();
     toast.success("Senha atualizada com sucesso!");
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const [userRes, specialtiesRes] = await Promise.all([
-        usersService.show(),
+        usersService.profile(),
         specialtiesService.list(),
       ]);
       const doctorSpecialtiesData = isUserDoctor
@@ -91,7 +97,10 @@ export const Profile = () => {
 
       setValue("name", doctorOrHospital!.name);
       setValue("email", userData.email);
-      setValue("phone", doctorOrHospital?.phone);
+      setValue(
+        "phone",
+        formatterUtil.formatPhone(doctorOrHospital?.phone || "")
+      );
       if (isUserDoctor) {
         setValue("crm", (doctorOrHospital as IDoctor).crm);
         setValue(
@@ -113,28 +122,48 @@ export const Profile = () => {
       <SectionCard.Root className="basis-2/3 space-y-4">
         <SectionCard.Header>Perfil</SectionCard.Header>
         <SectionCard.Content>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form id="profileForm" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-2 gap-4 mb-8">
               <Input
+                id="name"
+                label="Nome"
                 {...register("name")}
                 isError={!!errors.name}
                 placeholder="Nome"
               />
               <Input
+                id="email"
+                label="E-mail"
                 {...register("email")}
                 isError={!!errors.email}
                 placeholder="E-mail"
               />
-              <Input {...register("phone")} placeholder="Telefone" />
+              <Input
+                id="phone"
+                label="Telefone"
+                {...register("phone")}
+                isError={!!errors.phone}
+                type="tel"
+                placeholder="Telefone"
+                mask="(__) _____-____"
+                replacement={{ _: /\d/ }}
+              />
 
               {isUserDoctor ? (
                 <>
-                  <Input {...register("crm")} placeholder="CRM" />
+                  <Input
+                    id="crm"
+                    label="CRM"
+                    {...register("crm")}
+                    placeholder="CRM"
+                  />
                   <Controller
                     name="specialties"
                     control={control}
                     render={({ field }) => (
                       <MultiSelect
+                        label="Especialidades"
+                        id="specialties"
                         isMulti
                         options={specialties.map((s) => ({
                           value: s.id,
@@ -155,34 +184,50 @@ export const Profile = () => {
                   />
                 </>
               ) : (
-                <Input {...register("address")} placeholder="Endereço" />
+                <Input
+                  id="address"
+                  label="Endereço"
+                  {...register("address")}
+                  placeholder="Endereço"
+                />
               )}
             </div>
-            <Button type="submit" title="Salvar alterações" />
           </form>
         </SectionCard.Content>
+        <SectionCard.Footer>
+          <Button type="submit" form="profileForm" title="Salvar alterações" />
+        </SectionCard.Footer>
       </SectionCard.Root>
       <SectionCard.Root className="basis-1/3 space-y-4">
         <SectionCard.Header>Alterar senha</SectionCard.Header>
         <SectionCard.Content>
-          <form onSubmit={handleSubmitPassword(onSubmitPassword)}>
+          <form
+            id="passwordForm"
+            onSubmit={handleSubmitPassword(onSubmitPassword)}
+          >
             <div className="mb-8 space-y-4">
               <Input
+                id="newPassword"
+                label="Nova senha"
                 {...registerPassword("newPassword")}
                 isError={!!errorsPassword.newPassword}
                 placeholder="Nova senha"
                 type="password"
               />
               <Input
+                id="confirmNewPassword"
+                label="Confirmar nova senha"
                 {...registerPassword("confirmNewPassword")}
                 isError={!!errorsPassword.confirmNewPassword}
                 placeholder="Confirmar nova senha"
                 type="password"
               />
             </div>
-            <Button type="submit" title="Alterar" />
           </form>
         </SectionCard.Content>
+        <SectionCardFooter>
+          <Button type="submit" form="passwordForm" title="Alterar" />
+        </SectionCardFooter>
       </SectionCard.Root>
     </div>
   );

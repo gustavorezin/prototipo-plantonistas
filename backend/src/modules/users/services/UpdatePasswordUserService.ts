@@ -1,7 +1,7 @@
 import { AppError } from "@commons/error/AppError";
 import { inject, injectable } from "tsyringe";
 import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
-import { HashProvider } from "@commons/providers/HashProvider";
+import { HashProvider } from "@commons/infra/providers/HashProvider";
 
 @injectable()
 export class UpdatePasswordUserService {
@@ -10,7 +10,7 @@ export class UpdatePasswordUserService {
     private usersRepository: IUsersRepository
   ) {}
 
-  async execute(id: string, newPassword: string) {
+  async execute({ id, newPassword }: { id: string; newPassword: string }) {
     const user = await this.usersRepository.findById(id);
 
     if (!user) {
@@ -27,6 +27,8 @@ export class UpdatePasswordUserService {
       throw new AppError("A nova senha não pode ser igual a atual");
     }
 
-    await this.usersRepository.updatePassword(id, newPassword);
+    const hashedPassword = await hashProvider.generateHash(newPassword);
+
+    await this.usersRepository.updatePassword(id, hashedPassword);
   }
 }

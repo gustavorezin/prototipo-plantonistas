@@ -1,16 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { Controller, FieldErrors, useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@commons/components/ui/button";
 import { Input } from "@commons/components/ui/input";
+import { MultiSelect } from "@commons/components/ui/multi-select";
 import { Toggle } from "@commons/components/ui/toggle";
 import { useAuth } from "@commons/hooks/use-auth";
-import { usersService } from "@services/users-service";
-import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ISpecialty, specialtiesService } from "@services/specialties-service";
-import { MultiSelect } from "@commons/components/ui/multi-select";
+import { usersService } from "@services/users-service";
+import { useEffect, useState } from "react";
+import { Controller, FieldErrors, useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -21,7 +21,10 @@ const registerSchema = loginSchema.extend({
   userType: z.enum(["HOSPITAL", "DOCTOR"]),
   name: z.string().min(3, "Nome é obrigatório"),
   address: z.string().optional(),
-  phone: z.string().optional(),
+  phone: z
+    .string()
+    .regex(/^\(\d{2}\) \d{4,5}-\d{4}$/)
+    .transform((val) => val.replace(/\D/g, "")),
   crm: z.string().optional(),
   specialties: z.array(z.string()).optional(),
 });
@@ -90,6 +93,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
           />
           <input type="hidden" value={userType} {...register("userType")} />
           <Input
+            id="name"
+            label="Nome"
             {...register("name")}
             isError={isRegister && !!(errors as FieldErrors)?.name}
             placeholder={
@@ -98,6 +103,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
           />
           {userType === "HOSPITAL" ? (
             <Input
+              id="address"
+              label="Endereço"
               {...register("address")}
               type="text"
               placeholder="Endereço"
@@ -105,6 +112,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
           ) : (
             <>
               <Input
+                id="crm"
+                label="CRM"
                 {...register("crm")}
                 isError={isRegister && !!(errors as FieldErrors)?.crm}
                 placeholder="CRM"
@@ -114,6 +123,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
+                    label="Especialidades"
+                    id="specialties"
                     {...register("specialties")}
                     isMulti
                     options={specialties.map((spec) => ({
@@ -135,11 +146,22 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
               />
             </>
           )}
-          <Input {...register("phone")} type="tel" placeholder="Telefone" />
+          <Input
+            id="phone"
+            label="Telefone"
+            {...register("phone")}
+            isError={isRegister && !!(errors as FieldErrors)?.phone}
+            type="tel"
+            placeholder="Telefone"
+            mask="(__) _____-____"
+            replacement={{ _: /\d/ }}
+          />
         </>
       )}
 
       <Input
+        id="email"
+        label="E-mail"
         {...register("email")}
         isError={!!errors.email}
         type="email"
@@ -147,6 +169,8 @@ export const CardLoginContent = ({ isRegister }: CardLoginContentProps) => {
       />
 
       <Input
+        id="password"
+        label="Senha"
         {...register("password")}
         isError={!!errors.password}
         type="password"

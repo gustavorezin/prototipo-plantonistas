@@ -1,10 +1,6 @@
+import { AppError } from "@commons/error/AppError";
 import { inject, injectable } from "tsyringe";
 import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
-import { ILoginUser } from "../domain/models/ILoginUser";
-import { AppError } from "@commons/error/AppError";
-import { HashProvider } from "@commons/providers/HashProvider";
-import { sign, SignOptions } from "jsonwebtoken";
-import { authConfig } from "@commons/config/authConfig";
 
 @injectable()
 export class SessionUserService {

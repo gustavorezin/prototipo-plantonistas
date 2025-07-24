@@ -1,11 +1,10 @@
-import { inject, injectable } from "tsyringe";
-import { ICreateUser } from "../domain/models/ICreateUser";
-import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
-import { HashProvider } from "@commons/providers/HashProvider";
+import type { ITokenProvider } from "@commons/domain/providers/ITokenProvider";
 import { AppError } from "@commons/error/AppError";
+import { HashProvider } from "@commons/infra/providers/HashProvider";
 import type { IDoctorsRepository } from "@modules/doctors/domain/repositories/IDoctorsRepository";
-import { sign, SignOptions } from "jsonwebtoken";
-import { authConfig } from "@commons/config/authConfig";
+import { inject, injectable } from "tsyringe";
+import { CreateUserSchema } from "../domain/models/schemas/CreateUserSchema";
+import type { IUsersRepository } from "../domain/repositories/IUsersRepository";
 
 @injectable()
 export class CreateUserService {
@@ -13,10 +12,12 @@ export class CreateUserService {
     @inject("UsersRepository")
     private usersRepository: IUsersRepository,
     @inject("DoctorsRepository")
-    private doctorsRepository: IDoctorsRepository
+    private doctorsRepository: IDoctorsRepository,
+    @inject("TokenProvider")
+    private tokenProvider: ITokenProvider
   ) {}
 
-  async execute(data: ICreateUser) {
+  async execute(data: CreateUserSchema) {
     const userEmailExists = await this.usersRepository.findByEmail(data.email);
     if (userEmailExists) {
       throw new AppError("E-mail já cadastrado");
@@ -37,10 +38,7 @@ export class CreateUserService {
       password: hashedPassword,
     });
 
-    const token = sign({}, authConfig.jwt.secret, {
-      subject: user.id,
-      expiresIn: authConfig.jwt.expiresIn,
-    } as SignOptions);
+    const token = this.tokenProvider.generateToken({}, user.id);
 
     return {
       user,

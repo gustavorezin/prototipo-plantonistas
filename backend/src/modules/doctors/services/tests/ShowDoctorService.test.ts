@@ -33,7 +33,7 @@ describe("ShowDoctor", () => {
     await expect(doctorPromise).rejects.toBeInstanceOf(AppError);
     await expect(doctorPromise).rejects.toHaveProperty(
       "message",
-      "Doctor not found"
+      "Médico não encontrado"
     );
   });
 });

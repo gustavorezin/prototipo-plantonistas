@@ -2,7 +2,7 @@ import api from "@commons/lib/api";
 import { IDoctor } from "./doctors-service";
 import { IHospital } from "./hospitals-service";
 
-type UserType = "HOSPITAL" | "DOCTOR";
+export type UserType = "HOSPITAL" | "DOCTOR";
 
 export interface IUser {
   id: string;
@@ -62,12 +62,27 @@ const update = (data: IUpdateRequest) => {
   return api.put<IUser>("/users", data);
 };
 
+const updatePassword = (data: { password: string }) => {
+  return api.put<void>("/users/password", data);
+};
+
 const session = () => {
   return api.get<IUserAuthProvider>("/users/session");
 };
 
-const show = () => {
+const profile = () => {
   return api.get<IUser>("/users/profile");
+};
+
+const show = (id: string) => {
+  return api.get<IUser>(`/users/${id}`);
+};
+
+const sendMail = (toUserId: string, content?: string) => {
+  return api.post("/users/send-mail", {
+    toUserId,
+    content,
+  });
 };
 
 export const usersService = {
@@ -75,6 +90,9 @@ export const usersService = {
   logout,
   create,
   update,
+  updatePassword,
   session,
+  profile,
   show,
+  sendMail,
 };

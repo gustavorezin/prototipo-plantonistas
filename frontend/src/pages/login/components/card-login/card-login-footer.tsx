@@ -9,7 +9,10 @@ export const CardLoginFooter = ({
 }: CardLoginFooterProps) => {
   return (
     <div className="text-center mt-4">
-      <button onClick={toggleForm} className="text-secondary hover:underline">
+      <button
+        onClick={toggleForm}
+        className="text-secondary hover:underline cursor-pointer"
+      >
         {isRegister
           ? "Já tem uma conta? Entre aqui"
           : "Não tem uma conta? Cadastre-se"}
