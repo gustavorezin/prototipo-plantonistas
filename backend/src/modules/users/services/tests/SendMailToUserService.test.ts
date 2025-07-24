@@ -1,5 +1,4 @@
 import { FakeMailProvider } from "@commons/domain/providers/fakes/FakeMailProvider";
-import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
 import { FakeUsersRepository } from "@modules/users/domain/repositories/fakes/FakeUsersRepository";
 import { SendMailToUserService } from "../SendMailToUserService";
 

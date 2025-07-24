@@ -4,16 +4,24 @@ import { FakeUsersRepository } from "@modules/users/domain/repositories/fakes/Fa
 import { AppError } from "@commons/error/AppError";
 import { HashProvider } from "@commons/infra/providers/HashProvider";
 import { CreateUserSchema } from "@modules/users/domain/models/schemas/CreateUserSchema";
+import { ITokenProvider } from "@commons/domain/providers/ITokenProvider";
+import { FakeTokenProvider } from "@commons/domain/providers/fakes/FakeTokenProvider";
 
 let usersRepository: FakeUsersRepository;
 let doctorsRepository: FakeDoctorsRepository;
+let tokenProvider: ITokenProvider;
 let service: CreateUserService;
 
 describe("CreateUser", () => {
   beforeEach(() => {
     usersRepository = new FakeUsersRepository();
     doctorsRepository = new FakeDoctorsRepository();
-    service = new CreateUserService(usersRepository, doctorsRepository);
+    tokenProvider = new FakeTokenProvider();
+    service = new CreateUserService(
+      usersRepository,
+      doctorsRepository,
+      tokenProvider
+    );
   });
 
   it("should be able to create a user", async () => {

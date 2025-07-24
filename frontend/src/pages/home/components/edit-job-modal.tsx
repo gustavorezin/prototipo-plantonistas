@@ -355,7 +355,7 @@ export const EditJobModal = ({ id, isOpen, onClose }: EditJobModalProps) => {
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
               userId={userId}
-              onSend={(message) => console.log(message)}
+              //onSend={(message) => console.log(message)}
             />
           )}
         </div>

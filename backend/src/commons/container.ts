@@ -15,6 +15,7 @@ import { UsersRepository } from "@modules/users/infra/repositories/UsersReposito
 import { container } from "tsyringe";
 import { SendMailToUserService } from "@modules/users/services/SendMailToUserService";
 import { MailProvider } from "./infra/providers/MailProvider";
+import { JwtTokenProvider } from "./infra/providers/JwtTokenProvider";
 
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
@@ -56,3 +57,4 @@ container.registerSingleton("SendMailToUserService", SendMailToUserService);
 
 // Providers
 container.registerSingleton("MailProvider", MailProvider);
+container.registerSingleton("TokenProvider", JwtTokenProvider);

@@ -1,4 +1,4 @@
-require("dotenv").config();
+import "dotenv/config";
 import "reflect-metadata";
 import "@commons/container";
 import express from "express";

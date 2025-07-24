@@ -1,7 +1,7 @@
-import { authConfig } from "@commons/config/authConfig";
+import { ITokenProvider } from "@commons/domain/providers/ITokenProvider";
 import { AppError } from "@commons/error/AppError";
 import { Request, Response, NextFunction } from "express";
-import { JwtPayload, verify } from "jsonwebtoken";
+import { container } from "tsyringe";
 
 export function isAuthenticated(
   request: Request,
@@ -14,17 +14,12 @@ export function isAuthenticated(
     throw new AppError("Não contém Token JWT", 401);
   }
 
-  try {
-    const decodedToken = verify(token, authConfig.jwt.secret);
+  const tokenProvider = container.resolve<ITokenProvider>("TokenProvider");
+  const { sub } = tokenProvider.verifyToken(token);
 
-    const { sub } = decodedToken as JwtPayload;
+  request.user = {
+    id: sub,
+  };
 
-    request.user = {
-      id: sub!,
-    };
-
-    return next();
-  } catch (error) {
-    throw new AppError("Token JWT inválido.", 401);
-  }
+  return next();
 }
