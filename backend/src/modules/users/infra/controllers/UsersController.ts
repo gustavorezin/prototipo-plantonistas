@@ -80,8 +80,6 @@ export class UsersController {
       req.headers["user-agent"]?.includes("iPhone") ||
       req.headers["user-agent"]?.includes("iPad");
 
-    console.log("User-Agent:", req.headers["user-agent"]);
-
     res.status(200).json({
       user,
       ...(isIOS && { token }),
