@@ -8,7 +8,9 @@ export function isAuthenticated(
   _response: Response,
   next: NextFunction
 ) {
-  const token = request.cookies?.token;
+  const token =
+    request.cookies?.token ||
+    request.headers.authorization?.replace("Bearer ", "");
 
   if (!token) {
     throw new AppError("Não contém Token JWT", 401);

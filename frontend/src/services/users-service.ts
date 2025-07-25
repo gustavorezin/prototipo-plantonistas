@@ -13,10 +13,13 @@ export interface IUser {
 }
 
 export interface IUserAuthProvider {
-  id: string;
-  name: string;
-  email: string;
-  userType: UserType;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    userType: UserType;
+  };
+  token: string;
 }
 
 export interface ILoginRequest {
@@ -67,7 +70,7 @@ const updatePassword = (data: { password: string }) => {
 };
 
 const session = () => {
-  return api.get<IUserAuthProvider>("/users/session");
+  return api.get<IUserAuthProvider["user"]>("/users/session");
 };
 
 const profile = () => {

@@ -1,4 +1,5 @@
 import { AuthContext } from "@commons/contexts/auth-context";
+import { isIOS } from "@commons/utils/isIOS";
 import {
   ILoginRequest,
   IUserAuthProvider,
@@ -11,7 +12,7 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<IUserAuthProvider | null>(null);
+  const [user, setUser] = useState<IUserAuthProvider["user"] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,13 +32,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (loginPayload: ILoginRequest) => {
     const response = await usersService.login(loginPayload);
-    const user = response.data;
+    const user = response.data.user;
+    const token = response.data.token;
+
     setUser(user);
+
+    if (isIOS() && token) {
+      sessionStorage.setItem("ios_token", token);
+    }
   };
 
   const logout = async () => {
     await usersService.logout();
     setUser(null);
+    if (isIOS()) {
+      sessionStorage.removeItem("ios_token");
+    }
   };
 
   return (

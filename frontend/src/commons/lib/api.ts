@@ -1,9 +1,20 @@
+import { isIOS } from "@commons/utils/isIOS";
 import axios from "axios";
 import { toast } from "sonner";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
+});
+
+api.interceptors.request.use((config) => {
+  if (isIOS()) {
+    const token = sessionStorage.getItem("ios_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
 });
 
 api.interceptors.response.use(

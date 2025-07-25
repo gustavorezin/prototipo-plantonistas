@@ -76,7 +76,16 @@ export class UsersController {
       maxAge: 1000 * 60 * 60 * 24,
     });
 
-    res.status(200).json(user);
+    const isIOS =
+      req.headers["user-agent"]?.includes("iPhone") ||
+      req.headers["user-agent"]?.includes("iPad");
+
+    console.log("User-Agent:", req.headers["user-agent"]);
+
+    res.status(200).json({
+      user,
+      ...(isIOS && { token }),
+    });
   }
 
   async logout(_req: Request, res: Response) {

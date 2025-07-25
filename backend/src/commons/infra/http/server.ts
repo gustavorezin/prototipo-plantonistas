@@ -14,10 +14,6 @@ const allowedOrigins = [
 
 const app = express();
 app.use(cookieParser());
-app.use((req, res, next) => {
-  console.log("Cookies recebidos:", req.cookies);
-  next();
-});
 app.use(
   cors({
     origin: function (origin, callback) {
