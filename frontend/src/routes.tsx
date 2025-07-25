@@ -3,6 +3,7 @@ import { Login } from "@pages/login";
 import { Home } from "@pages/home";
 import { PrivateLayout } from "@commons/components/private-layout";
 import { Profile } from "@pages/profile";
+import { History } from "@pages/history";
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ export const router = createBrowserRouter([
     element: <PrivateLayout />,
     children: [
       { path: "/", element: <Home />, index: true },
+      { path: "/history", element: <History /> },
       { path: "/profile", element: <Profile /> },
     ],
   },

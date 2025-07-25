@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
+import { History } from "lucide-react";
 
 export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -16,7 +17,8 @@ export const Sidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { name: "Home", icon: <Home size={20} />, path: "/" },
+    { name: "Início", icon: <Home size={20} />, path: "/" },
+    { name: "Histórico", icon: <History size={20} />, path: "/history" },
     { name: "Perfil", icon: <User size={20} />, path: "/profile" },
   ];
 
