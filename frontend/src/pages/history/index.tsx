@@ -1,4 +1,6 @@
 import { useAuth } from "@commons/hooks/use-auth";
+import { LastUsersSection } from "./sections/last-users-section";
+import { LastJobsSection } from "./sections/last-jobs-section";
 
 export const History = () => {
   const { user } = useAuth();
@@ -7,8 +9,8 @@ export const History = () => {
 
   return (
     <div className="flex flex-row h-screen bg-white p-4 gap-4">
-      {/* <ListUsersSection isUserDoctor={isUserDoctor} />
-      <JobsSection /> */}
+      <LastUsersSection isUserDoctor={isUserDoctor} />
+      <LastJobsSection />
     </div>
   );
 };
