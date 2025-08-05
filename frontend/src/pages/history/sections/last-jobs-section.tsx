@@ -7,27 +7,22 @@ import {
 } from "@services/applications-service";
 import { useAuth } from "@commons/hooks/use-auth";
 import { CardJob } from "@pages/home/components/card-job";
+import { EditJobModal } from "@pages/home/components/edit-job-modal";
 
 export const LastJobsSection = () => {
   const [jobs, setJobs] = useState<IJob[]>([]);
   const [applications, setApplications] = useState<IApplication[]>([]);
-  /* const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
-  const [isModalNewJobOpen, setIsModalNewJobOpen] = useState(false); 
+  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
   const [isModalEditJobOpen, setIsModalEditJobOpen] = useState(false);
-  const [isModalApplyJobOpen, setIsModalApplyJobOpen] = useState(false);*/
 
   const { user } = useAuth();
   const userType = user?.userType;
   const isUserDoctor = userType === "DOCTOR";
 
   const handleCardClick = (job: IJob) => {
-    console.log(job);
-    /* setSelectedJob(job);
-    if (isUserDoctor) {
-      setIsModalApplyJobOpen(true);
-    } else {
-      setIsModalEditJobOpen(true);
-    }  */
+    if (isUserDoctor) return;
+    setSelectedJob(job);
+    setIsModalEditJobOpen(true);
   };
 
   const fetchJobs = useCallback(async () => {
@@ -80,7 +75,7 @@ export const LastJobsSection = () => {
             .sort()}
         </div>
       </SectionCard.Content>
-      {/* {selectedJob && (
+      {selectedJob && (
         <EditJobModal
           isOpen={isModalEditJobOpen}
           onClose={() => {
@@ -90,7 +85,7 @@ export const LastJobsSection = () => {
           }}
           id={selectedJob.id}
         />
-      )} */}
+      )}
     </SectionCard.Root>
   );
 };
