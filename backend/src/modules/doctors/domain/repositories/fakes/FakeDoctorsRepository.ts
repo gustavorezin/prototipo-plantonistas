@@ -29,4 +29,8 @@ export class FakeDoctorsRepository implements IDoctorsRepository {
   addDoctor(doctor: IDoctor): void {
     this.doctors.push(doctor);
   }
+
+  async findAllHiredByHospitalId(hospitalId: string): Promise<IDoctor[]> {
+    return this.doctors; // falta implementar
+  }
 }
