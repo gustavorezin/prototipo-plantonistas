@@ -16,6 +16,7 @@ import { container } from "tsyringe";
 import { SendMailToUserService } from "@modules/users/services/SendMailToUserService";
 import { MailProvider } from "./infra/providers/MailProvider";
 import { JwtTokenProvider } from "./infra/providers/JwtTokenProvider";
+import { EtherealMailProvider } from "./infra/providers/EtherealMailProvider";
 
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
@@ -56,5 +57,8 @@ container.registerSingleton(
 container.registerSingleton("SendMailToUserService", SendMailToUserService);
 
 // Providers
-container.registerSingleton("MailProvider", MailProvider);
+container.registerSingleton(
+  "MailProvider",
+  process.env.NODE_ENV === "production" ? MailProvider : EtherealMailProvider
+);
 container.registerSingleton("TokenProvider", JwtTokenProvider);
