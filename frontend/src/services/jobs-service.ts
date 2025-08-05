@@ -54,6 +54,10 @@ const listByHospital = () => {
   return api.get<IJob[]>("/jobs/hospital");
 };
 
+const listByDoctor = () => {
+  return api.get<IJob[]>("/jobs/doctor");
+};
+
 const list = () => {
   return api.get<IJob[]>("/jobs");
 };
@@ -68,6 +72,7 @@ export const jobsService = {
   updateStatus,
   show,
   listByHospital,
+  listByDoctor,
   list,
   remove,
 };

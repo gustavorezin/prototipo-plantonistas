@@ -165,6 +165,40 @@ export class JobsRepository implements IJobsRepository {
     }));
   }
 
+  async findAllByDoctorId(doctorId: string): Promise<IJob[]> {
+    const jobs = await prisma.job.findMany({
+      where: {
+        applications: {
+          some: {
+            doctorId,
+          },
+        },
+      },
+      include: {
+        specialties: {
+          select: {
+            specialty: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return jobs.map((job) => ({
+      ...job,
+      startTime: job.startTime.toISOString(),
+      endTime: job.endTime.toISOString(),
+      specialties: job.specialties.map((jobSpecialty) => ({
+        id: jobSpecialty.specialty.id,
+        name: jobSpecialty.specialty.name,
+      })),
+    }));
+  }
+
   async findAll(): Promise<IJobWithHospitalInfo[]> {
     const jobs = await prisma.job.findMany({
       include: {

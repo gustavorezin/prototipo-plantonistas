@@ -18,6 +18,7 @@ jobsRouter.put(
 );
 jobsRouter.put("/:id", validateData(updateJobSchema), jobsController.update);
 jobsRouter.get("/hospital", jobsController.listByHospital);
+jobsRouter.get("/doctor", jobsController.listByDoctor);
 jobsRouter.get("/", jobsController.list);
 jobsRouter.get("/:id", jobsController.show);
 jobsRouter.delete("/:id", jobsController.delete);

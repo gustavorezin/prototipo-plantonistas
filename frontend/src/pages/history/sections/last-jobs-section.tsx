@@ -33,7 +33,7 @@ export const LastJobsSection = () => {
   const fetchJobs = useCallback(async () => {
     if (!userType) return;
     const response = isUserDoctor
-      ? await jobsService.list()
+      ? await jobsService.listByDoctor()
       : await jobsService.listByHospital();
     setJobs(response.data);
 

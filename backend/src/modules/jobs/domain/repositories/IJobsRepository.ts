@@ -12,6 +12,7 @@ export interface IJobsRepository {
   decrementFilledSlots(id: string): Promise<void>;
   findById(id: string): Promise<IJob | null>;
   findAllByHospitalId(hospitalId: string): Promise<IJob[]>;
+  findAllByDoctorId(doctorId: string): Promise<IJob[]>;
   findAll(): Promise<IJobWithHospitalInfo[]>;
   delete(id: string): Promise<void>;
 }

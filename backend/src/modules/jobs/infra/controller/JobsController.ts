@@ -11,6 +11,7 @@ import { container } from "tsyringe";
 import { ShowJobService } from "@modules/jobs/services/ShowJobService";
 import { UpdateStatusJobSchema } from "@modules/jobs/domain/models/schemas/UpdateStatusJobSchema";
 import { UpdateStatusJobService } from "@modules/jobs/services/UpdateStatusJobService";
+import { ListJobsByDoctorService } from "@modules/jobs/services/ListJobsByDoctorService";
 
 export class JobsController {
   async create(req: TypedRequestBody<CreateJobSchema>, res: Response) {
@@ -83,6 +84,15 @@ export class JobsController {
 
     const listJobsByHospital = container.resolve(ListJobsByHospitalService);
     const jobs = await listJobsByHospital.execute(hospitalId);
+
+    res.status(200).json(jobs);
+  }
+
+  async listByDoctor(req: Request, res: Response) {
+    const doctorId = req.user.id;
+
+    const listJobsByDoctor = container.resolve(ListJobsByDoctorService);
+    const jobs = await listJobsByDoctor.execute(doctorId);
 
     res.status(200).json(jobs);
   }
