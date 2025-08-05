@@ -118,12 +118,12 @@ export const Profile = () => {
   }, [isUserDoctor, user?.id, setValue]);
 
   return (
-    <div className="flex h-screen bg-white p-4 gap-4">
-      <SectionCard.Root className="basis-2/3 space-y-4">
+    <div className="flex flex-col md:flex-row md:h-screen bg-white p-4 gap-4">
+      <SectionCard.Root className="w-full md:basis-2/3 max-h-screen overflow-auto">
         <SectionCard.Header>Perfil</SectionCard.Header>
         <SectionCard.Content>
           <form id="profileForm" onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               <Input
                 id="name"
                 label="Nome"
@@ -198,7 +198,7 @@ export const Profile = () => {
           <Button type="submit" form="profileForm" title="Salvar alterações" />
         </SectionCard.Footer>
       </SectionCard.Root>
-      <SectionCard.Root className="basis-1/3 space-y-4">
+      <SectionCard.Root className="w-full md:basis-1/3 h-full overflow-auto">
         <SectionCard.Header>Alterar senha</SectionCard.Header>
         <SectionCard.Content>
           <form
