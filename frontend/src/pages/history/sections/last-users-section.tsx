@@ -66,7 +66,7 @@ export const LastUsersSection = ({ isUserDoctor }: LastUsersSectionProps) => {
   }, [fetchUsers, fetchSpecialtyItems]);
 
   return (
-    <SectionCard.Root className="basis-2/3">
+    <SectionCard.Root className="w-full md:basis-2/3 max-h-screen overflow-auto">
       <SectionCard.Header>
         Últimos {isUserDoctor ? "hospitais trabalhados" : "médicos contratados"}
       </SectionCard.Header>

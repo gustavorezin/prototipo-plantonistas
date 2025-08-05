@@ -42,7 +42,7 @@ export const LastJobsSection = () => {
   }, [fetchJobs]);
 
   return (
-    <SectionCard.Root className="basis-1/3">
+    <SectionCard.Root className="w-full md:basis-1/3 h-full overflow-auto">
       <SectionCard.Header>Últimos plantões</SectionCard.Header>
       <SectionCard.Content>
         <div className="flex flex-1 flex-col gap-4 my-4">
