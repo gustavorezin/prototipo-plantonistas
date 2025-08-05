@@ -51,25 +51,33 @@ export const LastJobsSection = () => {
       <SectionCard.Header>Últimos plantões</SectionCard.Header>
       <SectionCard.Content>
         <div className="flex flex-1 flex-col gap-4 my-4">
-          {jobs.map((job) => {
-            const application = applications.find(
-              (app) => app.jobId === job.id
-            );
-            const applicationsCount = applications.filter(
-              (app) => app.jobId === job.id
-            ).length;
-            return (
-              <CardJob
-                {...job}
-                isUserDoctor={isUserDoctor}
-                key={job.id}
-                onClick={() => handleCardClick(job)}
-                applicationStatus={application?.status}
-                applicationsCount={applicationsCount}
-                hospitalName={job?.hospital?.name}
-              />
-            );
-          })}
+          {jobs
+            .filter((job) => job.status !== "OPEN")
+            .sort(
+              (a, b) =>
+                new Date(b.startTime).getTime() -
+                new Date(a.startTime).getTime()
+            )
+            .map((job) => {
+              const application = applications.find(
+                (app) => app.jobId === job.id
+              );
+              const applicationsCount = applications.filter(
+                (app) => app.jobId === job.id
+              ).length;
+              return (
+                <CardJob
+                  {...job}
+                  isUserDoctor={isUserDoctor}
+                  key={job.id}
+                  onClick={() => handleCardClick(job)}
+                  applicationStatus={application?.status}
+                  applicationsCount={applicationsCount}
+                  hospitalName={job?.hospital?.name}
+                />
+              );
+            })
+            .sort()}
         </div>
       </SectionCard.Content>
       {/* {selectedJob && (
