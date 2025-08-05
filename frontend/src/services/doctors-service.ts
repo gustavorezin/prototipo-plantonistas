@@ -12,6 +12,12 @@ const list = () => {
   return api.get<IDoctor[]>("/doctors");
 };
 
+const listHiredByHospital = () => {
+  console.log("fetching last hired doctors");
+  return api.get<IDoctor[]>("/doctors/hired-by-hospital");
+};
+
 export const doctorsService = {
   list,
+  listHiredByHospital,
 };

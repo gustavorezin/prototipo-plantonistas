@@ -6,4 +6,5 @@ export interface IDoctorsRepository {
   findAll(): Promise<IDoctor[]>;
   findById(id: string): Promise<IDoctor | null>;
   findNameAndEmailById(id: string): Promise<IDoctorMail | null>;
+  findAllHiredByHospitalId(hospitalId: string): Promise<IDoctor[]>;
 }
