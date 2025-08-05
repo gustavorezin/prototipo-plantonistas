@@ -66,23 +66,23 @@ export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
   }, [fetchUsers, fetchSpecialtyItems]);
 
   return (
-    <SectionCard.Root className="basis-2/3">
+    <SectionCard.Root className="w-full md:basis-2/3 max-h-screen overflow-auto">
       <SectionCard.Header>
         Buscar {isUserDoctor ? "hospitais" : "médicos"}
       </SectionCard.Header>
-      <div className="flex flex-row gap-4 my-4">
+      <div className="flex flex-col md:flex-row gap-4 my-4">
         <input
           type="text"
           placeholder="Buscar por nome..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full md:flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
         {!isUserDoctor && (
           <select
             value={filterSpecialty}
             onChange={(e) => setFilterSpecialty(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full md:w-auto border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">Todos</option>
             {filterSpecialtyItens.map((item) => (

@@ -50,7 +50,7 @@ export const JobsSection = () => {
   }, [fetchJobs]);
 
   return (
-    <SectionCard.Root className="basis-1/3">
+    <SectionCard.Root className="w-full md:basis-1/3 h-full overflow-auto">
       <SectionCard.Header>
         Vagas {isUserDoctor ? "disponíveis" : "cadastradas"}
       </SectionCard.Header>
