@@ -1,31 +1,19 @@
 import { useAuth } from "@commons/hooks/use-auth";
+import { MenuItem, menuItems } from "@commons/utils/menu-items";
 import clsx from "clsx";
-import {
-  Home,
-  LogOut,
-  PanelLeftClose,
-  PanelLeftOpen,
-  User,
-} from "lucide-react";
+import { LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
-import { History } from "lucide-react";
 
-export const Sidebar = () => {
+export const MenuDesktop = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
 
-  const menuItems = [
-    { name: "Início", icon: <Home size={20} />, path: "/" },
-    { name: "Histórico", icon: <History size={20} />, path: "/history" },
-    { name: "Perfil", icon: <User size={20} />, path: "/profile" },
-  ];
-
   return (
     <div
       className={clsx(
-        "h-screen bg-primary text-white flex flex-col transition-all duration-300 ease-in-out",
+        "hidden md:flex flex-col bg-primary text-white transition-all duration-300 ease-in-out h-screen",
         collapsed ? "w-14" : "w-64"
       )}
     >
@@ -41,7 +29,7 @@ export const Sidebar = () => {
 
       <nav className="flex flex-col flex-1 p-2 space-y-1">
         <div className="flex-1 space-y-1">
-          {menuItems.map((item) => (
+          {menuItems.map((item: MenuItem) => (
             <Link
               key={item.name}
               to={item.path}

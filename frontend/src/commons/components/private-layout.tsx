@@ -1,13 +1,15 @@
 import { Outlet } from "react-router";
 import { ProtectedRoute } from "./protected-route";
-import { Sidebar } from "./sidebar";
+import { MenuDesktop } from "./menu-desktop";
+import { MenuMobile } from "./menu-mobile";
 
 export const PrivateLayout = () => {
   return (
     <ProtectedRoute>
-      <div className="flex ">
-        <Sidebar />
-        <main className="flex-1">
+      <div className="flex flex-col md:flex-row h-screen">
+        <MenuDesktop />
+        <MenuMobile />
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>
