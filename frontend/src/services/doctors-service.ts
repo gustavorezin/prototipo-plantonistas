@@ -13,7 +13,6 @@ const list = () => {
 };
 
 const listHiredByHospital = () => {
-  console.log("fetching last hired doctors");
   return api.get<IDoctor[]>("/doctors/hired-by-hospital");
 };
 

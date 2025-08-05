@@ -7,5 +7,6 @@ const hospitalsController = new HospitalsController();
 
 hospitalsRouter.use(isAuthenticated);
 
-hospitalsRouter.get("/:id", hospitalsController.show);
+//hospitalsRouter.get("/:id", hospitalsController.show);
 hospitalsRouter.get("/", hospitalsController.list);
+hospitalsRouter.get("/hired-by-doctor", hospitalsController.lastHiredByDoctor);

@@ -37,4 +37,23 @@ export class HospitalsRepository implements IHospitalsRepository {
       email: hospital?.user?.email,
     } as IHospitalMail;
   }
+
+  async findAllHiredByDoctorId(doctorId: string): Promise<IHospital[]> {
+    const hospitals = await prisma.hospital.findMany({
+      where: {
+        Job: {
+          some: {
+            applications: {
+              some: {
+                doctorId,
+                status: "ACCEPTED",
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return hospitals;
+  }
 }

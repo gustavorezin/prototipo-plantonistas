@@ -11,6 +11,11 @@ const list = () => {
   return api.get<IHospital[]>("/hospitals");
 };
 
+const listHiredByDoctor = () => {
+  return api.get<IHospital[]>("/hospitals/hired-by-doctor");
+};
+
 export const hospitalsService = {
   list,
+  listHiredByDoctor,
 };

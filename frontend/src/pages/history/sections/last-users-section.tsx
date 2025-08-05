@@ -45,7 +45,7 @@ export const LastUsersSection = ({ isUserDoctor }: LastUsersSectionProps) => {
 
   const fetchUsers = useCallback(async () => {
     const response = isUserDoctor
-      ? await hospitalsService.list()
+      ? await hospitalsService.listHiredByDoctor()
       : await doctorsService.listHiredByHospital();
     if (isUserDoctor) {
       setHospitals(response.data as IHospital[]);

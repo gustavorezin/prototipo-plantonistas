@@ -5,4 +5,5 @@ export interface IHospitalsRepository {
   findAll(): Promise<IHospital[]>;
   findById(id: string): Promise<IHospital | null>;
   findNameAndEmailById(id: string): Promise<IHospitalMail | null>;
+  findAllHiredByDoctorId(hospitalId: string): Promise<IHospital[]>;
 }
