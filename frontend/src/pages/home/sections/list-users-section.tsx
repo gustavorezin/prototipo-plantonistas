@@ -66,7 +66,7 @@ export const ListUsersSection = ({ isUserDoctor }: ListUsersSectionProps) => {
   }, [fetchUsers, fetchSpecialtyItems]);
 
   return (
-    <SectionCard.Root className="w-full md:basis-2/3 max-h-screen overflow-auto">
+    <SectionCard.Root className="w-full md:basis-2/3 max-h-[calc(100vh-8rem)] md:max-h-screen overflow-auto">
       <SectionCard.Header>
         Buscar {isUserDoctor ? "hospitais" : "médicos"}
       </SectionCard.Header>

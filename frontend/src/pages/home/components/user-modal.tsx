@@ -35,11 +35,11 @@ export const UserModal = ({ isOpen, onClose, userId }: UserModalProps) => {
   if (!isOpen || !user) return null;
   return (
     <div
-      className="fixed inset-0 bg-black/30 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl"
+        className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl max-h-[calc(100vh-2rem)] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold mb-4 text-primary">{user.name}</h2>
