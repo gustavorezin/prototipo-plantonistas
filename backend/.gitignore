@@ -15,8 +15,6 @@ prisma/.env
 docker-compose.override.yml
 docker-compose.override.yaml
 .env
-.dockerignore
-Dockerfile
 
 # Logs
 logs/
