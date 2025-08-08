@@ -8,11 +8,14 @@ on:
 
 jobs:
   backend:
-    name: Backend CI
+    name: Backend CI & Docker
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backend
+
+    env:
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/prototipo-bkd
 
     steps:
       - name: Checkout código
@@ -21,18 +24,34 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 22
 
-      - name: Instalar dependências
-        run: npm ci
+      - name: Instalar dependências e buildar
+        run: |
+          npm ci
+          npm run build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Build do backend
-        run: npm run build
-
-      - name: Rodar testes
+      - name: Rodar testes unitários
         run: npm run test
+
+      - name: Login no Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push da imagem Docker
+        if: github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v4
+        with:
+          context: backend
+          file: backend/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   frontend:
     name: Frontend CI/CD
